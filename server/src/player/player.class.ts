@@ -1,12 +1,13 @@
-import { IPosition, TModel, TAnimation, IEncodePlayer } from './player.interface';
+import { ICoordinates, TModel, TAnimation, IPlayer } from './player.interface';
 
 export class Player {
-    constructor(id: string, username: string) {
+    constructor(id: string, username: string, model?: TModel, position?: ICoordinates, rotation?: ICoordinates) {
         this.id = id;
         this.username = username;
         this.animation = 'idle';
-        this.model = 'Alien';
-        this.position = { x: 0, y: 0, z: 0 };
+        this.model = model ?? 'Alien';
+        this.position = position ?? { x: 0, y: 0, z: 0 };
+        this.rotation = rotation ?? { x: 0, y: 0, z: 0 };
     }
 
     private moveX(x: number) {
@@ -20,38 +21,42 @@ export class Player {
     private moveZ(z: number) {
         this.position.z = z;
     }
-
-    move(x: number, z: number) {
-        this.moveX(x);
-        this.moveZ(z);
+    private rotateX(x: number) {
+        this.rotation.x = x;
     }
 
-    jump() {
-        let i = 0;
-        const intervalID = setInterval(() => {
-            if (i >= 4) {
-                this.moveY(0);
-                return clearInterval(intervalID);
-            }
-            this.moveY(-1.25 * i ** 2 + 5 * i);
-            // send Y - websocket
-            i += 0.01;
-        }, 1000 / 60);
+    private rotateY(y: number) {
+        this.rotation.y = y;
     }
 
-    encodePlayer() {
-        const player: IEncodePlayer = {
+    private rotateZ(z: number) {
+        this.rotation.z = z;
+    }
+
+    move(position: ICoordinates, rotation: ICoordinates) {
+        this.moveX(position.x);
+        this.moveZ(position.z);
+        this.moveY(position.y);
+        this.rotateX(rotation.x);
+        this.rotateZ(rotation.z);
+        this.rotateY(rotation.y);
+    }
+
+    toObject(): IPlayer {
+        const player: IPlayer = {
             id: this.id,
             model: this.model,
             position: this.position,
+            rotation: this.rotation,
             animation: this.animation,
             username: this.username,
         };
-        return JSON.stringify(player);
+        return player;
     }
 
     id: string;
-    position: IPosition;
+    position: ICoordinates;
+    rotation: ICoordinates;
     username: string;
     model: TModel;
     animation: TAnimation;

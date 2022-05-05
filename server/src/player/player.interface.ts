@@ -1,14 +1,15 @@
-export interface IPosition {
+export interface ICoordinates {
     x: number;
     y: number;
     z: number;
 }
 
-export interface IEncodePlayer {
+export interface IPlayer {
     id: string;
     model: TModel;
     animation: TAnimation;
-    position: IPosition;
+    position: ICoordinates;
+    rotation: ICoordinates;
     username: string;
 }
 
