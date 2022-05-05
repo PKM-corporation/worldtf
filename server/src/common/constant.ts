@@ -1,1 +1,6 @@
-export const WebsocketEvent = 'PlayerAction';
+export const WebsocketEvent = {
+    PlayerAction: 'PlayerAction',
+    Chat: 'Chat',
+    Warning: 'Warning',
+    Players: 'Players',
+};
