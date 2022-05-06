@@ -1,3 +1,4 @@
+import { ParsedUrlQuery } from 'querystring';
 import { Player } from 'src/player/player.class';
 import { ICoordinates, TAnimation, TModel } from 'src/player/player.interface';
 
@@ -20,10 +21,10 @@ export interface IWebsocketChatData extends IWebsocketData {
     message: string;
 }
 
-export interface IWebsocketConnectionOptions {
+export interface IWebsocketConnectionOptions extends ParsedUrlQuery {
     userId: string;
-    position: ICoordinates;
-    rotation: ICoordinates;
+    position: string;
+    rotation: string;
     model: TModel;
 }
 

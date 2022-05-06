@@ -9,7 +9,6 @@ import {
     WebSocketGateway,
     WebSocketServer,
 } from '@nestjs/websockets';
-import BadWordsFilter from 'bad-words';
 import { Cache } from 'cache-manager';
 import { Server, Socket } from 'socket.io';
 import { WebsocketEvent } from 'src/common/constant';
@@ -25,7 +24,7 @@ import {
 } from './websocket.interface';
 import { WebsocketService } from './websocket.service';
 
-@WebSocketGateway()
+@WebSocketGateway({ cors: true })
 export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
     @WebSocketServer() wss: Server;
     private logger: Logger = new Logger('WebsocketGateway');
@@ -36,9 +35,16 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
     afterInit() {
         this.logger.log(`websocket server initialized`);
     }
-    handleConnection(client: Socket, options: IWebsocketConnectionOptions) {
+    handleConnection(client: Socket) {
+        const options = client.handshake.query as IWebsocketConnectionOptions;
         const players = Array.from(this.players.values());
-        const player = new Player(client.id, options.userId, options.model, options.position, options.rotation);
+        const player = new Player(
+            client.id,
+            options.userId,
+            options.model,
+            options.position ? JSON.parse(options.position) : null,
+            options.rotation ? JSON.parse(options.rotation) : null,
+        );
 
         client.emit(WebsocketEvent.Players, players);
         this.players.set(client.id, player);
@@ -90,13 +96,12 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         if (!player) {
             return this.logger.warn(`Player not found, client: ${client.id}`);
         }
-        const badWordsFilter = new BadWordsFilter();
         const cachedClient = await this.cacheManager.get(client.id);
         if (cachedClient) {
             return client.emit(WebsocketEvent.Warning, 'please do not spam');
         } else {
-            await this.cacheManager.set(client.id, client, { ttl: 2 });
+            await this.cacheManager.set(client.id, client, { ttl: 0.5 });
         }
-        this.websocketService.chat(badWordsFilter.clean(data.message), player, this.wss);
+        this.websocketService.chat(data.message, player, this.wss);
     }
 }
