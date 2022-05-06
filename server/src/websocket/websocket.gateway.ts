@@ -78,6 +78,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
             case 'ModelChoice':
                 const modelData = data as IWebsocketModelChoiceData;
                 this.websocketService.modelChoice(modelData.model, player, this.wss);
+                break;
             default:
                 this.logger.warn(`Unknown websocket data type: ${data.type}`);
                 break;
