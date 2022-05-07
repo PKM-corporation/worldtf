@@ -15,6 +15,7 @@ import { WebsocketEvent } from 'src/common/constant';
 import { Player } from 'src/player/player.class';
 import {
     IClientEmitPlayer,
+    IClientEmitPlayers,
     IWebsocketAnimData,
     IWebsocketChatData,
     IWebsocketConnectionOptions,
@@ -46,7 +47,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
             options.rotation ? JSON.parse(options.rotation) : null,
         );
 
-        client.emit(WebsocketEvent.Players, players);
+        client.emit(WebsocketEvent.Players, { type: 'InitPlayers', players } as IClientEmitPlayers);
         this.players.set(client.id, player);
 
         const newPlayer: IClientEmitPlayer = { type: 'AddPlayer', id: client.id, player };

@@ -2,7 +2,7 @@ import { ParsedUrlQuery } from 'querystring';
 import { Player } from 'src/player/player.class';
 import { ICoordinates, TAnimation, TModel } from 'src/player/player.interface';
 
-export type TWebsocketDataType = 'Chat' | 'Move' | 'ModelChoice' | 'Anim' | 'RemovePlayer' | 'AddPlayer';
+export type TWebsocketDataType = 'Chat' | 'Move' | 'ModelChoice' | 'Anim' | 'RemovePlayer' | 'AddPlayer' | 'InitPlayers';
 
 export interface IWebsocketData {
     type: TWebsocketDataType;
@@ -30,10 +30,13 @@ export interface IWebsocketConnectionOptions extends ParsedUrlQuery {
 
 export interface IClientEmitData {
     type: TWebsocketDataType;
-    id: string;
+    id?: string;
 }
 export interface IClientEmitPlayer extends IClientEmitData {
     player: Player;
+}
+export interface IClientEmitPlayers extends IClientEmitData {
+    players: Player[];
 }
 export interface IClientEmitPosition extends IClientEmitData {
     position: ICoordinates;
