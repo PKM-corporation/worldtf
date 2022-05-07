@@ -2,14 +2,14 @@ import React, { useEffect, useRef } from 'react';
 import { useSphere } from '@react-three/cannon';
 import { useThree, useFrame } from '@react-three/fiber';
 import { Raycaster, Vector3 } from 'three';
-import { useKeyboardControls } from '../hooks/useKeyboardControls';
+import { useKeyboardControls } from '../hooks/player.hooks';
 
 const SPEED = 6;
 var speedSprint = SPEED;
 const jumpSpeed = 5;
 const jumpCoolDown = 1250;
 
-export function Player(props) {
+export const Player = (props) => {
     const { camera, scene } = useThree();
     const { moveForward, moveBackward, moveLeft, moveRight, jump, sprint } = useKeyboardControls();
     const [ref, api] = useSphere(() => ({
@@ -73,4 +73,4 @@ export function Player(props) {
             <mesh ref={ref} />
         </>
     );
-}
+};
