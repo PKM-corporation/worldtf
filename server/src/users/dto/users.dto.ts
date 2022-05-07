@@ -22,7 +22,25 @@ export class LoginUserDto {
     @ApiProperty()
     @IsString()
     @IsNotEmpty()
-    login: string;
+    username: string;
+
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    password: string;
+}
+
+export class UserDto {
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    pseudo: string;
+
+    @ApiProperty()
+    @IsString()
+    @IsEmail()
+    @IsNotEmpty()
+    email: string;
 
     @ApiProperty()
     @IsString()

@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Param, Body, Logger, HttpStatus, HttpCode, HttpException, UseGuards, Request } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { UserAuthGuard } from 'src/auth/guards/user-auth.guards';
-import { CreateUserDto, LoginUserDto } from './dto/users.dto';
+import { CreateUserDto, LoginUserDto, UserDto } from './dto/users.dto';
 import { User } from './schemas/users.schema';
 import { UsersService } from './users.service';
 
@@ -12,7 +12,7 @@ export class UsersController {
     private logger: Logger = new Logger('UsersController');
 
     @Get(':id')
-    @ApiResponse({ status: HttpStatus.OK })
+    @ApiResponse({ status: HttpStatus.OK, type: UserDto })
     @HttpCode(HttpStatus.OK)
     async getUser(@Param('id') id: string): Promise<User> {
         try {
@@ -25,7 +25,7 @@ export class UsersController {
     }
 
     @Post('create')
-    @ApiResponse({ status: HttpStatus.OK, type: CreateUserDto })
+    @ApiResponse({ status: HttpStatus.OK, type: UserDto })
     @HttpCode(HttpStatus.OK)
     async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
         try {
@@ -40,14 +40,15 @@ export class UsersController {
 
     @UseGuards(UserAuthGuard)
     @Post('login')
-    @ApiResponse({ status: HttpStatus.OK, type: LoginUserDto })
+    @ApiResponse({ status: HttpStatus.OK, type: UserDto })
     @HttpCode(HttpStatus.OK)
-    async login(@Request() req) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    async login(@Request() req, @Body() body: LoginUserDto) {
         return req.user;
     }
 
     @Get()
-    @ApiResponse({ status: HttpStatus.OK })
+    @ApiResponse({ status: HttpStatus.OK, type: UserDto })
     @HttpCode(HttpStatus.OK)
     async getAll(): Promise<User[]> {
         try {
