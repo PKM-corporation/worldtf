@@ -1,15 +1,19 @@
-import React, { useEffect, useRef } from 'react';
+import React, { Suspense, useEffect, useRef, useState } from 'react';
 import { useSphere } from '@react-three/cannon';
 import { useThree, useFrame } from '@react-three/fiber';
-import { Raycaster, Vector3 } from 'three';
+import { Raycaster, Vector3, Euler } from 'three';
 import { useKeyboardControls } from '../hooks/player.hooks';
+import { server } from '../hooks/websocket.hooks';
 
 const SPEED = 6;
-var speedSprint = SPEED;
+let speedSprint = SPEED;
 const jumpSpeed = 5;
 const jumpCoolDown = 1250;
+let lastRotation = new Euler();
 
-export const Player = (props) => {
+export const PlayerComponent = (props) => {
+    // eslint-disable-next-line react/prop-types
+    const [position, setPosition] = useState(props.position);
     const { camera, scene } = useThree();
     const { moveForward, moveBackward, moveLeft, moveRight, jump, sprint } = useKeyboardControls();
     const [ref, api] = useSphere(() => ({
@@ -34,6 +38,7 @@ export const Player = (props) => {
     });
 
     useFrame(() => {
+        const lastPosition = { ...ref.current.position };
         if (sprint && !state.current.sprinting) {
             state.current.sprinting = true;
             speedSprint = SPEED * 1.5;
@@ -41,7 +46,7 @@ export const Player = (props) => {
             speedSprint = SPEED;
             state.current.sprinting = false;
         }
-        camera.position.set(ref.current.position.x, ref.current.position.y + 0, ref.current.position.z);
+        camera.position.set(ref.current.position.x, ref.current.position.y + 0.9, ref.current.position.z);
         const direction = new Vector3();
 
         const frontVector = new Vector3(0, 0, Number(moveBackward) - Number(moveForward));
@@ -66,11 +71,21 @@ export const Player = (props) => {
                 api.velocity.set(direction.x, jumpSpeed, direction.z);
             }
         }
+        //console.log(camera.rotation, lastRotation);
+        if (ref.current.position.distanceTo(lastPosition) > 0.01 || !camera.rotation.equals(lastRotation)) {
+            console.log('move');
+            server.emit('PlayerAction', {
+                type: 'Move',
+                position: ref.current.position,
+                rotation: camera.rotation,
+            });
+        }
+        lastRotation = camera.rotation.clone();
     });
 
     return (
         <>
-            <mesh ref={ref} />
+            <mesh ref={ref}></mesh>
         </>
     );
 };

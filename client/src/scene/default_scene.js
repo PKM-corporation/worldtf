@@ -7,15 +7,17 @@ import { Physics } from '@react-three/cannon';
 import { useThree } from '@react-three/fiber';
 import { PointerLockControls, Stats, OrbitControls } from '@react-three/drei';
 
-// Prefabs
-import Plane from '../prefabs/Plane';
-import Skybox from '../prefabs/Skybox';
-import { Player } from '../prefabs/Player';
+// Components
+import { PlayerComponent } from '../components/player.component';
+import SkyboxComponent from '../components/skybox.component';
+import PlaneComponent from '../components/plane.component';
+import { useSelector } from 'react-redux';
+import { OtherPlayerComponent } from '../components/other-player.component';
 
 const DefaultScene = () => {
     const { camera, gl } = useThree();
     const controls = useRef();
-
+    const players = useSelector((state) => state.players.players);
     useEffect(() => {
         camera.layers.enable(0);
         camera.layers.enable(1);
@@ -35,7 +37,7 @@ const DefaultScene = () => {
     return (
         <>
             {/** Skybox */}
-            <Skybox />
+            <SkyboxComponent />
             {/* Pointer lock */}
             <PointerLockControls ref={controls} args={[camera, gl.domElement]} />
             {/* Lighting */}
@@ -45,10 +47,13 @@ const DefaultScene = () => {
             <ambientLight intensity={0.6} />
             {/** Physic objects */}
             <Physics isPaused={false} gravity={[0, -9.81, 0]} tolerance={0} iterations={50} broadphase={'Naive'}>
-                <Plane />
-                <Player position={[0, 1, 0]} key="player" />
+                <PlaneComponent />
+                <PlayerComponent position={[0, 1, 0]} key="player" />
                 <Suspense fallback={null}></Suspense>
             </Physics>
+            {players.map((player) => {
+                return <OtherPlayerComponent player={player} key={player.id} />;
+            })}
             {/* Stats */}
             <Stats />
         </>

@@ -30,6 +30,7 @@ export const PlayersSlice = createSlice({
                 state.players[index].position = action.payload.position;
                 state.players[index].rotation = action.payload.rotation;
             }
+            state.players = [...state.players];
         },
         choiceModelPlayer: (state, action) => {
             const index = state.players.findIndex((player) => player.id === action.payload.id);

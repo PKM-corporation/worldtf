@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useThree } from '@react-three/fiber';
 import { CubeTextureLoader } from 'three';
-const Skybox = () => {
+const SkyboxComponent = () => {
     const { scene } = useThree();
 
     useEffect(() => {
@@ -13,4 +13,4 @@ const Skybox = () => {
     return <></>;
 };
 
-export default Skybox;
+export default SkyboxComponent;

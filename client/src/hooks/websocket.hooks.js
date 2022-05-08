@@ -26,6 +26,12 @@ export const useWebsocketServer = () => {
                 case 'InitPlayers':
                     dispatch(initPlayers(data.players));
                     break;
+                default:
+                    break;
+            }
+        });
+        server.on('PlayerAction', (data) => {
+            switch (data.type) {
                 case 'Move':
                     dispatch(movePlayer(data));
                     break;
@@ -50,8 +56,4 @@ export const useWebsocketServer = () => {
             server.disconnect();
         };
     }, []);
-
-    useEffect(() => {
-        console.log(players);
-    }, [players]);
 };
