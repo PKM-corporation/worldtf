@@ -1,0 +1,79 @@
+#AuthPage{
+    background-image: url('https://media.discordapp.net/attachments/971437463992160327/972115444163022858/3158.jpg?width=1408&height=536');
+    height: 100vh;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#pink-background{
+   
+   background-color: rgba(118, 29, 123, 0.700);
+   border: solid rgb(185, 227, 255) 3px ;
+   box-shadow: 0 0 .2rem #fff,
+   0 0 .2rem #fff,
+   0 0 2rem rgba(0, 153, 255, 0.508),
+   0 0 0.8rem rgba(0, 153, 255, 0.508),
+   0 0 2.8rem rgba(0, 153, 255, 0.508),
+   inset 0 0 1.3rem rgba(0, 153, 255, 0.508); 
+
+}
+
+.neonText {
+    animation: flicker 1.5s infinite alternate;
+    color: #fff;
+    font-size: 4.2rem; 
+  }
+
+
+/* Animate neon flicker */
+@keyframes flicker {
+    
+    0%, 18%, 22%, 25%, 53%, 57%, 100% {
+
+        text-shadow:
+        0 0 4px #fff,
+        0 0 11px #fff,
+        0 0 19px #fff,
+        0 0 40px rgb(0, 153, 255),
+        0 0 80px rgb(0, 153, 255),
+        0 0 90px rgb(0, 153, 255),
+        0 0 100px rgb(0, 153, 255),
+        0 0 150px rgb(0, 153, 255);
+    }
+    
+    
+    20%, 24%, 55% {        
+        text-shadow: none;
+    }  
+}
+.form-control{
+    background-color: #2907289f;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-color: rgb(0, 153, 255);
+    color: #fff;
+}
+.form-control:focus{
+    background-color: #2907289f;
+    color: #fff;
+    ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+        color: pink;
+      }
+    
+}
+.vertical-line{
+    border-left: 2px solid rgb(255, 255, 255);
+    display: inline-block;
+    height: 100%;
+    position: sticky;
+    top: 50%;
+    left: 50%;
+  }
+
+.rounded-circle{
+    background-color: rgb(0, 153, 255);
+    border: none;
+    color: #fff;font-size: large;
+}
+
