@@ -3,6 +3,11 @@ export interface ICoordinates {
     y: number;
     z: number;
 }
+export interface IEuler {
+    _x: number;
+    _y: number;
+    _z: number;
+}
 
 export interface IPlayer {
     id: string;

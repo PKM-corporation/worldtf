@@ -1,6 +1,7 @@
 import { ParsedUrlQuery } from 'querystring';
 import { Player } from 'src/player/player.class';
-import { ICoordinates, TAnimation, TModel } from 'src/player/player.interface';
+import { ICoordinates, IEuler, TAnimation, TModel } from 'src/player/player.interface';
+import { Vector3 } from 'three';
 
 export type TWebsocketDataType = 'Chat' | 'Move' | 'ModelChoice' | 'Anim' | 'RemovePlayer' | 'AddPlayer' | 'InitPlayers';
 
@@ -8,8 +9,8 @@ export interface IWebsocketData {
     type: TWebsocketDataType;
 }
 export interface IWebsocketMoveData extends IWebsocketData {
-    position: ICoordinates;
-    rotation: ICoordinates;
+    position: Vector3;
+    rotation: IEuler;
 }
 export interface IWebsocketAnimData extends IWebsocketData {
     animation: TAnimation;

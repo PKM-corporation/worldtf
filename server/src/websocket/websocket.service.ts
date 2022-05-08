@@ -2,12 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
 import { WebsocketEvent } from 'src/common/constant';
 import { Player } from 'src/player/player.class';
-import { ICoordinates, TAnimation, TModel } from 'src/player/player.interface';
+import { IEuler, TAnimation, TModel } from 'src/player/player.interface';
+import { Vector3 } from 'three';
 import { IClientEmitPosition, IClientEmitMessage, IClientEmitModel, IClientEmitData, IClientEmitAnimation } from './websocket.interface';
 
 @Injectable()
 export class WebsocketService {
-    move(position: ICoordinates, rotation: ICoordinates, player: Player, server: Server) {
+    move(position: Vector3, rotation: IEuler, player: Player, server: Server) {
         player.move(position, rotation);
         const playerPosition: IClientEmitPosition = {
             type: 'Move',

@@ -1,4 +1,5 @@
-import { ICoordinates, TModel, TAnimation, IPlayer } from './player.interface';
+import { Vector3 } from 'three';
+import { ICoordinates, TModel, TAnimation, IPlayer, IEuler } from './player.interface';
 
 export class Player {
     constructor(id: string, username: string, model?: TModel, position?: ICoordinates, rotation?: ICoordinates) {
@@ -33,13 +34,13 @@ export class Player {
         this.rotation.z = z;
     }
 
-    move(position: ICoordinates, rotation: ICoordinates) {
+    move(position: Vector3, rotation: IEuler) {
         this.moveX(position.x);
         this.moveZ(position.z);
         this.moveY(position.y);
-        this.rotateX(rotation.x);
-        this.rotateZ(rotation.z);
-        this.rotateY(rotation.y);
+        this.rotateX(rotation._x);
+        this.rotateZ(rotation._z);
+        this.rotateY(rotation._y);
     }
 
     toObject(): IPlayer {
