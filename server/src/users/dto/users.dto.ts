@@ -47,3 +47,10 @@ export class UserDto {
     @IsNotEmpty()
     password: string;
 }
+
+export class AccessTokenDto {
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    access_token: string;
+}
