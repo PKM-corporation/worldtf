@@ -1,16 +1,19 @@
 import { Controller, Get, Post, Param, Body, Logger, HttpStatus, HttpCode, HttpException, UseGuards, Request } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
+import { AuthService } from 'src/auth/auth.service';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guards';
 import { UserAuthGuard } from 'src/auth/guards/user-auth.guards';
-import { CreateUserDto, LoginUserDto, UserDto } from './dto/users.dto';
+import { AccessTokenDto, CreateUserDto, LoginUserDto, UserDto } from './dto/users.dto';
 import { User } from './schemas/users.schema';
 import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
-    constructor(private readonly usersService: UsersService) {}
+    constructor(private readonly usersService: UsersService, private authService: AuthService) {}
 
     private logger: Logger = new Logger('UsersController');
 
+    @UseGuards(JwtAuthGuard)
     @Get(':id')
     @ApiResponse({ status: HttpStatus.OK, type: UserDto })
     @HttpCode(HttpStatus.OK)
@@ -40,13 +43,14 @@ export class UsersController {
 
     @UseGuards(UserAuthGuard)
     @Post('login')
-    @ApiResponse({ status: HttpStatus.OK, type: UserDto })
+    @ApiResponse({ status: HttpStatus.OK, type: AccessTokenDto })
     @HttpCode(HttpStatus.OK)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async login(@Request() req, @Body() body: LoginUserDto) {
-        return req.user;
+        return await this.authService.login(req.user);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Get()
     @ApiResponse({ status: HttpStatus.OK, type: UserDto })
     @HttpCode(HttpStatus.OK)

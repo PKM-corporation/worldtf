@@ -5,8 +5,14 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { WebsocketModule } from './websocket/websocket.module';
 
+const configOptions = {
+    isGlobal: true,
+    ignoreEnvFile: false,
+    envFilePath: '.env',
+};
+
 @Module({
-    imports: [ConfigModule.forRoot(), UsersModule, AuthModule, WebsocketModule, MongooseModule.forRoot(process.env.MONGODB_URI)],
+    imports: [ConfigModule.forRoot(configOptions), UsersModule, AuthModule, WebsocketModule, MongooseModule.forRoot(process.env.MONGODB_URI)],
     controllers: [],
     providers: [],
 })
