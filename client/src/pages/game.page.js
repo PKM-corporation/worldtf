@@ -3,7 +3,6 @@ import CrosshairComponent from '../components/crosshair.component';
 import DefaultScene from '../scene/default_scene';
 import { Canvas } from '@react-three/fiber';
 import { useThree } from '@react-three/fiber';
-import { io } from 'socket.io-client';
 import { useWebsocketServer } from '../hooks/websocket.hooks';
 
 const PixelRatioSetting = () => {
