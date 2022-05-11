@@ -28,12 +28,18 @@ export class UsersController {
     }
 
     @Post('create')
-    @ApiResponse({ status: HttpStatus.OK, type: UserDto })
+    @ApiResponse({ status: HttpStatus.OK, type: AccessTokenDto })
     @HttpCode(HttpStatus.OK)
-    async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
+    async createUser(@Body() createUserDto: CreateUserDto): Promise<AccessTokenDto> {
         try {
-            return await this.usersService.createUser(createUserDto.pseudo, createUserDto.email, createUserDto.password);
+            const user = await this.usersService.createUser(createUserDto.pseudo, createUserDto.email, createUserDto.password);
+            this.logger.debug(`New user ${user._id} created`);
+            return await this.authService.login(user);
         } catch (e) {
+            if (e.message === 'PseudoOrEmailAlreadyTaken') {
+                this.logger.error(`Create user error, PseudoOrEmailAlreadyTaken`);
+                throw new HttpException('CreateUserError', HttpStatus.CONFLICT);
+            }
             this.logger.error(
                 `Create user error, pseudo: ${createUserDto.pseudo}, email: ${createUserDto.email}, password: ${createUserDto.password}, error: ${e}`,
             );
@@ -46,7 +52,7 @@ export class UsersController {
     @ApiResponse({ status: HttpStatus.OK, type: AccessTokenDto })
     @HttpCode(HttpStatus.OK)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async login(@Request() req, @Body() body: LoginUserDto) {
+    async login(@Request() req, @Body() body: LoginUserDto): Promise<AccessTokenDto> {
         return await this.authService.login(req.user);
     }
 
