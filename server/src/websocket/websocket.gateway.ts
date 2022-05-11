@@ -1,4 +1,4 @@
-import { CACHE_MANAGER, Inject, Logger } from '@nestjs/common';
+import { CACHE_MANAGER, Inject, Logger, UseGuards } from '@nestjs/common';
 import {
     ConnectedSocket,
     MessageBody,
@@ -11,6 +11,8 @@ import {
 } from '@nestjs/websockets';
 import { Cache } from 'cache-manager';
 import { Server, Socket } from 'socket.io';
+import { AuthService } from 'src/auth/auth.service';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guards';
 import { WebsocketEvent } from 'src/common/constant';
 import { Player } from 'src/player/player.class';
 import {
@@ -31,17 +33,20 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
     private logger: Logger = new Logger('WebsocketGateway');
     private players: Map<string, Player> = new Map();
 
-    constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache, private websocketService: WebsocketService) {}
+    constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache, private websocketService: WebsocketService, private authService: AuthService) {}
 
     afterInit() {
         this.logger.log(`websocket server initialized`);
     }
-    handleConnection(client: Socket) {
+    async handleConnection(client: Socket) {
+        const user = await this.authService.validateUserWithToken(client.handshake.auth.token);
+        if (!user) return client.disconnect();
+
         const options = client.handshake.query as IWebsocketConnectionOptions;
         const players = Array.from(this.players.values());
         const player = new Player(
             client.id,
-            options.userId,
+            user.pseudo,
             options.model,
             options.position ? JSON.parse(options.position) : null,
             options.rotation ? JSON.parse(options.rotation) : null,
@@ -67,6 +72,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         this.logger.log(`client ${client.id} disconnected`);
     }
 
+    @UseGuards(JwtAuthGuard)
     @SubscribeMessage(WebsocketEvent.PlayerAction)
     handleEventPlayerAction(@MessageBody() data: IWebsocketData, @ConnectedSocket() client: Socket) {
         const player = this.players.get(client.id);
@@ -91,6 +97,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
                 break;
         }
     }
+    @UseGuards(JwtAuthGuard)
     @SubscribeMessage(WebsocketEvent.Chat)
     async handleEventChat(@MessageBody() data: IWebsocketChatData, @ConnectedSocket() client: Socket) {
         const player = this.players.get(client.id);

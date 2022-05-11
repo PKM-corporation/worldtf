@@ -1,8 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import jwtDecode from 'jwt-decode';
 import { User } from 'src/users/schemas/users.schema';
 import { UsersRepository } from 'src/users/users.repository';
+import { IUserTokenPaylaod } from './auth.interface';
 
 @Injectable()
 export class AuthService {
@@ -27,5 +29,17 @@ export class AuthService {
         return {
             access_token: this.jwtService.sign(payload),
         };
+    }
+
+    async validateUserWithToken(token: string): Promise<User> {
+        if (!token) return;
+        const decodedToken: IUserTokenPaylaod = jwtDecode(token);
+
+        try {
+            const user = await this.usersRepository.findOne({ pseudo: decodedToken.username, _id: decodedToken.sub });
+            if (user) return user;
+        } catch (e) {
+            return;
+        }
     }
 }

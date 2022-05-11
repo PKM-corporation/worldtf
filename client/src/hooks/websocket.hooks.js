@@ -1,14 +1,20 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import { addPlayer, animPlayer, choiceModelPlayer, initPlayers, movePlayer, removePlayer } from '../store/slices/players.slice';
 
-export const server = io(process.env.REACT_APP_BASE_WEBSOCKET_SERVER_URI, { query: { userId: 'test' } });
+export let server = null;
 
 export const useWebsocketServer = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const players = useSelector((state) => state.players.players);
     useEffect(() => {
+        const accessToken = window.localStorage.getItem('access_token');
+        if (!accessToken) return navigate('/authenticate');
+
+        server = io(process.env.REACT_APP_BASE_WEBSOCKET_SERVER_URI, { query: { userId: 'test' }, auth: { token: accessToken } });
         server.on('Players', (data) => {
             switch (data.type) {
                 case 'RemovePlayer':
@@ -39,6 +45,10 @@ export const useWebsocketServer = () => {
         server.on('Warning', (data) => {
             console.log(data);
         });
+
+        return () => {
+            server.disconnect();
+        };
     }, []);
 
     useEffect(() => {

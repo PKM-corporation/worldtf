@@ -33,9 +33,9 @@ export class UsersService {
     private async isUserExist(email: string, pseudo: string) {
         try {
             const existingUser = await this.userRepository.findOne({ $or: [{ email }, { pseudo }] });
-            if (existingUser) return false;
+            if (existingUser) return true;
         } catch (e) {
-            return true;
+            return false;
         }
     }
 }
