@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const LoginFormComponent = () => {
+    const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [invalidMessage, setInvalidMessage] = useState();
@@ -12,6 +14,7 @@ const LoginFormComponent = () => {
             const res = await axios.post(process.env.REACT_APP_BASE_API_URI + '/users/login', { username, password });
             window.localStorage.setItem('access_token', res.data.access_token);
             setInvalidMessage(null);
+            navigate('/');
         } catch (e) {
             if (e.response.status === 401) {
                 return setInvalidMessage(<p className="mb-3 text-center invalid-message">Mot de passe ou login incorrects</p>);
