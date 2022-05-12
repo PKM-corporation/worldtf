@@ -11,18 +11,40 @@ import { useSelector } from 'react-redux';
 
 export default function Model({ ...props }) {
     const player = useSelector((state) => state.players[props.playerId]);
-    console.log(player, 'Model Remy', props.playerId);
     const group = useRef();
     const { scene, materials, animations } = useGLTF('/models/playerModels/remy.glb');
     const clones = useMemo(() => clone(scene), [scene]);
     const { nodes } = useGraph(clones);
     const { actions } = useAnimations(animations, group);
-    // useEffect(() => {
-    //     if (!player.animation) return;
-    //     console.log(player.animation, 'Model Remy');
-    //     // actions.Walking.play();
-    //     // group.current.position.y += 0.2;
-    // }, [player.animation]);
+    useEffect(() => {
+        if (!player.animation) return;
+        switch (player.animation) {
+            case 'Jumping':
+                actions.Idle.stop();
+                actions.Walking.stop();
+                actions.Running.stop();
+                actions.Jumping.play();
+                break;
+            case 'Running':
+                actions.Running.play();
+                actions.Idle.stop();
+                actions.Walking.stop();
+                break;
+            case 'Walking':
+                actions.Walking.play();
+                actions.Idle.stop();
+                actions.Running.stop();
+                break;
+            case 'Idle':
+                actions.Idle.play();
+                actions.Walking.stop();
+                actions.Jumping.stop();
+                actions.Running.stop();
+                break;
+            default:
+                break;
+        }
+    }, [player.animation]);
     return (
         <group ref={group} {...props} dispose={null}>
             <group name="Scene">

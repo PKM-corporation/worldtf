@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useSphere } from '@react-three/cannon';
 import { useThree, useFrame } from '@react-three/fiber';
 import { Raycaster, Vector3, Euler } from 'three';
@@ -22,7 +22,6 @@ function sendSocketAnimation(animationName) {
 
 export const PlayerComponent = (props) => {
     // eslint-disable-next-line react/prop-types
-    const [position, setPosition] = useState(props.position);
     const { camera, scene } = useThree();
     const { moveForward, moveBackward, moveLeft, moveRight, jump, sprint } = useKeyboardControls();
     const [ref, api] = useSphere(() => ({
@@ -57,9 +56,13 @@ export const PlayerComponent = (props) => {
             state.current.sprinting = false;
         }
 
-        if (moveForward && currentAnimation !== 'Walking') {
+        if (state.current.jumping && currentAnimation !== 'Jumping') {
+            sendSocketAnimation('Jumping');
+        } else if (!state.current.jumping && moveForward && sprint && currentAnimation !== 'Running') {
+            sendSocketAnimation('Running');
+        } else if (!state.current.jumping && moveForward && !sprint && currentAnimation !== 'Walking') {
             sendSocketAnimation('Walking');
-        } else if (!moveForward && currentAnimation !== 'Idle') {
+        } else if (!state.current.jumping && !moveForward && currentAnimation !== 'Idle') {
             sendSocketAnimation('Idle');
         }
         camera.position.set(ref.current.position.x, ref.current.position.y + 0.9, ref.current.position.z);
@@ -87,7 +90,6 @@ export const PlayerComponent = (props) => {
                 api.velocity.set(direction.x, jumpSpeed, direction.z);
             }
         }
-        //console.log(camera.rotation, lastRotation);
         if (ref.current.position.distanceTo(lastPosition) > 0.01 || !camera.rotation.equals(lastRotation)) {
             server.emit('PlayerAction', {
                 type: 'Move',

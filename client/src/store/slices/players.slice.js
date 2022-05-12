@@ -24,11 +24,7 @@ export const PlayersSlice = createSlice({
             state[action.payload.id] = action.payload;
         },
         animPlayer: (state, action) => {
-            const index = state.playerList.findIndex((player) => player.id === action.payload.id);
-            if (index >= 0) {
-                state.playerList[index].animation = action.payload.animation;
-            }
-            state.playerList = [...state.playerList];
+            state[action.payload.id].animation = action.payload.animation;
         },
         movePlayer: (state, action) => {
             state[action.payload.id].position = action.payload.position;
