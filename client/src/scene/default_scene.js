@@ -14,10 +14,13 @@ import PlaneComponent from '../components/plane.component';
 import { useSelector } from 'react-redux';
 import { OtherPlayerComponent } from '../components/other-player.component';
 
+// Models
+import WorldMap from '../models/map/Map';
+
 const DefaultScene = () => {
     const { camera, gl } = useThree();
     const controls = useRef();
-    const players = useSelector((state) => state.players.players);
+    const players = useSelector((state) => state.players.playerList);
     useEffect(() => {
         camera.layers.enable(0);
         camera.layers.enable(1);
@@ -50,9 +53,10 @@ const DefaultScene = () => {
                 <PlaneComponent />
                 <PlayerComponent position={[0, 1, 0]} key="player" />
                 <Suspense fallback={null}></Suspense>
+                {/* <WorldMap position={[0, 2.35, 0]} /> */}
             </Physics>
             {players.map((player) => {
-                return <OtherPlayerComponent player={player} key={player.id} />;
+                return <OtherPlayerComponent playerId={player.id} key={player.id} />;
             })}
             {/* Stats */}
             <Stats />

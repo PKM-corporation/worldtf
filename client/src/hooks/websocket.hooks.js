@@ -9,7 +9,7 @@ export let server = null;
 export const useWebsocketServer = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const players = useSelector((state) => state.players.players);
+    const players = useSelector((state) => state.players);
     useEffect(() => {
         const accessToken = window.localStorage.getItem('access_token');
         if (!accessToken) return navigate('/authenticate');
@@ -56,4 +56,7 @@ export const useWebsocketServer = () => {
             server.disconnect();
         };
     }, []);
+    useEffect(() => {
+        // console.log(players);
+    }, [players]);
 };

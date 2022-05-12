@@ -10,6 +10,15 @@ let speedSprint = SPEED;
 const jumpSpeed = 5;
 const jumpCoolDown = 1250;
 let lastRotation = new Euler();
+let currentAnimation = 'Idle';
+
+function sendSocketAnimation(animationName) {
+    server.emit('PlayerAction', {
+        type: 'Anim',
+        animation: animationName,
+    });
+    currentAnimation = animationName;
+}
 
 export const PlayerComponent = (props) => {
     // eslint-disable-next-line react/prop-types
@@ -38,6 +47,7 @@ export const PlayerComponent = (props) => {
     });
 
     useFrame(() => {
+        camera.rotation.order = 'YXZ';
         const lastPosition = { ...ref.current.position };
         if (sprint && !state.current.sprinting) {
             state.current.sprinting = true;
@@ -45,6 +55,12 @@ export const PlayerComponent = (props) => {
         } else if (!sprint && state.current.sprinting) {
             speedSprint = SPEED;
             state.current.sprinting = false;
+        }
+
+        if (moveForward && currentAnimation !== 'Walking') {
+            sendSocketAnimation('Walking');
+        } else if (!moveForward && currentAnimation !== 'Idle') {
+            sendSocketAnimation('Idle');
         }
         camera.position.set(ref.current.position.x, ref.current.position.y + 0.9, ref.current.position.z);
         const direction = new Vector3();
@@ -73,7 +89,6 @@ export const PlayerComponent = (props) => {
         }
         //console.log(camera.rotation, lastRotation);
         if (ref.current.position.distanceTo(lastPosition) > 0.01 || !camera.rotation.equals(lastRotation)) {
-            console.log('move');
             server.emit('PlayerAction', {
                 type: 'Move',
                 position: ref.current.position,
