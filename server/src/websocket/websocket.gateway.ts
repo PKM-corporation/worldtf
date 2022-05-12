@@ -1,4 +1,4 @@
-import { CACHE_MANAGER, Inject, Logger, UseGuards } from '@nestjs/common';
+import { CACHE_MANAGER, Inject, Logger } from '@nestjs/common';
 import {
     ConnectedSocket,
     MessageBody,
@@ -12,7 +12,6 @@ import {
 import { Cache } from 'cache-manager';
 import { Server, Socket } from 'socket.io';
 import { AuthService } from 'src/auth/auth.service';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guards';
 import { WebsocketEvent } from 'src/common/constant';
 import { Player } from 'src/player/player.class';
 import {
@@ -72,7 +71,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         this.logger.log(`client ${client.id} disconnected`);
     }
 
-    @UseGuards(JwtAuthGuard)
+    //@UseGuards(JwtAuthGuard)
     @SubscribeMessage(WebsocketEvent.PlayerAction)
     handleEventPlayerAction(@MessageBody() data: IWebsocketData, @ConnectedSocket() client: Socket) {
         const player = this.players.get(client.id);
@@ -97,7 +96,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
                 break;
         }
     }
-    @UseGuards(JwtAuthGuard)
+    //@UseGuards(JwtAuthGuard)
     @SubscribeMessage(WebsocketEvent.Chat)
     async handleEventChat(@MessageBody() data: IWebsocketChatData, @ConnectedSocket() client: Socket) {
         const player = this.players.get(client.id);
