@@ -27,15 +27,15 @@ export class AuthService {
     async login(user: User) {
         const payload = { username: user.pseudo, sub: user._id };
         return {
-            access_token: this.jwtService.sign(payload),
+            access_token: this.jwtService.sign(payload, { secret: process.env.JWT_SECRET }),
         };
     }
 
     async validateUserWithToken(token: string): Promise<User> {
         if (!token) return;
-        const decodedToken: IUserTokenPaylaod = jwtDecode(token);
 
         try {
+            const decodedToken: IUserTokenPaylaod = jwtDecode(token);
             const user = await this.usersRepository.findOne({ pseudo: decodedToken.username, _id: decodedToken.sub });
             if (user) return user;
         } catch (e) {

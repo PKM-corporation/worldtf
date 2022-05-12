@@ -40,7 +40,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
     }
     async handleConnection(client: Socket) {
         const user = await this.authService.validateUserWithToken(client.handshake.auth.token);
-        if (!user) return client.disconnect();
+        if (!user || Object.values(client.handshake.query).length === 0) return client.disconnect();
 
         const options = client.handshake.query as IWebsocketConnectionOptions;
         const players = Array.from(this.players.values());
@@ -63,7 +63,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
     handleDisconnect(client: Socket) {
         const player = this.players.get(client.id);
         if (!player) {
-            return this.logger.warn(`Player not found, client: ${client.id}`);
+            return this.logger.warn(`Suspicious attempt to connect, client: ${client.id}`);
         }
         const removedPlayer: IClientEmitPlayer = { type: 'RemovePlayer', id: client.id, player };
         this.websocketService.emit(this.websocketService.getClientsWithoutOne(this.wss, client.id), WebsocketEvent.Players, removedPlayer);
