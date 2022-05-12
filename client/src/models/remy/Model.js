@@ -17,6 +17,9 @@ export default function Model({ ...props }) {
     const { nodes } = useGraph(clones);
     const { actions } = useAnimations(animations, group);
     useEffect(() => {
+        actions.Idle.play();
+    }, []);
+    useEffect(() => {
         if (!player.animation) return;
         switch (player.animation) {
             case 'Jumping':
@@ -29,11 +32,13 @@ export default function Model({ ...props }) {
                 actions.Running.play();
                 actions.Idle.stop();
                 actions.Walking.stop();
+                actions.Jumping.stop();
                 break;
             case 'Walking':
                 actions.Walking.play();
                 actions.Idle.stop();
                 actions.Running.stop();
+                actions.Jumping.stop();
                 break;
             case 'Idle':
                 actions.Idle.play();
