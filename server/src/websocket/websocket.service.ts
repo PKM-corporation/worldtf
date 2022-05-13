@@ -8,7 +8,12 @@ import { IClientEmitPosition, IClientEmitMessage, IClientEmitModel, IClientEmitD
 
 @Injectable()
 export class WebsocketService {
-    move(position: Vector3, rotation: IEuler, player: Player, server: Server) {
+    private server: Server;
+
+    init(server: Server) {
+        this.server = server;
+    }
+    move(position: Vector3, rotation: IEuler, player: Player) {
         player.move(position, rotation);
         const playerPosition: IClientEmitPosition = {
             type: 'Move',
@@ -16,39 +21,39 @@ export class WebsocketService {
             position: player.position,
             rotation: player.rotation,
         };
-        const clients = this.getClientsWithoutOne(server, player.id);
+        const clients = this.getClientsWithoutOne(player.id);
         this.emit(clients, WebsocketEvent.PlayerAction, playerPosition);
     }
 
-    anim(animation: TAnimation, player: Player, server: Server) {
+    anim(animation: TAnimation, player: Player) {
         player.animation = animation;
         const playerAnimation: IClientEmitAnimation = {
             type: 'Anim',
             id: player.id,
             animation: animation,
         };
-        const clients = this.getClientsWithoutOne(server, player.id);
+        const clients = this.getClientsWithoutOne(player.id);
         this.emit(clients, WebsocketEvent.PlayerAction, playerAnimation);
     }
 
-    modelChoice(model: TModel, player: Player, server: Server) {
+    modelChoice(model: TModel, player: Player) {
         player.model = model;
         const playerModel: IClientEmitModel = {
             id: player.id,
             type: 'ModelChoice',
             model,
         };
-        const clients = this.getClientsWithoutOne(server, player.id);
+        const clients = this.getClientsWithoutOne(player.id);
         this.emit(clients, WebsocketEvent.PlayerAction, playerModel);
     }
 
-    chat(message: string, player: Player, server: Server) {
+    chat(message: string, player: Player) {
         const playerMessage: IClientEmitMessage = {
             type: 'Chat',
             id: player.id,
             message: message,
         };
-        server.emit(WebsocketEvent.Chat, playerMessage);
+        this.server.emit(WebsocketEvent.Chat, playerMessage);
     }
 
     emit(clients: Socket[], event: string, data: IClientEmitData) {
@@ -57,7 +62,11 @@ export class WebsocketService {
         }
     }
 
-    getClientsWithoutOne(server: Server, clientId: string): Socket[] {
-        return Array.from(server.sockets.sockets.values()).filter((client) => client.id !== clientId);
+    getClientsWithoutOne(clientId: string): Socket[] {
+        return Array.from(this.server.sockets.sockets.values()).filter((client) => client.id !== clientId);
+    }
+
+    getOnlineClients(): number {
+        return Array.from(this.server.sockets.sockets.values()).length;
     }
 }

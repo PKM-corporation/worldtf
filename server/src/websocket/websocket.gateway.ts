@@ -35,6 +35,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
     constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache, private websocketService: WebsocketService, private authService: AuthService) {}
 
     afterInit() {
+        this.websocketService.init(this.wss);
         this.logger.log(`websocket server initialized`);
     }
     async handleConnection(client: Socket) {
@@ -55,7 +56,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         this.players.set(client.id, player);
 
         const newPlayer: IClientEmitPlayer = { type: 'AddPlayer', id: client.id, player };
-        this.websocketService.emit(this.websocketService.getClientsWithoutOne(this.wss, client.id), WebsocketEvent.Players, newPlayer);
+        this.websocketService.emit(this.websocketService.getClientsWithoutOne(client.id), WebsocketEvent.Players, newPlayer);
 
         this.logger.log(`client ${client.id} connected`);
     }
@@ -65,7 +66,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
             return this.logger.warn(`Suspicious attempt to connect, client: ${client.id}`);
         }
         const removedPlayer: IClientEmitPlayer = { type: 'RemovePlayer', id: client.id, player };
-        this.websocketService.emit(this.websocketService.getClientsWithoutOne(this.wss, client.id), WebsocketEvent.Players, removedPlayer);
+        this.websocketService.emit(this.websocketService.getClientsWithoutOne(client.id), WebsocketEvent.Players, removedPlayer);
         this.players.delete(client.id);
 
         this.logger.log(`client ${client.id} disconnected`);
@@ -81,15 +82,15 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         switch (data.type) {
             case 'Move':
                 const moveData = data as IWebsocketMoveData;
-                this.websocketService.move(moveData.position, moveData.rotation, player, this.wss);
+                this.websocketService.move(moveData.position, moveData.rotation, player);
                 break;
             case 'Anim':
                 const animData = data as IWebsocketAnimData;
-                this.websocketService.anim(animData.animation, player, this.wss);
+                this.websocketService.anim(animData.animation, player);
                 break;
             case 'ModelChoice':
                 const modelData = data as IWebsocketModelChoiceData;
-                this.websocketService.modelChoice(modelData.model, player, this.wss);
+                this.websocketService.modelChoice(modelData.model, player);
                 break;
             default:
                 this.logger.warn(`Unknown websocket data type: ${data.type}`);
@@ -109,6 +110,6 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         } else {
             await this.cacheManager.set(client.id, client, { ttl: 0.5 });
         }
-        this.websocketService.chat(data.message, player, this.wss);
+        this.websocketService.chat(data.message, player);
     }
 }
