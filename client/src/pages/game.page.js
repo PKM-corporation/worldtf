@@ -4,6 +4,8 @@ import DefaultScene from '../scene/default_scene';
 import { Canvas } from '@react-three/fiber';
 import { useThree } from '@react-three/fiber';
 import { useWebsocketServer } from '../hooks/websocket.hooks';
+import { Provider } from 'react-redux';
+import store from '../store/store';
 
 const PixelRatioSetting = () => {
     const { gl } = useThree();
@@ -11,16 +13,17 @@ const PixelRatioSetting = () => {
 };
 const GamePage = () => {
     useWebsocketServer();
-
     return (
         <div id="canvas-container">
             <CrosshairComponent />
             <Canvas
                 shadows={{ type: 'VSMShadowMap' }}
-                camera={{ position: [0, 0, 5], fov: 70, near: 0.05, far: 100, aspect: window.innerWidth / window.innerHeight }}
+                camera={{ position: [0, 0, 5], fov: 70, near: 0.01, far: 100, aspect: window.innerWidth / window.innerHeight }}
             >
                 <PixelRatioSetting />
-                <DefaultScene />
+                <Provider store={store}>
+                    <DefaultScene />
+                </Provider>
             </Canvas>
         </div>
     );

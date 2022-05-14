@@ -3,38 +3,37 @@ import { createSlice } from '@reduxjs/toolkit';
 export const PlayersSlice = createSlice({
     name: 'players',
     initialState: {
-        players: [],
+        playerList: [],
     },
     reducers: {
         initPlayers: (state, action) => {
-            state.players = action.payload;
+            state.playerList = action.payload;
+            for (const player of action.payload) {
+                state[player.id] = player;
+            }
         },
         removePlayer: (state, action) => {
-            state.players.splice(
-                state.players.findIndex((player) => player.id === action.payload),
+            state.playerList.splice(
+                state.playerList.findIndex((player) => player.id === action.payload),
                 1,
             );
+            delete state[action.payload.id];
         },
         addPlayer: (state, action) => {
-            state.players.push(action.payload);
+            state.playerList.push(action.payload);
+            state[action.payload.id] = action.payload;
         },
         animPlayer: (state, action) => {
-            const index = state.players.findIndex((player) => player.id === action.payload.id);
-            if (index >= 0) {
-                state.players[index].animation = action.payload.animation;
-            }
+            state[action.payload.id].animation = action.payload.animation;
         },
         movePlayer: (state, action) => {
-            const index = state.players.findIndex((player) => player.id === action.payload.id);
-            if (index >= 0) {
-                state.players[index].position = action.payload.position;
-                state.players[index].rotation = action.payload.rotation;
-            }
+            state[action.payload.id].position = action.payload.position;
+            state[action.payload.id].rotation = action.payload.rotation;
         },
         choiceModelPlayer: (state, action) => {
-            const index = state.players.findIndex((player) => player.id === action.payload.id);
+            const index = state.playerList.findIndex((player) => player.id === action.payload.id);
             if (index >= 0) {
-                state.players[index].model = action.payload.model;
+                state.playerList[index].model = action.payload.model;
             }
         },
     },

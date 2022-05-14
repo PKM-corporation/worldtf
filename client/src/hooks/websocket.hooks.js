@@ -9,7 +9,7 @@ export let server = null;
 export const useWebsocketServer = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const players = useSelector((state) => state.players.players);
+    const players = useSelector((state) => state.players);
     useEffect(() => {
         const accessToken = window.localStorage.getItem('access_token');
         if (!accessToken) return navigate('/authenticate');
@@ -26,6 +26,12 @@ export const useWebsocketServer = () => {
                 case 'InitPlayers':
                     dispatch(initPlayers(data.players));
                     break;
+                default:
+                    break;
+            }
+        });
+        server.on('PlayerAction', (data) => {
+            switch (data.type) {
                 case 'Move':
                     dispatch(movePlayer(data));
                     break;
@@ -50,8 +56,7 @@ export const useWebsocketServer = () => {
             server.disconnect();
         };
     }, []);
-
     useEffect(() => {
-        console.log(players);
+        // console.log(players);
     }, [players]);
 };
