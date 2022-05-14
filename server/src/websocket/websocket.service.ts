@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
 import { WebsocketEvent } from 'src/common/constant';
-import { Player } from 'src/player/player.class';
-import { IEuler, TAnimation, TModel } from 'src/player/player.interface';
+import { Player } from 'src/classes/Player.class';
+import { IEuler, TAnimation, TPlayerModel } from 'src/classes/player.interface';
 import { Vector3 } from 'three';
 import { IClientEmitPosition, IClientEmitMessage, IClientEmitModel, IClientEmitData, IClientEmitAnimation } from './websocket.interface';
+import { Entity } from 'src/classes/Entity.class';
+import * as crypto from 'crypto';
 
 @Injectable()
 export class WebsocketService {
@@ -13,15 +15,15 @@ export class WebsocketService {
     init(server: Server) {
         this.server = server;
     }
-    move(position: Vector3, rotation: IEuler, player: Player) {
-        player.move(position, rotation);
+    move(position: Vector3, rotation: IEuler, entity: Player | Entity) {
+        entity.move(position, rotation);
         const playerPosition: IClientEmitPosition = {
             type: 'Move',
-            id: player.id,
-            position: player.position,
-            rotation: player.rotation,
+            id: entity.id,
+            position: entity.position,
+            rotation: entity.rotation,
         };
-        const clients = this.getClientsWithoutOne(player.id);
+        const clients = this.getClientsWithoutOne(entity.id);
         this.emit(clients, WebsocketEvent.PlayerAction, playerPosition);
     }
 
@@ -36,7 +38,7 @@ export class WebsocketService {
         this.emit(clients, WebsocketEvent.PlayerAction, playerAnimation);
     }
 
-    modelChoice(model: TModel, player: Player) {
+    modelChoice(model: TPlayerModel, player: Player) {
         player.model = model;
         const playerModel: IClientEmitModel = {
             id: player.id,
@@ -60,6 +62,11 @@ export class WebsocketService {
         for (const client of clients) {
             client.emit(event, data);
         }
+    }
+
+    initEntities(entities: Map<string, Entity>) {
+        const id = crypto.randomUUID();
+        entities.set(id, new Entity(id, 'Cube', { x: 10, y: 0, z: 10 }));
     }
 
     getClientsWithoutOne(clientId: string): Socket[] {

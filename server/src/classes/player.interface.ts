@@ -11,13 +11,15 @@ export interface IEuler {
 
 export interface IPlayer {
     id: string;
-    model: TModel;
+    model: TPlayerModel;
     animation: TAnimation;
     position: ICoordinates;
     rotation: ICoordinates;
     username: string;
 }
 
-export type TModel = 'Alien';
+export type TPlayerModel = 'Alien';
+
+export type TEntityModel = 'Cube' | 'Sphere';
 
 export type TAnimation = 'walk' | 'idle' | 'run' | 'jump';

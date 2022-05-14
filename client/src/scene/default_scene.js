@@ -12,6 +12,7 @@ import { PlayerComponent } from '../components/player.component';
 import SkyboxComponent from '../components/skybox.component';
 import PlaneComponent from '../components/plane.component';
 import { useSelector } from 'react-redux';
+import { Cube } from '../components/cube.component';
 import { OtherPlayerComponent } from '../components/other-player.component';
 
 // Models
@@ -53,6 +54,7 @@ const DefaultScene = () => {
                 <PlaneComponent />
                 <PlayerComponent position={[0, 1, 0]} key="player" />
                 <Suspense fallback={null}></Suspense>
+                <Cube position={[10, 0, 10]} />
                 {/* <WorldMap position={[0, 2.35, 0]} /> */}
             </Physics>
             {players.map((player) => {

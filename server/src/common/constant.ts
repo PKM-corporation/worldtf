@@ -3,4 +3,6 @@ export const WebsocketEvent = {
     Chat: 'Chat',
     Warning: 'Warning',
     Players: 'Players',
+    EntityAction: 'EntityAction',
+    Entities: 'Entities',
 };

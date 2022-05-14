@@ -1,12 +1,10 @@
 import { Vector3 } from 'three';
-import { ICoordinates, TModel, TAnimation, IPlayer, IEuler } from './player.interface';
+import { ICoordinates, IEuler, TEntityModel, TPlayerModel } from './player.interface';
 
-export class Player {
-    constructor(id: string, username: string, model?: TModel, position?: ICoordinates, rotation?: ICoordinates) {
+export class Entity {
+    constructor(id: string, model: TEntityModel | TPlayerModel, position?: ICoordinates, rotation?: ICoordinates) {
         this.id = id;
-        this.username = username;
-        this.animation = 'idle';
-        this.model = model ?? 'Alien';
+        this.model = model;
         this.position = position ?? { x: 0, y: 0, z: 0 };
         this.rotation = rotation ?? { x: 0, y: 0, z: 0 };
     }
@@ -43,22 +41,8 @@ export class Player {
         this.rotateY(rotation._y);
     }
 
-    toObject(): IPlayer {
-        const player: IPlayer = {
-            id: this.id,
-            model: this.model,
-            position: this.position,
-            rotation: this.rotation,
-            animation: this.animation,
-            username: this.username,
-        };
-        return player;
-    }
-
     id: string;
     position: ICoordinates;
     rotation: ICoordinates;
-    username: string;
-    model: TModel;
-    animation: TAnimation;
+    model: TEntityModel | TPlayerModel;
 }
