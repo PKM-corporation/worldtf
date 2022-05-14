@@ -17,117 +17,51 @@ export default function Model({ ...props }) {
     const { nodes } = useGraph(clones);
     const { actions } = useAnimations(animations, group);
 
+    const stopAllAnimations = () => {
+        for (const action of Object.values(actions)) {
+            action.stop();
+        }
+    };
+
     useEffect(() => {
         actions.Idle.play();
     }, []);
     useEffect(() => {
         if (!player.animation) return;
+        stopAllAnimations();
         switch (player.animation) {
+            case 'Idle':
+                actions.Idle.play();
+                break;
             case 'Jumping':
-                actions.Idle.stop();
-                actions.Walking_forward.stop();
-                actions.Walking_backward.stop();
-                actions.Running_right.stop();
-                actions.Running_left.stop();
-                actions.Running_forward.stop();
-                actions.Running_backward.stop();
                 actions.Jumping.play();
+                break;
+            case 'Falling_idle':
+                actions.Falling_idle.play();
                 break;
             case 'Walking_forward':
                 actions.Walking_forward.play();
-                actions.Walking_backward.stop();
-                actions.Running_right.stop();
-                actions.Running_left.stop();
-                actions.Running_forward.stop();
-                actions.Running_backward.stop();
-                actions.Idle.stop();
-                actions.Jumping.stop();
                 break;
             case 'Walking_left':
                 actions.Walking_left.play();
-                actions.Walking_right.stop();
-                actions.Walking_forward.stop();
-                actions.Walking_backward.stop();
-                actions.Running_right.stop();
-                actions.Running_left.stop();
-                actions.Running_forward.stop();
-                actions.Running_backward.stop();
-                actions.Idle.stop();
-                actions.Jumping.stop();
                 break;
             case 'Walking_right':
                 actions.Walking_right.play();
-                actions.Walking_left.stop();
-                actions.Walking_forward.stop();
-                actions.Walking_backward.stop();
-                actions.Running_right.stop();
-                actions.Running_left.stop();
-                actions.Running_forward.stop();
-                actions.Running_backward.stop();
-                actions.Idle.stop();
-                actions.Jumping.stop();
                 break;
             case 'Walking_backward':
                 actions.Walking_backward.play();
-                actions.Running_right.stop();
-                actions.Running_left.stop();
-                actions.Walking_forward.stop();
-                actions.Running_forward.stop();
-                actions.Running_backward.stop();
-                actions.Idle.stop();
-                actions.Jumping.stop();
                 break;
             case 'Running_forward':
                 actions.Running_forward.play();
-                actions.Running_right.stop();
-                actions.Running_left.stop();
-                actions.Running_backward.stop();
-                actions.Walking_forward.stop();
-                actions.Walking_backward.stop();
-                actions.Idle.stop();
-                actions.Jumping.stop();
                 break;
             case 'Running_left':
                 actions.Running_left.play();
-                actions.Running_right.stop();
-                actions.Running_forward.stop();
-                actions.Running_backward.stop();
-                actions.Walking_forward.stop();
-                actions.Walking_backward.stop();
-                actions.Idle.stop();
-                actions.Jumping.stop();
                 break;
             case 'Running_right':
                 actions.Running_right.play();
-                actions.Running_left.stop();
-                actions.Running_forward.stop();
-                actions.Running_backward.stop();
-                actions.Walking_forward.stop();
-                actions.Walking_backward.stop();
-                actions.Idle.stop();
-                actions.Jumping.stop();
                 break;
             case 'Running_backward':
                 actions.Running_backward.play();
-                actions.Running_forward.stop();
-                actions.Running_right.stop();
-                actions.Running_left.stop();
-                actions.Walking_forward.stop();
-                actions.Walking_backward.stop();
-                actions.Idle.stop();
-                actions.Jumping.stop();
-                break;
-            case 'Idle':
-                actions.Idle.play();
-                actions.Walking_forward.stop();
-                actions.Walking_backward.stop();
-                actions.Walking_right.stop();
-                actions.Walking_left.stop();
-                actions.Running_forward.stop();
-                actions.Running_backward.stop();
-                actions.Running_right.stop();
-                actions.Running_left.stop();
-                actions.Jumping.stop();
                 break;
             default:
                 break;

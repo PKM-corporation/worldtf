@@ -20,6 +20,8 @@ const Running_backward = 'Running_backward';
 const Running_left = 'Running_left';
 const Running_right = 'Running_right';
 const Jumping = 'Jumping';
+const Falling_idle = 'Falling_idle';
+const Falling_to_landing = 'Falling_to_landing';
 const Idle = 'Idle';
 
 function sendSocketAnimation(animationName) {
@@ -72,7 +74,7 @@ export const PlayerComponent = (props) => {
         }
 
         if (!state.current.jumping) {
-            if (!sprint) {
+            if (!sprint && !jump) {
                 if (moveForward && !moveBackward && !moveLeft && !moveRight && currentAnimation !== Walking_forward) {
                     sendSocketAnimation(Walking_forward);
                 } else if (!moveForward && !moveBackward && moveLeft && !moveRight && currentAnimation !== Walking_left) {
@@ -84,7 +86,7 @@ export const PlayerComponent = (props) => {
                 } else if (!moveForward && !moveBackward && !moveLeft && !moveRight && currentAnimation !== Idle) {
                     sendSocketAnimation(Idle);
                 }
-            } else {
+            } else if (sprint && !jump) {
                 if (moveForward && !moveBackward && !moveLeft && !moveRight && currentAnimation !== Running_forward) {
                     sendSocketAnimation(Running_forward);
                 } else if (!moveForward && !moveBackward && moveLeft && !moveRight && currentAnimation !== Running_left) {
@@ -96,9 +98,11 @@ export const PlayerComponent = (props) => {
                 } else if (!moveForward && !moveBackward && !moveLeft && !moveRight && currentAnimation !== Idle) {
                     sendSocketAnimation(Idle);
                 }
+            } else if (currentAnimation !== Jumping) {
+                sendSocketAnimation(Jumping);
             }
-        } else if (state.current.jumping && currentAnimation !== Jumping) {
-            sendSocketAnimation(Jumping);
+        } else if (state.current.jumping && currentAnimation !== Falling_idle) {
+            sendSocketAnimation(Falling_idle);
         }
 
         camera.position.set(ref.current.position.x, ref.current.position.y + 0.9, ref.current.position.z);
