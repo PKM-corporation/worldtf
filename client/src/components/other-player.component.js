@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { Suspense, useEffect, useRef } from 'react';
 import { Html } from '@react-three/drei';
-import Remy from '../models/remy/Remy';
+import Aj from '../models/aj/Aj';
 import { useSelector } from 'react-redux';
 
 export const OtherPlayerComponent = (props) => {
@@ -25,9 +25,9 @@ export const OtherPlayerComponent = (props) => {
         <>
             <mesh ref={boxRef}>
                 <Suspense fallback={null}>
-                    <Remy position={[0, 0, 0]} playerId={props.playerId} />
+                    <Aj position={[0, 0, 0]} playerId={props.playerId} />
                 </Suspense>
-                <Html distanceFactor={10} style={{ transform: 'translate(-50%,-500%)' }}>
+                <Html distanceFactor={10} style={{ transform: 'translate(-50%,-800%)' }}>
                     <div ref={textRef} className="pseudo-label">
                         {player.username}
                     </div>

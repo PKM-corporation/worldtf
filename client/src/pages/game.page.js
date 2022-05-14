@@ -18,7 +18,7 @@ const GamePage = () => {
             <CrosshairComponent />
             <Canvas
                 shadows={{ type: 'VSMShadowMap' }}
-                camera={{ position: [0, 0, 5], fov: 70, near: 0.05, far: 100, aspect: window.innerWidth / window.innerHeight }}
+                camera={{ position: [0, 0, 5], fov: 70, near: 0.01, far: 100, aspect: window.innerWidth / window.innerHeight }}
             >
                 <PixelRatioSetting />
                 <Provider store={store}>
