@@ -1,0 +1,34 @@
+
+
+.navButton{
+    z-index: 999;
+    color: white;
+    font-size: 3rem;
+    cursor: pointer;
+}
+
+.navButton:hover{
+    color: white;
+    font-size: 3rem;
+    cursor: pointer;
+    text-shadow:
+    0 0 4px #fff,
+    0 0 11px #fff,
+    0 0 19px #fff,
+    0 0 40px rgb(238, 0, 255),
+    0 0 80px rgb(238, 0, 255),
+    0 0 90px rgb(238, 0, 255),
+    0 0 100px rgb(238, 0, 255),
+    0 0 150px rgb(238, 0, 255);
+}
+
+
+
+
+
+.content{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
