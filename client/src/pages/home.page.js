@@ -39,8 +39,10 @@ const HomePage = () => {
                                     <h2 className="navButton" onClick={() => navigate('/universe')}>
                                         Jouer
                                     </h2>
-                                    <h2 className="navButton" onClick={logout}>
-                                        Deconnexion
+                                    <h2 className="navButton">Paramètres</h2>
+                                    <h2 className="navButton">Crédits</h2>
+                                    <h2 className="navButton py-5" onClick={logout}>
+                                        Déconnexion
                                     </h2>
                                 </div>
                             )}
