@@ -14,6 +14,7 @@ import { Server, Socket } from 'socket.io';
 import { AuthService } from 'src/auth/auth.service';
 import { WebsocketEvent } from 'src/common/constant';
 import { Player } from 'src/player/player.class';
+import { User } from 'src/users/schemas/users.schema';
 import {
     IClientEmitPlayer,
     IClientEmitPlayers,
@@ -40,7 +41,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         this.logger.log(`websocket server initialized`);
     }
     async handleConnection(client: Socket) {
-        const user = await this.authService.validateUserWithToken(client.handshake.auth.token);
+        const user = (await this.authService.checkIfAccessTokenValid(client.handshake.auth.token, true)) as User;
         if (!user || Object.values(client.handshake.query).length === 0) return client.disconnect();
 
         const options = client.handshake.query as IWebsocketConnectionOptions;

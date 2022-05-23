@@ -8,7 +8,7 @@ export class UsersService {
     private logger: Logger = new Logger('UsersService');
     constructor(private readonly userRepository: UsersRepository) {}
 
-    async createUser(pseudo: string, email: string, password: string, avatar: string): Promise<User> {
+    async createUser(pseudo: string, email: string, password: string): Promise<User> {
         if (await this.isUserExist(email, pseudo)) {
             throw new Error('PseudoOrEmailAlreadyTaken');
         }
@@ -17,7 +17,6 @@ export class UsersService {
             pseudo,
             email,
             password: hashPassword,
-            avatar,
         });
     }
 

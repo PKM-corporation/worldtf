@@ -1,4 +1,4 @@
-import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { isObject } from 'class-validator';
@@ -62,10 +62,11 @@ export class AuthService {
         return auth.split(' ')[1];
     }
 
-    async checkTokenAndRefreshIfNecessary(accessToken: string): Promise<void> {
+    async checkIfAccessTokenValid(accessToken: string, withUser = false): Promise<boolean | User> {
         const userWithAccessToken = await this.validateUserWithToken(accessToken);
-        if (!userWithAccessToken) throw new UnauthorizedException();
-        if (userWithAccessToken.accessToken !== accessToken) throw new UnauthorizedException();
-        return;
+        if (!userWithAccessToken) return false;
+        if (userWithAccessToken.accessToken !== accessToken) return false;
+        if (withUser) return userWithAccessToken;
+        return true;
     }
 }

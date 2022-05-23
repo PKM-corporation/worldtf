@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
 import { ParamsDictionary } from 'express-serve-static-core';
@@ -8,6 +8,7 @@ import { AuthService } from '../auth.service';
 
 @Injectable()
 export class JwtTokenValidationStrategy extends PassportStrategy(Strategy, 'JwtTokenValidation') {
+    private logger: Logger = new Logger('JwtTokenStrategy');
     constructor(private authService: AuthService) {
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -17,10 +18,16 @@ export class JwtTokenValidationStrategy extends PassportStrategy(Strategy, 'JwtT
     }
     async authenticate(req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>): Promise<void> {
         try {
-            await this.authService.checkTokenAndRefreshIfNecessary(this.authService.getAccessTokenFromAuthorizationHeader(req.headers.authorization));
-            this.pass();
+            const result = await this.authService.checkIfAccessTokenValid(
+                this.authService.getAccessTokenFromAuthorizationHeader(req.headers.authorization),
+            );
+            if (result) {
+                this.pass();
+            }
+            this.error(new UnauthorizedException());
         } catch (e) {
-            this.error(e);
+            this.logger.error(`validation token failed with error, token: ${req.headers.authorization}`);
+            throw e;
         }
     }
 }
