@@ -2,12 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import MyVideo from '../components/backgroundVid.mp4';
 
-const HomePage = () => {
+const SettingsPage = () => {
     const navigate = useNavigate();
-    const logout = () => {
-        window.localStorage.removeItem('access_token');
-        navigate('/authenticate');
-    };
     const isConnected = window.localStorage.access_token;
 
     return (
@@ -36,15 +32,27 @@ const HomePage = () => {
                         <span className="mt-3">
                             {isConnected && (
                                 <div className="menu">
-                                    <h2 className="navButton" onClick={() => navigate('/universe')}>
-                                        Jouer
-                                    </h2>
-                                    <h2 className="navButton" onClick={() => navigate('/settings')}>
-                                        Paramètres
-                                    </h2>
-                                    <h2 className="navButton">Crédits</h2>
-                                    <h2 className="navButton py-5" onClick={logout}>
-                                        Déconnexion
+                                    <h2 className="text-large">Langues</h2>
+                                    <div className="language">
+                                        <table>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <span className="text-small navButton" onClick={() => changeLanguage('fr')}>
+                                                            FR
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span className="text-small navButton" onClick={() => changeLanguage('en')}>
+                                                            EN
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <h2 className="navButton" onClick={() => navigate('/')}>
+                                        Retour
                                     </h2>
                                 </div>
                             )}
@@ -63,4 +71,4 @@ const HomePage = () => {
     );
 };
 
-export default HomePage;
+export default SettingsPage;
