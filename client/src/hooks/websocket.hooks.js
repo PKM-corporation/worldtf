@@ -2,6 +2,8 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
+import { MessageTypes } from '../common/constant';
+import { addMessage } from '../store/slices/chat.slice';
 import { addPlayer, animPlayer, choiceModelPlayer, initPlayers, movePlayer, removePlayer } from '../store/slices/players.slice';
 
 export let server = null;
@@ -46,7 +48,21 @@ export const useWebsocketServer = () => {
             }
         });
         server.on('Chat', (data) => {
-            console.log(data);
+            switch (data.type) {
+                case MessageTypes.Chat:
+                    console.log(data);
+                    dispatch(
+                        addMessage({
+                            type: MessageTypes.Chat,
+                            content: data.message,
+                            sender: data.id,
+                        }),
+                    );
+                    break;
+
+                default:
+                    break;
+            }
         });
         server.on('Warning', (data) => {
             console.log(data);
