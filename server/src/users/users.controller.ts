@@ -32,7 +32,7 @@ export class UsersController {
     @HttpCode(HttpStatus.OK)
     async createUser(@Body() createUserDto: CreateUserDto): Promise<AccessTokenDto> {
         try {
-            const user = await this.usersService.createUser(createUserDto.pseudo, createUserDto.email, createUserDto.password);
+            const user = await this.usersService.createUser(createUserDto.pseudo, createUserDto.email, createUserDto.password, createUserDto.avatar);
             this.logger.debug(`New user ${user._id} created`);
             return await this.authService.login(user);
         } catch (e) {
@@ -41,7 +41,7 @@ export class UsersController {
                 throw new HttpException('CreateUserError', HttpStatus.CONFLICT);
             }
             this.logger.error(
-                `Create user error, pseudo: ${createUserDto.pseudo}, email: ${createUserDto.email}, password: ${createUserDto.password}, error: ${e}`,
+                `Create user error, pseudo: ${createUserDto.pseudo}, email: ${createUserDto.email}, password: ${createUserDto.password}, avatar: ${createUserDto.avatar}, error: ${e}`,
             );
             throw new HttpException('CreateUserError', HttpStatus.INTERNAL_SERVER_ERROR);
         }

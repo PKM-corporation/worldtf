@@ -16,6 +16,10 @@ export class CreateUserDto {
     @IsString()
     @IsNotEmpty()
     password: string;
+
+    @ApiProperty()
+    @IsString()
+    avatar: string;
 }
 
 export class LoginUserDto {
@@ -46,6 +50,10 @@ export class UserDto {
     @IsString()
     @IsNotEmpty()
     password: string;
+
+    @ApiProperty()
+    @IsString()
+    avatar: string;
 }
 
 export class AccessTokenDto {
