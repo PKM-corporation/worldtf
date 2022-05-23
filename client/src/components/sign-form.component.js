@@ -75,7 +75,9 @@ const SignFormComponent = () => {
                     <label htmlFor="floatingPassword">Mot de passe</label>
                 </div>
                 <span className="mt-3 d-flex justify-content-center">
-                    <input onClick={sign} className="p-3 rounded-circle" type="button" value="test" />
+                    <button className="btnForm" onClick={sign}>
+                        <span>Inscription</span>
+                    </button>
                 </span>
             </div>
         </div>

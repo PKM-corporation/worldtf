@@ -51,7 +51,9 @@ const LoginFormComponent = () => {
                     <label htmlFor="floatingPasswordLogin">Mot de passe</label>
                 </div>
                 <span className="mt-3 d-flex justify-content-center">
-                    <input onClick={login} className="p-3 rounded-circle" type="button" value="test" />
+                    <button className="btnForm" onClick={login}>
+                        <span>Connexion</span>
+                    </button>
                 </span>
             </div>
         </div>
