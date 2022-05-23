@@ -16,6 +16,7 @@ import { OtherPlayerComponent } from '../components/other-player.component';
 
 // Models
 import WorldMap from '../models/map/Map';
+import { Vector3 } from 'three';
 
 const DefaultScene = () => {
     const { camera, gl } = useThree();

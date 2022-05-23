@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import CrosshairComponent from '../components/crosshair.component';
 import DefaultScene from '../scene/default_scene';
 import ChatComponent from '../components/chat.component';
@@ -20,6 +20,7 @@ const PixelRatioSetting = () => {
     const { gl } = useThree();
     gl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 };
+
 const GamePage = () => {
     const dispatch = useDispatch();
     const connected = useSelector((state) => state.websocket.connected);

@@ -2,6 +2,8 @@
 import React, { Suspense, useEffect, useRef } from 'react';
 import { Html } from '@react-three/drei';
 import Aj from '../models/aj/Aj';
+import Starkie from '../models/starkie/Starkie';
+import TheBoss from '../models/the_boss/The_boss';
 import { useSelector } from 'react-redux';
 
 export const OtherPlayerComponent = (props) => {
@@ -25,7 +27,7 @@ export const OtherPlayerComponent = (props) => {
         <>
             <mesh ref={boxRef}>
                 <Suspense fallback={null}>
-                    <Aj position={[0, 0, 0]} playerId={props.playerId} />
+                    <TheBoss position={[0, 0, 0]} playerId={props.playerId} />
                 </Suspense>
                 <Html distanceFactor={10} style={{ transform: 'translate(-50%,-800%)' }}>
                     <div ref={textRef} className="pseudo-label">
