@@ -5,7 +5,7 @@ import { Vector3 } from 'three';
 
 export type TWebsocketDataType = 'Chat' | 'Move' | 'ModelChoice' | 'Anim' | 'RemovePlayer' | 'AddPlayer' | 'InitPlayers';
 
-export type TWebsocketLog = 'Connection';
+export type TWebsocketLog = 'Connection' | 'Disconnection';
 
 export interface IWebsocketData {
     type: TWebsocketDataType;
