@@ -20,6 +20,7 @@ import {
     IClientEmitPlayers,
     IWebsocketAnimData,
     IWebsocketChatData,
+    IWebsocketCommandData,
     IWebsocketConnectionLog,
     IWebsocketConnectionOptions,
     IWebsocketData,
@@ -115,5 +116,36 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
             await this.cacheManager.set(client.id, client, { ttl: 0.5 });
         }
         this.websocketService.chat(data.message, player);
+    }
+
+    //@UseGuards(JwtAuthGuard)
+    @SubscribeMessage(WebsocketEvent.Command)
+    async handleEventCommand(@MessageBody() data: IWebsocketCommandData, @ConnectedSocket() client: Socket) {
+        const player = this.players.get(client.id);
+        if (!player) {
+            return this.logger.warn(`Player not found, client: ${client.id}`);
+        }
+        const cachedClient = await this.cacheManager.get(client.id);
+        if (cachedClient) {
+            return client.emit(WebsocketEvent.Warning, 'please do not spam');
+        } else {
+            await this.cacheManager.set(client.id, client, { ttl: 0.5 });
+        }
+        const command = this.websocketService.splitCommand(data.command);
+        switch (command.type) {
+            case 'mp':
+                this.websocketService.sendMpTo(this.findPlayerByPseudo(command.target), command.content, client);
+                break;
+            case 'tp':
+                this.websocketService.tpTo(this.findPlayerByPseudo(command.target), player);
+                break;
+            case 'help':
+                this.websocketService.askHelp(client);
+                break;
+        }
+    }
+
+    private findPlayerByPseudo(pseudo: string): Player {
+        return Array.from(this.players.values()).find((player) => (player.username = pseudo));
     }
 }

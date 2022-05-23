@@ -3,7 +3,7 @@ import { Player } from 'src/player/player.class';
 import { ICoordinates, IEuler, TAnimation, TModel } from 'src/player/player.interface';
 import { Vector3 } from 'three';
 
-export type TWebsocketDataType = 'Chat' | 'Move' | 'ModelChoice' | 'Anim' | 'RemovePlayer' | 'AddPlayer' | 'InitPlayers';
+export type TWebsocketDataType = 'Chat' | 'Move' | 'ModelChoice' | 'Anim' | 'RemovePlayer' | 'AddPlayer' | 'InitPlayers' | 'Mp' | 'Help';
 
 export type TWebsocketLog = 'Connection' | 'Disconnection';
 
@@ -22,6 +22,9 @@ export interface IWebsocketModelChoiceData extends IWebsocketData {
 }
 export interface IWebsocketChatData extends IWebsocketData {
     message: string;
+}
+export interface IWebsocketCommandData extends IWebsocketData {
+    command: string;
 }
 
 export interface IWebsocketConnectionOptions extends ParsedUrlQuery {
@@ -62,4 +65,11 @@ export interface IWebsocketLog {
 
 export interface IWebsocketConnectionLog extends IWebsocketLog {
     pseudo: string;
+}
+
+export type TCommand = 'mp' | 'tp' | 'help';
+export interface ICommand {
+    type: TCommand;
+    target?: string;
+    content?: string;
 }
