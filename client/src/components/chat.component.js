@@ -27,7 +27,11 @@ const ChatComponent = () => {
             <form
                 onSubmit={(e) => {
                     e.preventDefault();
-                    server.emit('Chat', { type: 'Chat', message: text });
+                    if (text[0] === '/') {
+                        server.emit('Command', { type: 'Command', command: text });
+                    } else {
+                        server.emit('Chat', { type: 'Chat', message: text });
+                    }
                     setText('');
                 }}
             >

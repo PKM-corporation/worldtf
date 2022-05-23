@@ -48,21 +48,13 @@ export const useWebsocketServer = () => {
             }
         });
         server.on('Chat', (data) => {
-            switch (data.type) {
-                case MessageTypes.Chat:
-                    console.log(data);
-                    dispatch(
-                        addMessage({
-                            type: MessageTypes.Chat,
-                            content: data.message,
-                            sender: data.id,
-                        }),
-                    );
-                    break;
-
-                default:
-                    break;
-            }
+            dispatch(
+                addMessage({
+                    type: data.type,
+                    content: data.message,
+                    sender: data.id,
+                }),
+            );
         });
         server.on('Warning', (data) => {
             console.log(data);

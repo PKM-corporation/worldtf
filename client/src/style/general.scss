@@ -60,6 +60,10 @@ body {
             width: 480px;
             display: flex;
 
+            &.Mp {
+                color: rgb(215, 5, 230);
+            }
+
             .sender {
                 margin-right: 10px;
                 font-weight: bold;
