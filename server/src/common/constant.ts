@@ -4,4 +4,5 @@ export const WebsocketEvent = {
     Logs: 'Logs',
     Warning: 'Warning',
     Players: 'Players',
+    Command: 'Command',
 };

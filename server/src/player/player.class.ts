@@ -1,3 +1,4 @@
+import { isObject } from 'class-validator';
 import { Vector3 } from 'three';
 import { ICoordinates, TModel, TAnimation, IPlayer, IEuler } from './player.interface';
 
@@ -34,13 +35,23 @@ export class Player {
         this.rotation.z = z;
     }
 
-    move(position: Vector3, rotation: IEuler) {
+    private isCoordinate(coord: any): coord is ICoordinates {
+        return isObject(coord) && !coord['_x'];
+    }
+
+    move(position: Vector3 | ICoordinates, rotation: IEuler | ICoordinates) {
         this.moveX(position.x);
         this.moveZ(position.z);
         this.moveY(position.y);
-        this.rotateX(rotation._x);
-        this.rotateZ(rotation._z);
-        this.rotateY(rotation._y);
+        if (this.isCoordinate(rotation)) {
+            this.rotateX(rotation.x);
+            this.rotateZ(rotation.z);
+            this.rotateY(rotation.y);
+        } else {
+            this.rotateX(rotation._x);
+            this.rotateZ(rotation._z);
+            this.rotateY(rotation._y);
+        }
     }
 
     toObject(): IPlayer {
