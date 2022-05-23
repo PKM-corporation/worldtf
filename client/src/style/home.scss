@@ -1,14 +1,22 @@
+* {
+    color: white;
+}
 
+.text-large {
+    font-size: 3rem;
+}
+
+.text-small {
+    font-size: 2rem;
+}
 
 .navButton{
     z-index: 999;
-    color: white;
     font-size: 3rem;
     cursor: pointer;
 }
 
 .navButton:hover{
-    color: white;
     font-size: 3rem;
     cursor: pointer;
     text-shadow:
