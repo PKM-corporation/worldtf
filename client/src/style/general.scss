@@ -37,3 +37,28 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
 }
+
+.chat{
+    left: 80px;  
+    bottom : 100px;
+    z-Index: 100000;
+    border: 1px solid;
+    max-height: 200px;
+    padding: 5; 
+    background-color: rgba(255, 255, 255, 0.227);
+    position: fixed;
+    width: 20%;
+    overflow-y: hidden;
+    text-align: bottom;
+    
+    & > input{
+        width : 95%;
+        margin: 10px;
+        position: fixed;
+
+    }
+    .chatContent{
+        width: 100%;
+        overflow: hidden;
+    }
+}

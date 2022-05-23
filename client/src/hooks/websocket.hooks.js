@@ -46,7 +46,7 @@ export const useWebsocketServer = () => {
             }
         });
         server.on('Chat', (data) => {
-            console.log(data);
+            dispatch(addMessage(data));
         });
         server.on('Warning', (data) => {
             console.log(data);
