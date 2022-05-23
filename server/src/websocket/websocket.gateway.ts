@@ -132,9 +132,10 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
             await this.cacheManager.set(client.id, client, { ttl: 0.5 });
         }
         const command = this.websocketService.splitCommand(data.command);
+        this.logger.debug(`${player.username} type command ${command.type}: target: ${command.target}, content: ${command.content}`);
         switch (command.type) {
             case 'mp':
-                this.websocketService.sendMpTo(this.findPlayerByPseudo(command.target), command.content, client);
+                this.websocketService.sendMpTo(this.findPlayerByPseudo(command.target), command.content, client, player);
                 break;
             case 'tp':
                 this.websocketService.tpTo(this.findPlayerByPseudo(command.target), player);
@@ -146,6 +147,6 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
     }
 
     private findPlayerByPseudo(pseudo: string): Player {
-        return Array.from(this.players.values()).find((player) => (player.username = pseudo));
+        return Array.from(this.players.values()).find((player) => player.username === pseudo);
     }
 }

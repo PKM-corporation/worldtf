@@ -50,7 +50,7 @@ export class WebsocketService {
     chat(message: string, player: Player) {
         const playerMessage: IClientEmitMessage = {
             type: 'Chat',
-            id: player.id,
+            id: player.username,
             message: message,
         };
         this.server.emit(WebsocketEvent.Chat, playerMessage);
@@ -71,7 +71,7 @@ export class WebsocketService {
     }
 
     getClientById(clientId: string): Socket {
-        return Array.from(this.server.sockets.sockets.values()).find((client) => client.id === clientId);
+        return this.server.sockets.sockets.get(clientId);
     }
 
     //Chat commands (mp, tp, help)
@@ -87,6 +87,7 @@ export class WebsocketService {
                         content: splittedCommand[2],
                     } as ICommand;
                 }
+                break;
             case '/tp':
                 if (splittedCommand[1]) {
                     return {
@@ -94,22 +95,24 @@ export class WebsocketService {
                         target: splittedCommand[1],
                     } as ICommand;
                 }
-            case '/help':
-            default:
-                return {
-                    type: 'help',
-                } as ICommand;
+                break;
         }
+        return {
+            type: 'help',
+        } as ICommand;
     }
 
-    sendMpTo(target: Player, message: string, client: Socket) {
+    sendMpTo(target: Player, message: string, client: Socket, player: Player) {
         const clientTarget = this.getClientById(target.id);
         const mp: IClientEmitMessage = {
             type: 'Mp',
-            id: client.id,
+            id: player.username,
             message,
         };
-        clientTarget.emit(WebsocketEvent.Chat, mp);
+        if (clientTarget) {
+            clientTarget.emit(WebsocketEvent.Chat, mp);
+            client.emit(WebsocketEvent.Chat, mp);
+        }
     }
 
     tpTo(target: Player, player: Player) {
