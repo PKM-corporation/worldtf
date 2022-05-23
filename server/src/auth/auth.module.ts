@@ -14,7 +14,6 @@ import { JwtTokenValidationStrategy } from './strategies/jwt-token-validation.st
         PassportModule,
         JwtModule.register({
             secret: process.env.JWT_SECRET,
-            signOptions: { expiresIn: '30min' },
         }),
     ],
     providers: [AuthService, UserValidationStrategy, JwtTokenValidationStrategy],
