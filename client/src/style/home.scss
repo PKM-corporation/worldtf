@@ -22,13 +22,11 @@
     0 0 150px rgb(238, 0, 255);
 }
 
-
-
-
-
-.content{
-    position: absolute;
-    width: 100%;
-    height: 100%;
+.home, .AuthPage{
+    .content{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+    }
 }
 

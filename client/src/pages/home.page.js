@@ -11,7 +11,7 @@ const HomePage = () => {
     const isConnected = window.localStorage.access_token;
 
     return (
-        <div>
+        <div className="home">
             <video
                 autoPlay
                 muted

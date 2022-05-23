@@ -1,20 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { MessageTypes } from '../../common/constant';
+
 export const ChatSlice = createSlice({
-    name: 'Chat',
+    name: 'chat',
     initialState: {
-        tchatList: [],
+        chatList: [],
     },
     reducers: {
         addMessage: (state, action) => {
-            state.playerList = action.payload;
-            for (const message of action.payload) {
-                state[(message.message, message.id)] = message;
-            }
+            state.chatList.push(action.payload);
         },
-        addServerMessage: (state, action) => {},
     },
 });
 
-export const { addMessage, addServerMessage } = ChatSlice.actions;
+export const { addMessage } = ChatSlice.actions;
 
 export default ChatSlice.reducer;

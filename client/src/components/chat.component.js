@@ -1,18 +1,38 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { server } from '../hooks/websocket.hooks';
 
 const ChatComponent = () => {
+    const [text, setText] = useState('');
+    const messages = useSelector((state) => state.chat.chatList);
+    const players = useSelector((state) => state.players);
+    const chatRef = useRef();
+
+    useEffect(() => {
+        console.log('test');
+        chatRef.current.scrollTop = chatRef.current.scrollHeight;
+    }, [messages]);
     return (
         <>
             <div className="chat" id="chat">
-                <div className="chatContent" id="chatContent">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam quidem quos asperiores nostrum cum dolorum eius Lorem ipsum
-                    dolor sit amet, consectetur adipisicing elit. Vero dignissimos beatae officia quasi iste consectetur deleniti quas ad nihil
-                    obcaecati commodi, ratione molestiae voluptatem corrupti, quos cum dolorem, soluta nesciunt! Lorem, ipsum dolor sit amet
-                    consectetur adipisicing elit. Nemo voluptatem perspiciatis impedit recusandae voluptates reiciendis temporedebitiscupiditate
-                    consectetur earum, perferendis enim, ipsum iste obcaecati excepturi adipisci autem veritatis alias.
+                <div className="chatContent" ref={chatRef} id="chatContent">
+                    {messages.map((message, i) => (
+                        <div className={`${message.type} message`} key={i}>
+                            <span className="sender">[{message.sender}]:</span>
+                            <span className="content">{message.content}</span>
+                        </div>
+                    ))}
                 </div>
-                <input type="text" id="inputChat" />
             </div>
+            <form
+                onSubmit={(e) => {
+                    e.preventDefault();
+                    server.emit('Chat', { type: 'Chat', message: text });
+                    setText('');
+                }}
+            >
+                <input onChange={(e) => setText(e.target.value)} value={text} autoComplete="off" type="text" id="inputChat" />
+            </form>
         </>
     );
 };
