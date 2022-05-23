@@ -5,6 +5,8 @@ import { Vector3 } from 'three';
 
 export type TWebsocketDataType = 'Chat' | 'Move' | 'ModelChoice' | 'Anim' | 'RemovePlayer' | 'AddPlayer' | 'InitPlayers';
 
+export type TWebsocketLog = 'Connection';
+
 export interface IWebsocketData {
     type: TWebsocketDataType;
 }
@@ -51,4 +53,13 @@ export interface IClientEmitModel extends IClientEmitData {
 }
 export interface IClientEmitMessage extends IClientEmitData {
     message: string;
+}
+
+export interface IWebsocketLog {
+    id: string;
+    type: TWebsocketLog;
+}
+
+export interface IWebsocketConnectionLog extends IWebsocketLog {
+    pseudo: string;
 }

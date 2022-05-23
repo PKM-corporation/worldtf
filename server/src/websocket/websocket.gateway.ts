@@ -19,6 +19,7 @@ import {
     IClientEmitPlayers,
     IWebsocketAnimData,
     IWebsocketChatData,
+    IWebsocketConnectionLog,
     IWebsocketConnectionOptions,
     IWebsocketData,
     IWebsocketModelChoiceData,
@@ -58,6 +59,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         const newPlayer: IClientEmitPlayer = { type: 'AddPlayer', id: client.id, player };
         this.websocketService.emit(this.websocketService.getClientsWithoutOne(client.id), WebsocketEvent.Players, newPlayer);
 
+        this.wss.emit(WebsocketEvent.Logs, { type: 'Connection', id: user._id, pseudo: user.pseudo } as IWebsocketConnectionLog);
         this.logger.log(`client ${client.id} connected`);
     }
     handleDisconnect(client: Socket) {
