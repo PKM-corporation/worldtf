@@ -46,6 +46,10 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
     async handleConnection(client: Socket) {
         const user = (await this.authService.checkIfAccessTokenValid(client.handshake.auth.token, true)) as User;
         if (!user || Object.values(client.handshake.query).length === 0) return client.disconnect();
+        if (this.findPlayerByPseudo(user.pseudo)) {
+            this.logger.warn(`Client ${client.id} tries to login with user ${user.pseudo} who is already logged in`);
+            return client.disconnect();
+        }
 
         const options = client.handshake.query as IWebsocketConnectionOptions;
         const players = Array.from(this.players.values());
