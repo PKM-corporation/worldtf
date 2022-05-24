@@ -17,7 +17,7 @@ export const useWebsocketServer = () => {
         const accessToken = window.localStorage.getItem('access_token');
         if (!accessToken) return navigate('/authenticate');
 
-        server = io(process.env.REACT_APP_BASE_WEBSOCKET_SERVER_URI, { query: { userId: 'test' }, auth: { token: accessToken } });
+        server = io(process.env.REACT_APP_BASE_WEBSOCKET_SERVER_URI, { auth: { token: accessToken } });
 
         server.on('disconnect', () => {
             dispatch(setWebsocketConnected(false));

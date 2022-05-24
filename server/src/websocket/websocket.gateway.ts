@@ -46,7 +46,8 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
     }
     async handleConnection(client: Socket) {
         const user = (await this.authService.checkIfAccessTokenValid(client.handshake.auth.token, true)) as User;
-        if (!user || Object.values(client.handshake.query).length === 0) {
+        if (!user) {
+            this.logger.warn(`Client ${client.id} tries to login with invalid token ${client.handshake.auth.token}`);
             client.emit(WebsocketEvent.Error, { type: 'Error', status: 401, message: 'IncorrectToken' } as IClientEmitError);
             return client.disconnect(true);
         }
@@ -77,9 +78,8 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
     }
     handleDisconnect(client: Socket) {
         const player = this.players.get(client.id);
-        if (!player) {
-            return this.logger.warn(`Suspicious attempt to connect, client: ${client.id}`);
-        }
+        if (!player) return;
+
         const removedPlayer: IClientEmitPlayer = { type: 'RemovePlayer', id: client.id, player };
         this.websocketService.emit(this.websocketService.getClientsWithoutOne(client.id), WebsocketEvent.Players, removedPlayer);
         this.players.delete(client.id);
