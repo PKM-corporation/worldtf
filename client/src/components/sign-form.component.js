@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { signInUser } from '../services/auth.service';
+import { setUser } from '../store/slices/user.slice';
 
 const SignFormComponent = () => {
     const navigate = useNavigate();
