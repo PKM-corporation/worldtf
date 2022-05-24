@@ -5,17 +5,19 @@ import ChatComponent from '../components/chat.component';
 import { Canvas } from '@react-three/fiber';
 import { useThree } from '@react-three/fiber';
 import { useWebsocketServer } from '../hooks/websocket.hooks';
-import { Provider, useSelector } from 'react-redux';
+import { Provider, useDispatch, useSelector } from 'react-redux';
 import store from '../store/store';
 import ErrorComponent from '../components/error.component';
 import LoaderComponent from '../components/loader.component';
 import { useNavigate } from 'react-router-dom';
+import { removeUser } from '../store/slices/user.slice';
 
 const PixelRatioSetting = () => {
     const { gl } = useThree();
     gl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 };
 const GamePage = () => {
+    const dispatch = useDispatch();
     const connected = useSelector((state) => state.websocket.connected);
     const error = useSelector((state) => state.websocket.error);
     const navigate = useNavigate();
@@ -23,7 +25,7 @@ const GamePage = () => {
 
     useEffect(() => {
         if (error.status === 401) {
-            window.localStorage.removeItem('access_token');
+            dispatch(removeUser());
             navigate('/authenticate');
         }
     }, [error]);

@@ -13,11 +13,11 @@ export const useWebsocketServer = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const players = useSelector((state) => state.players);
+    const user = useSelector((state) => state.user);
     useEffect(() => {
-        const accessToken = window.localStorage.getItem('access_token');
-        if (!accessToken) return navigate('/authenticate');
+        if (!user.updated || !user.accessToken) return navigate('/authenticate');
 
-        server = io(process.env.REACT_APP_BASE_WEBSOCKET_SERVER_URI, { auth: { token: accessToken } });
+        server = io(process.env.REACT_APP_BASE_WEBSOCKET_SERVER_URI, { auth: { token: user.accessToken } });
 
         server.on('disconnect', () => {
             dispatch(setWebsocketConnected(false));

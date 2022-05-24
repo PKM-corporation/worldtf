@@ -74,7 +74,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         this.websocketService.emit(this.websocketService.getClientsWithoutOne(client.id), WebsocketEvent.Players, newPlayer);
 
         this.wss.emit(WebsocketEvent.Logs, { type: 'Connection', id: client.id, pseudo: user.pseudo } as IWebsocketConnectionLog);
-        this.logger.log(`client ${client.id} connected`);
+        this.logger.log(`client ${client.id}, pseudo: ${user.pseudo} connected`);
     }
     handleDisconnect(client: Socket) {
         const player = this.players.get(client.id);

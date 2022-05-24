@@ -18,11 +18,12 @@ export class JwtTokenValidationStrategy extends PassportStrategy(Strategy, 'JwtT
     }
     async authenticate(req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>): Promise<void> {
         try {
-            const result = await this.authService.checkIfAccessTokenValid(
+            const user = await this.authService.checkIfAccessTokenValid(
                 this.authService.getAccessTokenFromAuthorizationHeader(req.headers.authorization),
+                true,
             );
-            if (result) {
-                this.pass();
+            if (user) {
+                this.success(user);
             }
             this.error(new UnauthorizedException());
         } catch (e) {

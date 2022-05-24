@@ -39,6 +39,15 @@ export class UsersService {
         }
     }
 
+    async removeAccessToken(userId: string): Promise<void> {
+        try {
+            await this.userRepository.update(userId, { accessToken: null });
+        } catch (e) {
+            this.logger.error(`RemoveAccessToken error with user: ${userId}`);
+            throw e;
+        }
+    }
+
     private async isUserExist(email: string, pseudo: string) {
         try {
             const existingUser = await this.userRepository.findOne({ $or: [{ email }, { pseudo }] });
