@@ -5,4 +5,5 @@ export const WebsocketEvent = {
     Warning: 'Warning',
     Players: 'Players',
     Command: 'Command',
+    Error: 'Error',
 };
