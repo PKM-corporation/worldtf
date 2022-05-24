@@ -16,6 +16,7 @@ import { WebsocketEvent } from 'src/common/constant';
 import { Player } from 'src/player/player.class';
 import { User } from 'src/users/schemas/users.schema';
 import {
+    IClientEmitError,
     IClientEmitPlayer,
     IClientEmitPlayers,
     IClientEmitWarning,
@@ -45,10 +46,14 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
     }
     async handleConnection(client: Socket) {
         const user = (await this.authService.checkIfAccessTokenValid(client.handshake.auth.token, true)) as User;
-        if (!user || Object.values(client.handshake.query).length === 0) return client.disconnect();
+        if (!user || Object.values(client.handshake.query).length === 0) {
+            client.emit(WebsocketEvent.Error, { type: 'Error', status: 401, message: 'IncorrectToken' } as IClientEmitError);
+            return client.disconnect(true);
+        }
         if (this.findPlayerByPseudo(user.pseudo)) {
             this.logger.warn(`Client ${client.id} tries to login with user ${user.pseudo} who is already logged in`);
-            return client.disconnect();
+            client.emit(WebsocketEvent.Error, { type: 'Error', status: 409, message: 'AlreadyLogin' } as IClientEmitError);
+            return client.disconnect(true);
         }
 
         const options = client.handshake.query as IWebsocketConnectionOptions;

@@ -15,6 +15,11 @@ export const WebsocketEvent = {
     Command: 'Command',
 };
 
+export const WebsocketErrorMessages = {
+    AlreadyLogin: 'AlreadyLogin',
+    IncorrectToken: 'IncorrectToken',
+};
+
 export const Animations = {
     WalkingForward: 'Walking_forward',
     WalkingLeft: 'Walking_left',

@@ -1,3 +1,4 @@
+import { HttpStatus } from '@nestjs/common';
 import { ParsedUrlQuery } from 'querystring';
 import { Player } from 'src/player/player.class';
 import { ICoordinates, TAnimation, TModel } from 'src/player/player.interface';
@@ -13,15 +14,12 @@ export type TWebsocketDataType =
     | 'InitPlayers'
     | 'Mp'
     | 'Help'
-    | 'Tp';
+    | 'Tp'
+    | 'Error';
 
 export type TWarning = 'Spam' | 'IncorrectTarget';
 
 export type TWebsocketLog = 'Connection' | 'Disconnection';
-
-export interface IClientEmitWarning {
-    type: TWarning;
-}
 
 export interface IWebsocketData {
     type: TWebsocketDataType;
@@ -55,6 +53,13 @@ export interface IWebsocketConnectionOptions extends ParsedUrlQuery {
 export interface IClientEmitData {
     type: TWebsocketDataType;
     id?: string;
+}
+export interface IClientEmitWarning {
+    type: TWarning;
+}
+export interface IClientEmitError extends IClientEmitData {
+    status: HttpStatus;
+    message: string;
 }
 export interface IClientEmitPlayer extends IClientEmitData {
     player: Player;

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import { addLog, addMessage } from '../store/slices/chat.slice';
+import { setWebsocketConnected, setWebsocketError } from '../store/slices/websocket.slice';
 import { setPlayerPosition } from '../store/slices/player.slice';
 import { addPlayer, animPlayer, choiceModelPlayer, initPlayers, movePlayer, removePlayer, rotatePlayer } from '../store/slices/players.slice';
 
@@ -17,6 +18,16 @@ export const useWebsocketServer = () => {
         if (!accessToken) return navigate('/authenticate');
 
         server = io(process.env.REACT_APP_BASE_WEBSOCKET_SERVER_URI, { query: { userId: 'test' }, auth: { token: accessToken } });
+
+        server.on('disconnect', () => {
+            dispatch(setWebsocketConnected(false));
+        });
+        server.on('connect', () => {
+            dispatch(setWebsocketConnected(true));
+        });
+        server.on('Error', (data) => {
+            dispatch(setWebsocketError(data));
+        });
         server.on('Players', (data) => {
             switch (data.type) {
                 case 'RemovePlayer':
