@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import MyVideo from '../components/backgroundVid.mp4';
+import BackgroundComponent from '../components/background.component';
 
 const SettingsPage = () => {
     const navigate = useNavigate();
@@ -8,23 +8,7 @@ const SettingsPage = () => {
 
     return (
         <div>
-            <video
-                autoPlay
-                muted
-                loop
-                style={{
-                    position: 'absolute',
-                    width: '100%',
-                    left: '50%',
-                    top: '50%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    transform: 'translate(-50%,-50%)',
-                    zZIndex: '-9',
-                }}
-            >
-                <source src={MyVideo} type="video/mp4" />
-            </video>
+            <BackgroundComponent />
             <div className="content">
                 <h1 className="text-center neonText pt-4">Universe</h1>
                 <div className=" h-75 d-flex justify-content-end align-items-center">
