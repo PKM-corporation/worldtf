@@ -8,11 +8,31 @@ export const ChatSlice = createSlice({
     },
     reducers: {
         addMessage: (state, action) => {
-            state.chatList.push(action.payload);
+            if (action.payload.type === MessageTypes.Help) {
+                action.payload.content = `
+                    Command List :
+                    - /mp [pseudo] [message]
+                    - /tp [pseudo]
+                    - /help
+                `;
+                state.chatList.push(action.payload);
+            } else {
+                state.chatList.push(action.payload);
+            }
+        },
+        addLog: (state, action) => {
+            switch (action.payload.type) {
+                case 'Connection':
+                    state.chatList.push({ type: MessageTypes.Logs, content: `Hello ${action.payload.pseudo}` });
+                    break;
+                case 'Disconnection':
+                    state.chatList.push({ type: MessageTypes.Logs, content: `Bye ${action.payload.pseudo}` });
+                    break;
+            }
         },
     },
 });
 
-export const { addMessage } = ChatSlice.actions;
+export const { addMessage, addLog } = ChatSlice.actions;
 
 export default ChatSlice.reducer;

@@ -18,13 +18,16 @@ import { User } from 'src/users/schemas/users.schema';
 import {
     IClientEmitPlayer,
     IClientEmitPlayers,
+    IClientEmitWarning,
     IWebsocketAnimData,
     IWebsocketChatData,
+    IWebsocketCommandData,
     IWebsocketConnectionLog,
     IWebsocketConnectionOptions,
     IWebsocketData,
     IWebsocketModelChoiceData,
     IWebsocketMoveData,
+    IWebsocketRotateData,
 } from './websocket.interface';
 import { WebsocketService } from './websocket.service';
 
@@ -86,7 +89,11 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         switch (data.type) {
             case 'Move':
                 const moveData = data as IWebsocketMoveData;
-                this.websocketService.move(moveData.position, moveData.rotation, player);
+                this.websocketService.move(moveData.position, player);
+                break;
+            case 'Rotate':
+                const rotateData = data as IWebsocketRotateData;
+                this.websocketService.rotate(rotateData.rotation, player);
                 break;
             case 'Anim':
                 const animData = data as IWebsocketAnimData;
@@ -114,6 +121,50 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         } else {
             await this.cacheManager.set(client.id, client, { ttl: 0.5 });
         }
+        this.logger.verbose(`[${player.username}]: ${data.message}`);
         this.websocketService.chat(data.message, player);
+    }
+
+    //@UseGuards(JwtAuthGuard)
+    @SubscribeMessage(WebsocketEvent.Command)
+    async handleEventCommand(@MessageBody() data: IWebsocketCommandData, @ConnectedSocket() client: Socket) {
+        const player = this.players.get(client.id);
+        if (!player) {
+            return this.logger.warn(`Player not found, client: ${client.id}`);
+        }
+        const cachedClient = await this.cacheManager.get(client.id);
+        if (cachedClient) {
+            return client.emit(WebsocketEvent.Warning, { type: 'Spam' } as IClientEmitWarning);
+        } else {
+            await this.cacheManager.set(client.id, client, { ttl: 0.5 });
+        }
+        const command = this.websocketService.splitCommand(data.command);
+        this.logger.debug(`[${player.username}]: /${command.type}: target: ${command.target}, content: ${command.content}`);
+        const target = this.findPlayerByPseudo(command.target);
+        switch (command.type) {
+            case 'mp':
+                if (target) {
+                    this.websocketService.sendMpTo(target, command.content, client, player);
+                } else {
+                    this.logger.warn(`${player.username} type ${command.type} command with incorrect target: ${command.target}`);
+                    client.emit(WebsocketEvent.Warning, { type: 'IncorrectTarget' } as IClientEmitWarning);
+                }
+                break;
+            case 'tp':
+                if (target) {
+                    this.websocketService.tpTo(target, player, client);
+                } else {
+                    this.logger.warn(`${player.username} type ${command.type} command with incorrect target: ${command.target}`);
+                    client.emit(WebsocketEvent.Warning, { type: 'IncorrectTarget' } as IClientEmitWarning);
+                }
+                break;
+            case 'help':
+                this.websocketService.askHelp(client);
+                break;
+        }
+    }
+
+    private findPlayerByPseudo(pseudo: string): Player {
+        return Array.from(this.players.values()).find((player) => player.username === pseudo);
     }
 }
