@@ -6,6 +6,7 @@ import { AuthService } from './auth.service';
 import { ConfigModule } from '@nestjs/config';
 import { UserValidationStrategy } from './strategies/user-validation.strategy';
 import { JwtTokenValidationStrategy } from './strategies/jwt-token-validation.strategy';
+import { AuthController } from './auth.controller';
 
 @Module({
     imports: [
@@ -16,6 +17,7 @@ import { JwtTokenValidationStrategy } from './strategies/jwt-token-validation.st
             secret: process.env.JWT_SECRET,
         }),
     ],
+    controllers: [AuthController],
     providers: [AuthService, UserValidationStrategy, JwtTokenValidationStrategy],
     exports: [AuthService],
 })

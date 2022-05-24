@@ -17,11 +17,10 @@ export class AuthService {
             const user = await this.usersRepository.findOne({ $or: [{ email: login }, { pseudo: login }] });
             const match = await bcrypt.compare(password, user.password);
             if (user && match) {
-                this.logger.debug(`User Login: ${login}`);
                 return user;
             }
         } catch (error) {
-            this.logger.debug(`User not found: ${login}`);
+            this.logger.debug(`User not found with login ${login}`);
         }
     }
 

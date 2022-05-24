@@ -1,14 +1,14 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import BackgroundComponent from '../components/background.component';
+import { logoutUser } from '../services/auth.service';
+import { removeUser } from '../store/slices/user.slice';
 
 const HomePage = () => {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
-    const logout = () => {
-        window.localStorage.removeItem('access_token');
-        navigate('/authenticate');
-    };
-    const isConnected = window.localStorage.access_token;
+    const user = useSelector((state) => state.user);
 
     return (
         <div className="home">
@@ -18,7 +18,7 @@ const HomePage = () => {
                 <div className=" h-75 d-flex justify-content-end align-items-center">
                     <div className="row w-25">
                         <span className="mt-3">
-                            {isConnected && (
+                            {user.updated > 0 && (
                                 <div className="menu">
                                     <h2 className="navButton" onClick={() => navigate('/universe')}>
                                         Jouer
@@ -27,12 +27,18 @@ const HomePage = () => {
                                         Paramètres
                                     </h2>
                                     <h2 className="navButton">Crédits</h2>
-                                    <h2 className="navButton py-5" onClick={logout}>
+                                    <h2
+                                        className="navButton py-5"
+                                        onClick={async () => {
+                                            await logoutUser();
+                                            dispatch(removeUser());
+                                        }}
+                                    >
                                         Déconnexion
                                     </h2>
                                 </div>
                             )}
-                            {!isConnected && (
+                            {user.updated === 0 && (
                                 <div className="menu">
                                     <h2 className="navButton" onClick={() => navigate('/authenticate')}>
                                         Connexion
