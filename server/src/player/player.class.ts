@@ -1,6 +1,4 @@
-import { isObject } from 'class-validator';
-import { Vector3 } from 'three';
-import { ICoordinates, TModel, TAnimation, IPlayer, IEuler } from './player.interface';
+import { ICoordinates, TModel, TAnimation, IPlayer } from './player.interface';
 
 export class Player {
     constructor(id: string, username: string, model?: TModel, position?: ICoordinates, rotation?: ICoordinates) {
@@ -35,23 +33,16 @@ export class Player {
         this.rotation.z = z;
     }
 
-    private isCoordinate(coord: any): coord is ICoordinates {
-        return isObject(coord) && !coord['_x'];
-    }
-
-    move(position: Vector3 | ICoordinates, rotation: IEuler | ICoordinates) {
+    move(position: ICoordinates) {
         this.moveX(position.x);
         this.moveZ(position.z);
         this.moveY(position.y);
-        if (this.isCoordinate(rotation)) {
-            this.rotateX(rotation.x);
-            this.rotateZ(rotation.z);
-            this.rotateY(rotation.y);
-        } else {
-            this.rotateX(rotation._x);
-            this.rotateZ(rotation._z);
-            this.rotateY(rotation._y);
-        }
+    }
+
+    rotate(rotation: ICoordinates) {
+        this.rotateX(rotation.x);
+        this.rotateY(rotation.y);
+        this.rotateZ(rotation.z);
     }
 
     toObject(): IPlayer {

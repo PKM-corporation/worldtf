@@ -64,6 +64,11 @@ body {
                 color: rgb(215, 5, 230);
             }
 
+            &.Logs {
+                font-weight: bold;
+                color: #FFFF55;
+            }
+
             .sender {
                 margin-right: 10px;
                 font-weight: bold;

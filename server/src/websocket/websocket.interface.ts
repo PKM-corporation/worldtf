@@ -1,18 +1,36 @@
 import { ParsedUrlQuery } from 'querystring';
 import { Player } from 'src/player/player.class';
-import { ICoordinates, IEuler, TAnimation, TModel } from 'src/player/player.interface';
-import { Vector3 } from 'three';
+import { ICoordinates, TAnimation, TModel } from 'src/player/player.interface';
 
-export type TWebsocketDataType = 'Chat' | 'Move' | 'ModelChoice' | 'Anim' | 'RemovePlayer' | 'AddPlayer' | 'InitPlayers' | 'Mp' | 'Help';
+export type TWebsocketDataType =
+    | 'Chat'
+    | 'Move'
+    | 'Rotate'
+    | 'ModelChoice'
+    | 'Anim'
+    | 'RemovePlayer'
+    | 'AddPlayer'
+    | 'InitPlayers'
+    | 'Mp'
+    | 'Help'
+    | 'Tp';
+
+export type TWarning = 'Spam' | 'IncorrectTarget';
 
 export type TWebsocketLog = 'Connection' | 'Disconnection';
+
+export interface IClientEmitWarning {
+    type: TWarning;
+}
 
 export interface IWebsocketData {
     type: TWebsocketDataType;
 }
 export interface IWebsocketMoveData extends IWebsocketData {
-    position: Vector3;
-    rotation: IEuler;
+    position: ICoordinates;
+}
+export interface IWebsocketRotateData extends IWebsocketData {
+    rotation: ICoordinates;
 }
 export interface IWebsocketAnimData extends IWebsocketData {
     animation: TAnimation;
@@ -46,6 +64,8 @@ export interface IClientEmitPlayers extends IClientEmitData {
 }
 export interface IClientEmitPosition extends IClientEmitData {
     position: ICoordinates;
+}
+export interface IClientEmitRotation extends IClientEmitData {
     rotation: ICoordinates;
 }
 export interface IClientEmitAnimation extends IClientEmitData {

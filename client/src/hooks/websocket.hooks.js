@@ -2,9 +2,9 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
-import { MessageTypes } from '../common/constant';
-import { addMessage } from '../store/slices/chat.slice';
-import { addPlayer, animPlayer, choiceModelPlayer, initPlayers, movePlayer, removePlayer } from '../store/slices/players.slice';
+import { addLog, addMessage } from '../store/slices/chat.slice';
+import { setPlayerPosition } from '../store/slices/player.slice';
+import { addPlayer, animPlayer, choiceModelPlayer, initPlayers, movePlayer, removePlayer, rotatePlayer } from '../store/slices/players.slice';
 
 export let server = null;
 
@@ -37,12 +37,17 @@ export const useWebsocketServer = () => {
                 case 'Move':
                     dispatch(movePlayer(data));
                     break;
+                case 'Rotate':
+                    dispatch(rotatePlayer(data));
+                    break;
                 case 'Anim':
                     dispatch(animPlayer(data));
                     break;
                 case 'Model':
                     dispatch(choiceModelPlayer(data));
                     break;
+                case 'Tp':
+                    dispatch(setPlayerPosition({ position: data.position }));
                 default:
                     break;
             }
@@ -55,6 +60,9 @@ export const useWebsocketServer = () => {
                     sender: data.id,
                 }),
             );
+        });
+        server.on('Logs', (data) => {
+            dispatch(addLog(data));
         });
         server.on('Warning', (data) => {
             console.log(data);
