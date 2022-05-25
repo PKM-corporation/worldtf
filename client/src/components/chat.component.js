@@ -4,6 +4,7 @@ import { server } from '../hooks/websocket.hooks';
 import { useTranslation } from 'react-i18next';
 import HelpCommandsComponent from './help-commands.component';
 import { setIsChatting } from '../store/slices/interface.slice';
+import { MessageTypes } from '../common/constant';
 
 const ChatComponent = () => {
     const dispatch = useDispatch();
