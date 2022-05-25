@@ -4,6 +4,7 @@ import WebsocketSlice from './slices/websocket.slice';
 import PlayerSlice from './slices/player.slice';
 import PlayersSlice from './slices/players.slice';
 import UserSlice from './slices/user.slice';
+import InterfaceSlice from './slices/interface.slice';
 
 export default configureStore({
     reducer: {
@@ -12,5 +13,6 @@ export default configureStore({
         players: PlayersSlice,
         chat: ChatSlice,
         player: PlayerSlice,
+        interface: InterfaceSlice,
     },
 });

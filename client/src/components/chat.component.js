@@ -1,15 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { MessageTypes } from '../common/constant';
+import { useDispatch, useSelector } from 'react-redux';
 import { server } from '../hooks/websocket.hooks';
 import { useTranslation } from 'react-i18next';
 import HelpCommandsComponent from './help-commands.component';
+import { setIsChatting } from '../store/slices/interface.slice';
+import { MessageTypes } from '../common/constant';
 
 const ChatComponent = () => {
+    const dispatch = useDispatch();
     const [text, setText] = useState('');
     const messages = useSelector((state) => state.chat.chatList);
     const chatRef = useRef();
     const { t } = useTranslation();
+
+    const chat = (e) => {
+        e.stopPropagation();
+        dispatch(setIsChatting(true));
+    };
 
     useEffect(() => {
         chatRef.current.scrollTop = chatRef.current.scrollHeight;
@@ -41,7 +48,14 @@ const ChatComponent = () => {
                     setText('');
                 }}
             >
-                <input onChange={(e) => setText(e.target.value)} value={text} autoComplete="off" type="text" id="inputChat" />
+                <input
+                    onClick={(e) => chat(e)}
+                    onChange={(e) => setText(e.target.value)}
+                    value={text}
+                    autoComplete="off"
+                    type="text"
+                    id="inputChat"
+                />
             </form>
         </>
     );

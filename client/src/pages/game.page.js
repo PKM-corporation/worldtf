@@ -11,6 +11,7 @@ import ErrorComponent from '../components/error.component';
 import LoaderComponent from '../components/loader.component';
 import { useNavigate } from 'react-router-dom';
 import { removeUser } from '../store/slices/user.slice';
+import { setIsChatting } from '../store/slices/interface.slice';
 
 const PixelRatioSetting = () => {
     const { gl } = useThree();
@@ -30,9 +31,13 @@ const GamePage = () => {
         }
     }, [error]);
 
+    const play = () => {
+        dispatch(setIsChatting(false));
+    };
+
     if (connected) {
         return (
-            <div id="canvas-container">
+            <div id="canvas-container" onClick={play}>
                 <CrosshairComponent />
                 <ChatComponent />
                 <Canvas
