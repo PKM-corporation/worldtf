@@ -57,6 +57,7 @@ const GamePage = () => {
                     shadows={{ type: 'VSMShadowMap' }}
                     camera={{ position: [0, 0, 5], fov: 70, near: 0.01, far: 100, aspect: window.innerWidth / window.innerHeight }}
                 >
+                    <FPSLimiter fps={60} />
                     <PixelRatioSetting />
                     <Provider store={store}>
                         <DefaultScene />
