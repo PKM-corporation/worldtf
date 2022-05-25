@@ -7,6 +7,7 @@ export const TRANSLATION_FR = {
         logout: 'Déconnexion',
         language: 'Langues',
         back: 'Retour',
+        onlinePlayers: '{{onlinePlayers}} joueurs en ligne',
     },
     log: {
         signup: 'Inscription',
