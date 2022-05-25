@@ -27,6 +27,18 @@
     0 0 150px rgb(238, 0, 255);
 }
 
+@media only screen and (max-width: 600px) {
+    .homePageConnexion{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    .vertical-line {
+        display: none;
+    }
+  }
+
 .home, .AuthPage, .settings{
     .content{
         position: absolute;
@@ -34,5 +46,24 @@
         height: 100%;
         color: rgb(255, 255, 255);
     }
+
+    @media only screen and (max-width: 600px) {
+        .menu>*{
+            text-align: center;
+            width: fit-content;
+        }
+        .menu{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+    }
+    
 }
 
