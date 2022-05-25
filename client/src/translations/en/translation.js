@@ -8,6 +8,7 @@ export const TRANSLATION_EN = {
         language: 'Languages',
         back: 'Back',
         onlinePlayers: '{{onlinePlayers}} online players',
+        loading: 'Loading',
     },
     log: {
         signup: 'Sign up',
