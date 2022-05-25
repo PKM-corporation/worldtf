@@ -22,7 +22,7 @@ const AppRouter = () => {
             dispatch(setUser(user));
             navigate('/');
         } catch (e) {
-            if (e.status === 401) {
+            if (e.status === 401 || e.response.status === 401) {
                 dispatch(removeUser());
                 navigate('/');
             } else {
