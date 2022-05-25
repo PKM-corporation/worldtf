@@ -23,46 +23,46 @@ export class WebsocketService {
     init(server: Server) {
         this.server = server;
     }
-    move(position: Vector3 | ICoordinates, player: Player) {
+    move(position: Vector3 | ICoordinates, player: Player, client: Socket) {
         player.move(position);
         const playerPosition: IClientEmitPosition = {
             type: 'Move',
             id: player.id,
             position: player.position,
         };
-        const clients = this.getClientsWithoutOne(player.id);
+        const clients = this.getClientsWithoutOne(client.id);
         this.emit(clients, WebsocketEvent.PlayerAction, playerPosition);
     }
-    rotate(rotation: ICoordinates, player: Player) {
+    rotate(rotation: ICoordinates, player: Player, client: Socket) {
         player.rotate(rotation);
         const playerPosition: IClientEmitRotation = {
             type: 'Rotate',
             id: player.id,
             rotation: player.rotation,
         };
-        const clients = this.getClientsWithoutOne(player.id);
+        const clients = this.getClientsWithoutOne(client.id);
         this.emit(clients, WebsocketEvent.PlayerAction, playerPosition);
     }
 
-    anim(animation: TAnimation, player: Player) {
+    anim(animation: TAnimation, player: Player, client: Socket) {
         player.animation = animation;
         const playerAnimation: IClientEmitAnimation = {
             type: 'Anim',
             id: player.id,
             animation: animation,
         };
-        const clients = this.getClientsWithoutOne(player.id);
+        const clients = this.getClientsWithoutOne(client.id);
         this.emit(clients, WebsocketEvent.PlayerAction, playerAnimation);
     }
 
-    modelChoice(model: TModel, player: Player) {
+    modelChoice(model: TModel, player: Player, client: Socket) {
         player.model = model;
         const playerModel: IClientEmitModel = {
             id: player.id,
             type: 'ModelChoice',
             model,
         };
-        const clients = this.getClientsWithoutOne(player.id);
+        const clients = this.getClientsWithoutOne(client.id);
         this.emit(clients, WebsocketEvent.PlayerAction, playerModel);
     }
 
@@ -143,7 +143,7 @@ export class WebsocketService {
             position: target.position,
         };
         client.emit(WebsocketEvent.PlayerAction, positionData);
-        this.move(target.position, player);
+        this.move(target.position, player, client);
     }
 
     askHelp(client: Socket) {
