@@ -12,6 +12,7 @@ import LoaderComponent from '../components/loader.component';
 import { useNavigate } from 'react-router-dom';
 import { removeUser } from '../store/slices/user.slice';
 import { setIsChatting } from '../store/slices/interface.slice';
+import { setChatColor } from '../store/slices/chat.slice';
 
 const PixelRatioSetting = () => {
     const { gl } = useThree();
@@ -22,6 +23,7 @@ const GamePage = () => {
     const connected = useSelector((state) => state.websocket.connected);
     const error = useSelector((state) => state.websocket.error);
     const navigate = useNavigate();
+    const tabColorsChat = ['#DA0F0F', '#207ACD', '#6ACD3C', '#E8DF0F', '#FFABD8', '#00E392', '#FF186B', '#FFFFFF', '#FD9B08', '#33E9E9'];
     useWebsocketServer();
 
     useEffect(() => {
@@ -30,6 +32,12 @@ const GamePage = () => {
             navigate('/authenticate');
         }
     }, [error]);
+
+    useEffect(() => {
+        let chatColor = window.sessionStorage.getItem('chatColor');
+        if (!chatColor) chatColor = tabColorsChat[Math.floor(Math.random() * 9)];
+        dispatch(setChatColor(chatColor));
+    }, []);
 
     const play = () => {
         dispatch(setIsChatting(false));

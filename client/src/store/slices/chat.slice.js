@@ -5,8 +5,13 @@ export const ChatSlice = createSlice({
     name: 'chat',
     initialState: {
         chatList: [],
+        color: '#000000',
     },
     reducers: {
+        setChatColor: (state, action) => {
+            state.color = action.payload;
+            window.sessionStorage.setItem('chatColor', action.payload);
+        },
         addMessage: (state, action) => {
             if (action.payload.type === MessageTypes.Help) {
                 action.payload.content = `
@@ -33,6 +38,6 @@ export const ChatSlice = createSlice({
     },
 });
 
-export const { addMessage, addLog } = ChatSlice.actions;
+export const { addMessage, addLog, setChatColor } = ChatSlice.actions;
 
 export default ChatSlice.reducer;

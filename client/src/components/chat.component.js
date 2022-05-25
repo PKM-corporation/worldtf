@@ -10,6 +10,7 @@ const ChatComponent = () => {
     const dispatch = useDispatch();
     const [text, setText] = useState('');
     const messages = useSelector((state) => state.chat.chatList);
+    const color = useSelector((state) => state.chat.color);
     const chatRef = useRef();
     const { t } = useTranslation();
 
@@ -17,6 +18,8 @@ const ChatComponent = () => {
         e.stopPropagation();
         dispatch(setIsChatting(true));
     };
+
+    const now = new Date();
 
     useEffect(() => {
         chatRef.current.scrollTop = chatRef.current.scrollHeight;
@@ -27,7 +30,14 @@ const ChatComponent = () => {
                 <div className="chatContent" ref={chatRef} id="chatContent">
                     {messages.map((message, i) => (
                         <div className={`${message.type} message`} key={i}>
-                            {message.sender ? <span className="sender">[{message.sender}]:</span> : ''}
+                            <span className="me-1">{'[' + now.getHours() + ':' + now.getMinutes() + '] '}</span>
+                            {message.sender ? (
+                                <span className="sender" style={{ color: message.color }}>
+                                    {' ' + message.sender}:
+                                </span>
+                            ) : (
+                                ''
+                            )}
                             {message.type === MessageTypes.Logs && <span className="content">{t(`log.${message.content}`, message.options)}</span>}
                             {message.type === MessageTypes.Help && <HelpCommandsComponent />}
                             {(message.type === MessageTypes.Chat || message.type === MessageTypes.Mp) && (
@@ -43,7 +53,7 @@ const ChatComponent = () => {
                     if (text[0] === '/') {
                         server.emit('Command', { type: 'Command', command: text });
                     } else {
-                        server.emit('Chat', { type: 'Chat', message: text });
+                        server.emit('Chat', { type: 'Chat', message: text, color });
                     }
                     setText('');
                 }}
