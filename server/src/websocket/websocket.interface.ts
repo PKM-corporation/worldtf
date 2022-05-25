@@ -38,6 +38,7 @@ export interface IWebsocketModelChoiceData extends IWebsocketData {
 }
 export interface IWebsocketChatData extends IWebsocketData {
     message: string;
+    color: string;
 }
 export interface IWebsocketCommandData extends IWebsocketData {
     command: string;
@@ -81,6 +82,10 @@ export interface IClientEmitModel extends IClientEmitData {
 }
 export interface IClientEmitMessage extends IClientEmitData {
     message: string;
+}
+export interface IClientEmitChatMessage extends IClientEmitData {
+    message: string;
+    color: string;
 }
 
 export interface IWebsocketLog {

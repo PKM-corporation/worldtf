@@ -130,8 +130,12 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         } else {
             await this.cacheManager.set(client.id, client, { ttl: 0.5 });
         }
+        if (!/^#([0-9a-f]{6})$/i.test(data.color)) {
+            this.logger.warn(`Incorrect hex color in message chat user: ${player.username}, color: ${data.color}`);
+            data.color = '#000000';
+        }
         this.logger.verbose(`[${player.username}]: ${data.message}`);
-        this.websocketService.chat(data.message, player);
+        this.websocketService.chat(data.message, data.color, player);
     }
 
     //@UseGuards(JwtAuthGuard)

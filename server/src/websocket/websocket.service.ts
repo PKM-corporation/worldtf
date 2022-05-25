@@ -12,6 +12,7 @@ import {
     IClientEmitAnimation,
     ICommand,
     IClientEmitRotation,
+    IClientEmitChatMessage,
 } from './websocket.interface';
 
 @Injectable()
@@ -64,11 +65,12 @@ export class WebsocketService {
         this.emit(clients, WebsocketEvent.PlayerAction, playerModel);
     }
 
-    chat(message: string, player: Player) {
-        const playerMessage: IClientEmitMessage = {
+    chat(message: string, color: string, player: Player) {
+        const playerMessage: IClientEmitChatMessage = {
             type: 'Chat',
             id: player.username,
             message: message,
+            color,
         };
         this.server.emit(WebsocketEvent.Chat, playerMessage);
     }
