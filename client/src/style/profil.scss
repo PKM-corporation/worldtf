@@ -1,0 +1,53 @@
+
+.background-side-bar{
+    background-color: rgba($color: #FFFFFF, $alpha: 0.1);
+    height: fit-content;
+}
+
+.content-profile{
+    background-color: rgba($color: #001B86, $alpha: 0.7);
+    hr{
+        width: 25%;
+        color: #00DDDD;
+        height: 2px;
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+        border: 1px solid #33E9C6;
+    }
+}
+
+.main-div-side-bar{
+    button{
+        border: none;
+        background-color: transparent;
+        padding: 1rem;
+        font-size: 1rem;
+        color: white;
+        cursor: pointer;
+    }
+    .show{
+        text-shadow:
+        0 0 4px #fff,
+        0 0 11px #fff,
+        0 0 19px #fff,
+        0 0 40px rgb(238, 0, 255),
+        0 0 80px rgb(238, 0, 255),
+        0 0 90px rgb(238, 0, 255),
+        0 0 100px rgb(238, 0, 255),
+        0 0 150px rgb(238, 0, 255);
+    }
+    .hidden{
+        color:white;
+    }
+}
+
+.main-div-content-profile{
+    height: 100vh;
+    background-color: rgba($color: #FFFFFF, $alpha: 0.1);
+}
+
+.neonTextMenu {
+    color: #00DDDD;
+    font-size: 2.5rem;
+    font-weight: lighter; 
+}
