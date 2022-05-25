@@ -7,6 +7,7 @@ export const TRANSLATION_EN = {
         logout: 'Log out',
         language: 'Languages',
         back: 'Back',
+        onlinePlayers: '{{onlinePlayers}} online players',
     },
     log: {
         signup: 'Sign up',

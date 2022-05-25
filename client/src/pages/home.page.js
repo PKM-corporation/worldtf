@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import BackgroundComponent from '../components/background.component';
@@ -6,6 +6,7 @@ import { logoutUser } from '../services/auth.service';
 import { removeUser } from '../store/slices/user.slice';
 import { useTranslation } from 'react-i18next';
 import '../translations/i18n';
+import { getConnectedPlayers } from '../services/users.service';
 
 const HomePage = () => {
     const dispatch = useDispatch();
@@ -13,10 +14,20 @@ const HomePage = () => {
     const user = useSelector((state) => state.user);
     const { t } = useTranslation();
 
+    const [connectedPlayers, setConnectedPlayers] = useState();
+    useEffect(() => {
+        getConnectedPlayers().then((data) => {
+            setConnectedPlayers(data.onlineClients);
+        });
+    });
+
     return (
         <div className="home">
             <BackgroundComponent />
             <div className="content">
+                <div className="playersOnline">
+                    {connectedPlayers && <p className="textOnlinePlayer">{t('home.onlinePlayers', { onlinePlayers: connectedPlayers })}</p>}
+                </div>
                 <h1 className="text-center neonText pt-4">Universe</h1>
                 <div className="h-75 d-flex justify-content-center justify-content-xl-end  align-items-center ">
                     <div className="row w-25">
