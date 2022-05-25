@@ -20,6 +20,8 @@ export const TRANSLATION_FR = {
         disconnection: '{{pseudo}} quitte le serveur',
     },
     warn: {
+        invalidName: 'Veuillez entrer un pseudo valide (plus de 2 caratères, sans caractères spéciaux)',
+        invalidPwd: "Veuillez entrer un mot de passe valide (au moins 6 caractères, pas d'espaces)",
         empty: 'Veuillez remplir les champs',
         email: 'Veuillez saisir une adresse mail valide',
         log: 'Mot de passe ou login incorrects',
