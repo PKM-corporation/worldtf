@@ -50,7 +50,6 @@ export const PlayerComponent = (props) => {
     }, [player.rotation]);
 
     useFrame(() => {
-        if (isChatting) return;
         camera.rotation.order = 'YXZ';
         if (sprint) {
             if (!player.sprinting) dispatch(setPlayerSprinting(true));
@@ -69,32 +68,36 @@ export const PlayerComponent = (props) => {
         }
 
         if (!player.jumping) {
-            if (!sprint && !jump) {
-                if (moveForward && !moveBackward && !moveLeft && !moveRight) {
-                    dispatch(setPlayerCurrentAnimation(Animations.WalkingForward));
-                } else if (!moveForward && !moveBackward && moveLeft && !moveRight) {
-                    dispatch(setPlayerCurrentAnimation(Animations.WalkingLeft));
-                } else if (!moveForward && !moveBackward && !moveLeft && moveRight) {
-                    dispatch(setPlayerCurrentAnimation(Animations.WalkingRight));
-                } else if (!moveForward && moveBackward && !moveLeft && !moveRight) {
-                    dispatch(setPlayerCurrentAnimation(Animations.WalkingBackward));
-                } else if (!moveForward && !moveBackward && !moveLeft && !moveRight) {
-                    dispatch(setPlayerCurrentAnimation(Animations.Idle));
-                }
-            } else if (sprint && !jump) {
-                if (moveForward && !moveBackward && !moveLeft && !moveRight) {
-                    dispatch(setPlayerCurrentAnimation(Animations.RunningForward));
-                } else if (!moveForward && !moveBackward && moveLeft && !moveRight) {
-                    dispatch(setPlayerCurrentAnimation(Animations.RunningLeft));
-                } else if (!moveForward && !moveBackward && !moveLeft && moveRight) {
-                    dispatch(setPlayerCurrentAnimation(Animations.RunningRight));
-                } else if (!moveForward && moveBackward && !moveLeft && !moveRight) {
-                    dispatch(setPlayerCurrentAnimation(Animations.RunningBackward));
-                } else if (!moveForward && !moveBackward && !moveLeft && !moveRight) {
-                    dispatch(setPlayerCurrentAnimation(Animations.Idle));
-                }
+            if (isChatting) {
+                dispatch(setPlayerCurrentAnimation(Animations.Idle));
             } else {
-                dispatch(setPlayerCurrentAnimation(Animations.Jumping));
+                if (!sprint && !jump) {
+                    if (moveForward && !moveBackward && !moveLeft && !moveRight) {
+                        dispatch(setPlayerCurrentAnimation(Animations.WalkingForward));
+                    } else if (!moveForward && !moveBackward && moveLeft && !moveRight) {
+                        dispatch(setPlayerCurrentAnimation(Animations.WalkingLeft));
+                    } else if (!moveForward && !moveBackward && !moveLeft && moveRight) {
+                        dispatch(setPlayerCurrentAnimation(Animations.WalkingRight));
+                    } else if (!moveForward && moveBackward && !moveLeft && !moveRight) {
+                        dispatch(setPlayerCurrentAnimation(Animations.WalkingBackward));
+                    } else if (!moveForward && !moveBackward && !moveLeft && !moveRight) {
+                        dispatch(setPlayerCurrentAnimation(Animations.Idle));
+                    }
+                } else if (sprint && !jump) {
+                    if (moveForward && !moveBackward && !moveLeft && !moveRight) {
+                        dispatch(setPlayerCurrentAnimation(Animations.RunningForward));
+                    } else if (!moveForward && !moveBackward && moveLeft && !moveRight) {
+                        dispatch(setPlayerCurrentAnimation(Animations.RunningLeft));
+                    } else if (!moveForward && !moveBackward && !moveLeft && moveRight) {
+                        dispatch(setPlayerCurrentAnimation(Animations.RunningRight));
+                    } else if (!moveForward && moveBackward && !moveLeft && !moveRight) {
+                        dispatch(setPlayerCurrentAnimation(Animations.RunningBackward));
+                    } else if (!moveForward && !moveBackward && !moveLeft && !moveRight) {
+                        dispatch(setPlayerCurrentAnimation(Animations.Idle));
+                    }
+                } else {
+                    dispatch(setPlayerCurrentAnimation(Animations.Jumping));
+                }
             }
         } else if (player.jumping) {
             dispatch(setPlayerCurrentAnimation(Animations.FallingIdle));
@@ -107,10 +110,12 @@ export const PlayerComponent = (props) => {
             api.position.set(player.position.x, player.position.y + 0.5, player.position.z);
         }
 
-        const frontVector = new Vector3(0, 0, Number(moveBackward) - Number(moveForward));
-        const sideVector = new Vector3(Number(moveLeft) - Number(moveRight), 0, 0);
-        direction.subVectors(frontVector, sideVector).normalize().multiplyScalar(player.speed).applyEuler(camera.rotation);
-        api.velocity.set(direction.x, velocity.current[1], direction.z);
+        if (!isChatting) {
+            const frontVector = new Vector3(0, 0, Number(moveBackward) - Number(moveForward));
+            const sideVector = new Vector3(Number(moveLeft) - Number(moveRight), 0, 0);
+            direction.subVectors(frontVector, sideVector).normalize().multiplyScalar(player.speed).applyEuler(camera.rotation);
+            api.velocity.set(direction.x, velocity.current[1], direction.z);
+        }
 
         ref.current.getWorldPosition(ref.current.position);
 
@@ -125,7 +130,7 @@ export const PlayerComponent = (props) => {
             }
         }
 
-        if (jump && !player.jumping) {
+        if (jump && !player.jumping && !isChatting) {
             const now = Date.now();
             if (now > player.timeToJump) {
                 dispatch(playerJump(now));
