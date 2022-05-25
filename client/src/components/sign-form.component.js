@@ -34,8 +34,8 @@ const SignFormComponent = () => {
     };
 
     return (
-        <div className="col-5 d-flex justify-content-center">
-            <div className="row" id="registerForm">
+        <div className="col-sm-5  d-flex col-12 justify-content-center">
+            <div className="row " id="registerForm">
                 <h3 className="p-3 text-center ">Inscription</h3>
                 {invalidMessage}
                 <div className="form-floating mb-3">

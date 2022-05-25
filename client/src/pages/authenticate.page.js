@@ -16,7 +16,7 @@ const AuthenticatePage = () => {
                 </div>
                 <div className="row">
                     <LoginFormComponent />
-                    <div className="col-2">
+                    <div className="col-2 ">
                         <span className="vertical-line text-center"></span>
                     </div>
                     <SignFormComponent />

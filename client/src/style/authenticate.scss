@@ -33,6 +33,21 @@
     font-family: 'Beon';
   }
 
+  @media only screen and (max-width: 600px) {
+    #pink-background{
+      left: 0;
+      top: 0;
+      width: 100%!important;
+      height: 100%!important;
+    }
+
+    #registerForm{
+      margin-top: 3em;
+    }
+    
+  }
+  
+
 
 /* Animate neon flicker */
 @keyframes flicker {

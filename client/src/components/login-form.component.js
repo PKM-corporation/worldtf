@@ -27,7 +27,7 @@ const LoginFormComponent = () => {
     };
 
     return (
-        <div className="col-5">
+        <div className="col-sm-5  col-12">
             <h3 className="p-3 text-center ">Connexion</h3>
             {invalidMessage}
             <div className="row" id="loginForm">

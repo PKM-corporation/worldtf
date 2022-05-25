@@ -15,7 +15,7 @@ const HomePage = () => {
             <BackgroundComponent />
             <div className="content">
                 <h1 className="text-center neonText pt-4">Universe</h1>
-                <div className=" h-75 d-flex justify-content-end align-items-center">
+                <div className="h-75 d-flex justify-content-center justify-content-xl-end  align-items-center ">
                     <div className="row w-25">
                         <span className="mt-3">
                             {user.updated > 0 && (
@@ -40,7 +40,7 @@ const HomePage = () => {
                             )}
                             {user.updated === 0 && (
                                 <div className="menu">
-                                    <h2 className="navButton" onClick={() => navigate('/authenticate')}>
+                                    <h2 className="navButton homePageConnexion" onClick={() => navigate('/authenticate')}>
                                         Connexion
                                     </h2>
                                 </div>
