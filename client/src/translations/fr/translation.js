@@ -8,6 +8,7 @@ export const TRANSLATION_FR = {
         language: 'Langues',
         back: 'Retour',
         onlinePlayers: '{{onlinePlayers}} joueurs en ligne',
+        loading: 'Chargement',
     },
     log: {
         signup: 'Inscription',

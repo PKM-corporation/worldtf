@@ -1,0 +1,26 @@
+.loader{
+    color: white;
+    left: 50%;
+    top: 50%;
+    width: 100%;
+    height: 100%;
+    transform: translate(-50%,-50%);
+    position : absolute;
+    background-color: rgb(48, 8, 43);
+    display:flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    .loader-text{
+        color: white;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
+        position : absolute;
+    }
+    img{
+        width: 15%;
+    }
+
+}
+ 
