@@ -11,7 +11,6 @@
 }
 
 #pink-background{
-   
    background-color: rgba(118, 29, 123, 0.700);
    border: solid rgb(185, 227, 255) 3px ;
    box-shadow: 0 0 .2rem #fff,
@@ -27,7 +26,18 @@
 }
 
 .neonText {
-    animation: flicker 1.5s infinite alternate;
+    //animation: flicker 1.5s infinite alternate;
+    -webkit-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
+    text-shadow:
+        0 0 4px #fff,
+        0 0 11px #fff,
+        0 0 19px #fff,
+        0 0 40px rgb(0, 153, 255),
+        0 0 80px rgb(0, 153, 255),
+        0 0 90px rgb(0, 153, 255),
+        0 0 100px rgb(0, 153, 255),
+        0 0 150px rgb(0, 153, 255);
     color: #fff;
     font-size: 4.2rem; 
     font-family: 'Beon';

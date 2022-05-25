@@ -11,6 +11,8 @@
     z-index: 999;
     font-size: 3rem;
     cursor: pointer;
+    -webkit-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
 }
 
 .navButton:hover{
