@@ -20,6 +20,8 @@ export const TRANSLATION_EN = {
         disconnection: '{{pseudo}} leave the server',
     },
     warn: {
+        invalidName: 'Please enter a valid username (2 characters or more, special characters are not allowed)',
+        invalidPwd: 'Please enter a valid password (6 characters or more, no spaces)',
         empty: 'Please fill in the fields',
         email: 'Please enter a valid email address',
         log: 'Log or password incorrect',

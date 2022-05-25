@@ -19,6 +19,12 @@ const SignFormComponent = () => {
         if (!username || !password || !email) {
             return setInvalidMessage(<p className="mb-3 text-center invalid-message">{t('warn.empty')}</p>);
         }
+        if (!/^\w{3,25}$/.test(username)) {
+            return setInvalidMessage(<p className="mb-3 text-center invalid-message">{t('warn.invalidName')}</p>);
+        }
+        if (!/^\S{6,25}$/.test(password)) {
+            return setInvalidMessage(<p className="mb-3 text-center invalid-message">{t('warn.invalidPwd')}</p>);
+        }
         if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
             return setInvalidMessage(<p className="mb-3 text-center invalid-message">{t('warn.email')}</p>);
         }
