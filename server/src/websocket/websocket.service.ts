@@ -14,6 +14,7 @@ import {
     IClientEmitRotation,
     IClientEmitChatMessage,
 } from './websocket.interface';
+import { DateTime } from 'luxon';
 
 @Injectable()
 export class WebsocketService {
@@ -71,6 +72,7 @@ export class WebsocketService {
             id: player.username,
             message: message,
             color,
+            date: DateTime.now().toFormat('HH:mm'),
         };
         this.server.emit(WebsocketEvent.Chat, playerMessage);
     }
@@ -127,6 +129,7 @@ export class WebsocketService {
             type: 'Mp',
             id: player.username,
             message,
+            date: DateTime.now().toFormat('HH:mm'),
         };
         if (clientTarget) {
             clientTarget.emit(WebsocketEvent.Chat, mp);

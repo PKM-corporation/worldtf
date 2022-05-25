@@ -82,15 +82,16 @@ export interface IClientEmitModel extends IClientEmitData {
 }
 export interface IClientEmitMessage extends IClientEmitData {
     message: string;
+    date: string;
 }
-export interface IClientEmitChatMessage extends IClientEmitData {
-    message: string;
+export interface IClientEmitChatMessage extends IClientEmitMessage {
     color: string;
 }
 
 export interface IWebsocketLog {
     id: string;
     type: TWebsocketLog;
+    date: string;
 }
 
 export interface IWebsocketConnectionLog extends IWebsocketLog {

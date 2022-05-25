@@ -70,6 +70,7 @@ export const useWebsocketServer = () => {
                     content: data.message,
                     sender: data.id,
                     color: data.color,
+                    date: data.date,
                 }),
             );
         });

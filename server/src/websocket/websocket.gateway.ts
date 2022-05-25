@@ -31,6 +31,7 @@ import {
     IWebsocketRotateData,
 } from './websocket.interface';
 import { WebsocketService } from './websocket.service';
+import { DateTime } from 'luxon';
 
 @WebSocketGateway({ cors: true })
 export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
@@ -73,7 +74,12 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         const newPlayer: IClientEmitPlayer = { type: 'AddPlayer', id: client.id, player };
         this.websocketService.emit(this.websocketService.getClientsWithoutOne(client.id), WebsocketEvent.Players, newPlayer);
 
-        this.wss.emit(WebsocketEvent.Logs, { type: 'Connection', id: client.id, pseudo: user.pseudo } as IWebsocketConnectionLog);
+        this.wss.emit(WebsocketEvent.Logs, {
+            type: 'Connection',
+            id: client.id,
+            pseudo: user.pseudo,
+            date: DateTime.now().toFormat('HH:mm'),
+        } as IWebsocketConnectionLog);
         this.logger.log(`client ${client.id}, pseudo: ${user.pseudo} connected`);
     }
     handleDisconnect(client: Socket) {
@@ -84,7 +90,12 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         this.websocketService.emit(this.websocketService.getClientsWithoutOne(client.id), WebsocketEvent.Players, removedPlayer);
         this.players.delete(client.id);
 
-        this.wss.emit(WebsocketEvent.Logs, { type: 'Disconnection', id: client.id, pseudo: player.username } as IWebsocketConnectionLog);
+        this.wss.emit(WebsocketEvent.Logs, {
+            type: 'Disconnection',
+            id: client.id,
+            pseudo: player.username,
+            date: DateTime.now().toFormat('HH:mm'),
+        } as IWebsocketConnectionLog);
         this.logger.log(`client ${client.id} disconnected`);
     }
 

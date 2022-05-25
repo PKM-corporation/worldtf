@@ -28,10 +28,20 @@ export const ChatSlice = createSlice({
         addLog: (state, action) => {
             switch (action.payload.type) {
                 case 'Connection':
-                    state.chatList.push({ type: MessageTypes.Logs, content: `connection`, options: { pseudo: action.payload.pseudo } });
+                    state.chatList.push({
+                        type: MessageTypes.Logs,
+                        content: `connection`,
+                        options: { pseudo: action.payload.pseudo },
+                        date: action.payload.date,
+                    });
                     break;
                 case 'Disconnection':
-                    state.chatList.push({ type: MessageTypes.Logs, content: `disconnection`, options: { pseudo: action.payload.pseudo } });
+                    state.chatList.push({
+                        type: MessageTypes.Logs,
+                        content: `disconnection`,
+                        options: { pseudo: action.payload.pseudo },
+                        date: action.payload.date,
+                    });
                     break;
             }
         },
