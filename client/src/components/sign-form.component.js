@@ -3,6 +3,8 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { signInUser } from '../services/auth.service';
 import { setUser } from '../store/slices/user.slice';
+import { useTranslation } from 'react-i18next';
+import '../translations/i18n';
 
 const SignFormComponent = () => {
     const navigate = useNavigate();
@@ -11,13 +13,14 @@ const SignFormComponent = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [invalidMessage, setInvalidMessage] = useState();
+    const { t } = useTranslation();
 
     const sign = async () => {
         if (!username || !password || !email) {
-            return setInvalidMessage(<p className="mb-3 text-center invalid-message">Veuillez remplir les champs</p>);
+            return setInvalidMessage(<p className="mb-3 text-center invalid-message">{t('warn.empty')}</p>);
         }
         if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
-            return setInvalidMessage(<p className="mb-3 text-center invalid-message">Veuillez saisir une adresse email valide</p>);
+            return setInvalidMessage(<p className="mb-3 text-center invalid-message">{t('warn.email')}</p>);
         }
         try {
             const user = await signInUser(username, email, password);
@@ -26,17 +29,17 @@ const SignFormComponent = () => {
             navigate('/');
         } catch (e) {
             if (e.response.status === 409) {
-                return setInvalidMessage(<p className="mb-3 text-center invalid-message">Pseudo ou Email déjà pris</p>);
+                return setInvalidMessage(<p className="mb-3 text-center invalid-message">{t('warn.taken')}</p>);
             }
             console.error(e);
-            return setInvalidMessage(<p className="mb-3 text-center invalid-message">Une erreur est survenue, veuillez réessayer plus tard</p>);
+            return setInvalidMessage(<p className="mb-3 text-center invalid-message">{t('warn.error')}</p>);
         }
     };
 
     return (
         <div className="col-5 d-flex justify-content-center">
             <div className="row" id="registerForm">
-                <h3 className="p-3 text-center ">Inscription</h3>
+                <h3 className="p-3 text-center ">{t('log.signup')}</h3>
                 {invalidMessage}
                 <div className="form-floating mb-3">
                     <input
@@ -47,9 +50,9 @@ const SignFormComponent = () => {
                         type="text"
                         className="form-control"
                         id="floatingPseudo"
-                        placeholder="Pseudo"
+                        placeholder={t('log.username')}
                     />
-                    <label htmlFor="floatingInput">Pseudo</label>
+                    <label htmlFor="floatingInput">{t('log.username')}</label>
                 </div>
                 <div className="form-floating mb-3">
                     <input
@@ -60,9 +63,9 @@ const SignFormComponent = () => {
                         type="text"
                         className="form-control"
                         id="floatingInput"
-                        placeholder="E-mail"
+                        placeholder={t('log.email')}
                     />
-                    <label htmlFor="floatingInput">Adresse mail</label>
+                    <label htmlFor="floatingInput">{t('log.email')}</label>
                 </div>
                 <div className="form-floating ">
                     <input
@@ -73,13 +76,13 @@ const SignFormComponent = () => {
                         type="password"
                         className="form-control"
                         id="floatingPassword"
-                        placeholder="Mot de passe"
+                        placeholder={t('log.password')}
                     />
-                    <label htmlFor="floatingPassword">Mot de passe</label>
+                    <label htmlFor="floatingPassword">{t('log.password')}</label>
                 </div>
                 <span className="mt-3 d-flex justify-content-center">
                     <button className="btnForm" onClick={sign}>
-                        <span>Inscription</span>
+                        <span>{t('log.signup')}</span>
                     </button>
                 </span>
             </div>

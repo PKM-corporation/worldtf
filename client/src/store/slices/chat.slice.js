@@ -23,10 +23,10 @@ export const ChatSlice = createSlice({
         addLog: (state, action) => {
             switch (action.payload.type) {
                 case 'Connection':
-                    state.chatList.push({ type: MessageTypes.Logs, content: `Hello ${action.payload.pseudo}` });
+                    state.chatList.push({ type: MessageTypes.Logs, content: `connection`, options: { pseudo: action.payload.pseudo } });
                     break;
                 case 'Disconnection':
-                    state.chatList.push({ type: MessageTypes.Logs, content: `Bye ${action.payload.pseudo}` });
+                    state.chatList.push({ type: MessageTypes.Logs, content: `disconnection`, options: { pseudo: action.payload.pseudo } });
                     break;
             }
         },
