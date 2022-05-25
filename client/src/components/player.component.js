@@ -20,6 +20,7 @@ export const PlayerComponent = (props) => {
     // eslint-disable-next-line react/prop-types
     const dispatch = useDispatch();
     const player = useSelector((state) => state.player);
+    const isChatting = useSelector((state) => state.interface.isChatting);
     const { camera, scene } = useThree();
     const { moveForward, moveBackward, moveLeft, moveRight, jump, sprint } = useKeyboardControls();
     const [ref, api] = useSphere(() => ({
@@ -49,6 +50,7 @@ export const PlayerComponent = (props) => {
     }, [player.rotation]);
 
     useFrame(() => {
+        if (isChatting) return;
         camera.rotation.order = 'YXZ';
         if (sprint) {
             if (!player.sprinting) dispatch(setPlayerSprinting(true));

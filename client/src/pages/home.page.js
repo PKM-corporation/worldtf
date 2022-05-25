@@ -4,11 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import BackgroundComponent from '../components/background.component';
 import { logoutUser } from '../services/auth.service';
 import { removeUser } from '../store/slices/user.slice';
+import { useTranslation } from 'react-i18next';
+import '../translations/i18n';
 
 const HomePage = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const user = useSelector((state) => state.user);
+    const { t } = useTranslation();
 
     return (
         <div className="home">
@@ -21,12 +24,12 @@ const HomePage = () => {
                             {user.updated > 0 && (
                                 <div className="menu">
                                     <h2 className="navButton" onClick={() => navigate('/universe')}>
-                                        Jouer
+                                        {t('home.play')}
                                     </h2>
                                     <h2 className="navButton" onClick={() => navigate('/settings')}>
-                                        Paramètres
+                                        {t('home.settings')}
                                     </h2>
-                                    <h2 className="navButton">Crédits</h2>
+                                    <h2 className="navButton">{t('home.credits')}</h2>
                                     <h2
                                         className="navButton py-5"
                                         onClick={async () => {
@@ -34,14 +37,14 @@ const HomePage = () => {
                                             dispatch(removeUser());
                                         }}
                                     >
-                                        Déconnexion
+                                        {t('home.logout')}
                                     </h2>
                                 </div>
                             )}
                             {user.updated === 0 && (
                                 <div className="menu">
                                     <h2 className="navButton homePageConnexion" onClick={() => navigate('/authenticate')}>
-                                        Connexion
+                                        {t('home.login')}
                                     </h2>
                                 </div>
                             )}
