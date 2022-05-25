@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { loginUser } from '../services/auth.service';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../store/slices/user.slice';
 
 const LoginFormComponent = () => {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -11,8 +14,8 @@ const LoginFormComponent = () => {
     const login = async () => {
         if (!username || !password) return setInvalidMessage(<p className="mb-3 text-center invalid-message">Veuillez remplir les champs</p>);
         try {
-            const res = await axios.post(process.env.REACT_APP_BASE_API_URI + '/users/login', { username, password });
-            window.localStorage.setItem('access_token', res.data.access_token);
+            const user = await loginUser(username, password);
+            dispatch(setUser(user));
             setInvalidMessage(null);
             navigate('/');
         } catch (e) {
@@ -51,7 +54,9 @@ const LoginFormComponent = () => {
                     <label htmlFor="floatingPasswordLogin">Mot de passe</label>
                 </div>
                 <span className="mt-3 d-flex justify-content-center">
-                    <input onClick={login} className="p-3 rounded-circle" type="button" value="test" />
+                    <button className="btnForm" onClick={login}>
+                        <span>Connexion</span>
+                    </button>
                 </span>
             </div>
         </div>

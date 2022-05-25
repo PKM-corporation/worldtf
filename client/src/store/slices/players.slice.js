@@ -28,6 +28,8 @@ export const PlayersSlice = createSlice({
         },
         movePlayer: (state, action) => {
             state[action.payload.id].position = action.payload.position;
+        },
+        rotatePlayer: (state, action) => {
             state[action.payload.id].rotation = action.payload.rotation;
         },
         choiceModelPlayer: (state, action) => {
@@ -39,6 +41,6 @@ export const PlayersSlice = createSlice({
     },
 });
 
-export const { initPlayers, removePlayer, addPlayer, animPlayer, movePlayer, choiceModelPlayer } = PlayersSlice.actions;
+export const { initPlayers, removePlayer, addPlayer, animPlayer, movePlayer, choiceModelPlayer, rotatePlayer } = PlayersSlice.actions;
 
 export default PlayersSlice.reducer;

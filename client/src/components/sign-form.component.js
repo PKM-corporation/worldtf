@@ -1,9 +1,12 @@
-import axios from 'axios';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { signInUser } from '../services/auth.service';
+import { setUser } from '../store/slices/user.slice';
 
 const SignFormComponent = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -17,8 +20,8 @@ const SignFormComponent = () => {
             return setInvalidMessage(<p className="mb-3 text-center invalid-message">Veuillez saisir une adresse email valide</p>);
         }
         try {
-            const res = await axios.post(process.env.REACT_APP_BASE_API_URI + '/users/create', { pseudo: username, password, email });
-            window.localStorage.setItem('access_token', res.data.access_token);
+            const user = await signInUser(username, email, password);
+            dispatch(setUser(user));
             setInvalidMessage(null);
             navigate('/');
         } catch (e) {
@@ -75,7 +78,9 @@ const SignFormComponent = () => {
                     <label htmlFor="floatingPassword">Mot de passe</label>
                 </div>
                 <span className="mt-3 d-flex justify-content-center">
-                    <input onClick={sign} className="p-3 rounded-circle" type="button" value="test" />
+                    <button className="btnForm" onClick={sign}>
+                        <span>Inscription</span>
+                    </button>
                 </span>
             </div>
         </div>

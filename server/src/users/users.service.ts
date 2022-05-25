@@ -30,6 +30,24 @@ export class UsersService {
         return await this.userRepository.findOne({ _id: id });
     }
 
+    async storeAccessToken(userId: string, token: string): Promise<void> {
+        try {
+            await this.userRepository.update(userId, { accessToken: token });
+        } catch (e) {
+            this.logger.error(`StoreAccessToken error with user: ${userId}, and token: ${token}`);
+            throw e;
+        }
+    }
+
+    async removeAccessToken(userId: string): Promise<void> {
+        try {
+            await this.userRepository.update(userId, { accessToken: null });
+        } catch (e) {
+            this.logger.error(`RemoveAccessToken error with user: ${userId}`);
+            throw e;
+        }
+    }
+
     private async isUserExist(email: string, pseudo: string) {
         try {
             const existingUser = await this.userRepository.findOne({ $or: [{ email }, { pseudo }] });

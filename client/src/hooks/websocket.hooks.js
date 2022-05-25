@@ -2,7 +2,10 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
-import { addPlayer, animPlayer, choiceModelPlayer, initPlayers, movePlayer, removePlayer } from '../store/slices/players.slice';
+import { addLog, addMessage } from '../store/slices/chat.slice';
+import { setWebsocketConnected, setWebsocketError } from '../store/slices/websocket.slice';
+import { setPlayerPosition } from '../store/slices/player.slice';
+import { addPlayer, animPlayer, choiceModelPlayer, initPlayers, movePlayer, removePlayer, rotatePlayer } from '../store/slices/players.slice';
 
 export let server = null;
 
@@ -10,11 +13,21 @@ export const useWebsocketServer = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const players = useSelector((state) => state.players);
+    const user = useSelector((state) => state.user);
     useEffect(() => {
-        const accessToken = window.localStorage.getItem('access_token');
-        if (!accessToken) return navigate('/authenticate');
+        if (!user.updated || !user.accessToken) return navigate('/authenticate');
 
-        server = io(process.env.REACT_APP_BASE_WEBSOCKET_SERVER_URI, { query: { userId: 'test' }, auth: { token: accessToken } });
+        server = io(process.env.REACT_APP_BASE_WEBSOCKET_SERVER_URI, { auth: { token: user.accessToken } });
+
+        server.on('disconnect', () => {
+            dispatch(setWebsocketConnected(false));
+        });
+        server.on('connect', () => {
+            dispatch(setWebsocketConnected(true));
+        });
+        server.on('Error', (data) => {
+            dispatch(setWebsocketError(data));
+        });
         server.on('Players', (data) => {
             switch (data.type) {
                 case 'RemovePlayer':
@@ -35,18 +48,32 @@ export const useWebsocketServer = () => {
                 case 'Move':
                     dispatch(movePlayer(data));
                     break;
+                case 'Rotate':
+                    dispatch(rotatePlayer(data));
+                    break;
                 case 'Anim':
                     dispatch(animPlayer(data));
                     break;
                 case 'Model':
                     dispatch(choiceModelPlayer(data));
                     break;
+                case 'Tp':
+                    dispatch(setPlayerPosition({ position: data.position }));
                 default:
                     break;
             }
         });
         server.on('Chat', (data) => {
-            console.log(data);
+            dispatch(
+                addMessage({
+                    type: data.type,
+                    content: data.message,
+                    sender: data.id,
+                }),
+            );
+        });
+        server.on('Logs', (data) => {
+            dispatch(addLog(data));
         });
         server.on('Warning', (data) => {
             console.log(data);

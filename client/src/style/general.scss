@@ -29,11 +29,21 @@ body {
     width: 10px;
     background-color: black;
     border-radius: 50%;
-    border: solid 1px gray;
+    border: solid 1px rgb(172, 172, 172);
     margin: auto;
     z-index: 100;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+.error {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    font-size: 18px;
+    text-align: center;
 }
