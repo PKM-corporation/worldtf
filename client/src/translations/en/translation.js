@@ -5,7 +5,7 @@ export const TRANSLATION_EN = {
         credits: 'Credits',
         login: 'Log in',
         logout: 'Log out',
-        language: 'Language',
+        language: 'Languages',
         back: 'Back',
     },
     log: {
@@ -14,6 +14,8 @@ export const TRANSLATION_EN = {
         email: 'Email address',
         nameTaken: 'Username or email already taken',
         password: 'Password',
+        connection: '{{pseudo}} just arrived on the server',
+        disconnection: '{{pseudo}} leave the server',
     },
     warn: {
         empty: 'Please fill in the fields',
@@ -21,5 +23,8 @@ export const TRANSLATION_EN = {
         log: 'Log or password incorrect',
         taken: 'Username or address already taken',
         error: 'An error occured, please try again later',
+    },
+    command: {
+        help: 'Commands list',
     },
 };

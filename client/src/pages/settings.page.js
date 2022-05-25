@@ -12,7 +12,7 @@ const SettingsPage = () => {
     const { t } = useTranslation();
 
     return (
-        <div>
+        <div className="settings">
             <BackgroundComponent />
             <div className="content">
                 <h1 className="text-center neonText pt-4">Universe</h1>

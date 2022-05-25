@@ -2,11 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { MessageTypes } from '../common/constant';
 import { server } from '../hooks/websocket.hooks';
+import { useTranslation } from 'react-i18next';
+import HelpCommandsComponent from './help-commands.component';
 
 const ChatComponent = () => {
     const [text, setText] = useState('');
     const messages = useSelector((state) => state.chat.chatList);
     const chatRef = useRef();
+    const { t } = useTranslation();
 
     useEffect(() => {
         chatRef.current.scrollTop = chatRef.current.scrollHeight;
@@ -18,7 +21,11 @@ const ChatComponent = () => {
                     {messages.map((message, i) => (
                         <div className={`${message.type} message`} key={i}>
                             {message.sender ? <span className="sender">[{message.sender}]:</span> : ''}
-                            <span className="content">{message.content}</span>
+                            {message.type === MessageTypes.Logs && <span className="content">{t(`log.${message.content}`, message.options)}</span>}
+                            {message.type === MessageTypes.Help && <HelpCommandsComponent />}
+                            {(message.type === MessageTypes.Chat || message.type === MessageTypes.Mp) && (
+                                <span className="content">{message.content}</span>
+                            )}
                         </div>
                     ))}
                 </div>
