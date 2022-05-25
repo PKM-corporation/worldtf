@@ -19,7 +19,7 @@ const HomePage = () => {
         getConnectedPlayers().then((data) => {
             setConnectedPlayers(data.onlineClients);
         });
-    });
+    }, []);
 
     return (
         <div className="home">
