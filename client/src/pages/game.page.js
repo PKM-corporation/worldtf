@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import CrosshairComponent from '../components/crosshair.component';
 import DefaultScene from '../scene/default_scene';
 import ChatComponent from '../components/chat.component';
