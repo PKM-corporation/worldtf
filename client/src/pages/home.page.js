@@ -26,7 +26,11 @@ const HomePage = () => {
             <BackgroundComponent />
             <div className="content">
                 <div className="playersOnline">
-                    {connectedPlayers && <p className="textOnlinePlayer">{t('home.onlinePlayers', { onlinePlayers: connectedPlayers })}</p>}
+                    {Number.isInteger(connectedPlayers) ? (
+                        <p className="textOnlinePlayer">{t('home.onlinePlayers', { onlinePlayers: connectedPlayers })}</p>
+                    ) : (
+                        ''
+                    )}
                 </div>
                 <h1 className="text-center neonText pt-4">Universe</h1>
                 <div className="h-75 d-flex justify-content-center justify-content-xl-end  align-items-center ">
