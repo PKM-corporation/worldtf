@@ -29,4 +29,12 @@ export const TRANSLATION_EN = {
     command: {
         help: 'Commands list',
     },
+    error: {
+        alreadyLogin: 'You are logged in elsewhere',
+        incorrectToken: 'You are not properly connected',
+        kicked: 'You have been kicked by {{sender}}',
+        banned: 'You have been banned by {{sender}}',
+        reason: 'Reason : {{reason}}',
+        date: 'On {{day}} at {{time}}',
+    },
 };

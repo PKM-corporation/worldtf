@@ -29,4 +29,12 @@ export const TRANSLATION_FR = {
     command: {
         help: 'Liste des commandes',
     },
+    error: {
+        alreadyLogin: 'Vous êtes connecté ailleurs',
+        incorrectToken: "Vous n'êtes pas connecté correctement",
+        kicked: 'Vous avez été kick par {{sender}}',
+        banned: 'Vous avez été bannis par {{sender}}',
+        reason: 'Raison : {{reason}}',
+        date: 'Le {{day}} à {{time}}',
+    },
 };

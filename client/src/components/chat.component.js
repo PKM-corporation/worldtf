@@ -30,10 +30,10 @@ const ChatComponent = () => {
                 <div className="chatContent" ref={chatRef} id="chatContent">
                     {messages.map((message, i) => (
                         <div className={`${message.type} message`} key={i}>
-                            <span className="me-1">[{message.date}]</span>
+                            {message.date && <span className="me-1">[{message.date}]</span>}
                             {message.sender ? (
                                 <span className="sender" style={{ color: message.color }}>
-                                    {' ' + message.sender}:
+                                    {(message.role === 'Admin' ? ' ADMIN ~ ' : ' ') + message.sender}:
                                 </span>
                             ) : (
                                 ''

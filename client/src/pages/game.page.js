@@ -59,7 +59,7 @@ const GamePage = () => {
                 </Canvas>
             </div>
         );
-    } else if (error.status === 409) {
+    } else if (error.type) {
         return <ErrorComponent />;
     }
     return <LoaderComponent />;

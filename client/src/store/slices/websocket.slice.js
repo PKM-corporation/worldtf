@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { WebsocketErrorMessages } from '../../common/constant';
 
 export const WebsocketSlice = createSlice({
     name: 'websocket',
@@ -12,16 +11,14 @@ export const WebsocketSlice = createSlice({
             if (typeof action.payload === 'boolean') state.connected = action.payload;
         },
         setWebsocketError: (state, action) => {
-            switch (action.payload.message) {
-                case WebsocketErrorMessages.AlreadyLogin:
-                    action.payload.message = 'Vous êtes connecté ailleurs';
-                    break;
-            }
             state.error = action.payload;
+        },
+        clearWebsocketError: (state) => {
+            state.error = {};
         },
     },
 });
 
-export const { setWebsocketConnected, setWebsocketError } = WebsocketSlice.actions;
+export const { setWebsocketConnected, setWebsocketError, clearWebsocketError } = WebsocketSlice.actions;
 
 export default WebsocketSlice.reducer;

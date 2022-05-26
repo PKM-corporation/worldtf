@@ -18,6 +18,8 @@ export const WebsocketEvent = {
 export const WebsocketErrorMessages = {
     AlreadyLogin: 'AlreadyLogin',
     IncorrectToken: 'IncorrectToken',
+    Kicked: 'Kicked',
+    Banned: 'Banned',
 };
 
 export const Animations = {

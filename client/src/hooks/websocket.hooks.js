@@ -71,6 +71,7 @@ export const useWebsocketServer = () => {
                     sender: data.id,
                     color: data.color,
                     date: data.date,
+                    role: data.role,
                 }),
             );
         });

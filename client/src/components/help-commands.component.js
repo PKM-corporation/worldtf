@@ -1,7 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 
 const HelpCommandsComponent = () => {
+    const user = useSelector((state) => state.user);
     const { t } = useTranslation();
     return (
         <div className="help-command">
@@ -9,6 +11,9 @@ const HelpCommandsComponent = () => {
             <span className="command">/mp [pseudo] [message]</span>
             <span className="command">/tp [pseudo]</span>
             <span className="command">/help</span>
+            {user.role === 'Admin' && <span className="command">/kick [pseudo] [timeout] [reason]</span>}
+            {user.role === 'Admin' && <span className="command">/mute [pseudo] [timeout] [reason]</span>}
+            {user.role === 'Admin' && <span className="command">/ban [pseudo] [reason]</span>}
         </div>
     );
 };

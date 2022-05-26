@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
-import { User } from 'src/users/schemas/users.schema';
+import { TRole } from 'src/db/db.interface';
+import { User } from 'src/db/schemas/users.schema';
 
 export class UserAndAccessTokenDto {
     constructor(user: User, accessToken: string) {
@@ -8,6 +9,7 @@ export class UserAndAccessTokenDto {
         this.pseudo = user.pseudo;
         this.email = user.email;
         this.avatar = user.avatar;
+        this.role = user.role;
         this.accessToken = accessToken;
     }
     @ApiProperty()
@@ -29,6 +31,11 @@ export class UserAndAccessTokenDto {
     @IsString()
     @IsOptional()
     avatar?: string;
+
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    role: TRole;
 
     @ApiProperty()
     @IsString()

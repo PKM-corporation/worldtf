@@ -7,3 +7,8 @@ export const WebsocketEvent = {
     Command: 'Command',
     Error: 'Error',
 };
+
+export const SanctionErrorMessages = {
+    UserAlreadySanctioned: 'UserAlreadySanctioned',
+    UserNotSanctioned: 'UserNotSanctioned',
+};
