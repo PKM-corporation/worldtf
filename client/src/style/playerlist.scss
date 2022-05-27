@@ -1,0 +1,27 @@
+.playerList{
+    z-index: 100001;
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 15em;
+    .playerlistContent{
+        width: 100%;
+        height: 100%;
+        backdrop-filter: grayscale(60%) blur(3px);
+        flex-wrap: wrap;
+        display: flex;
+        .player{
+            width: 25%;
+            height: 75px;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            padding: 1em 0;
+            background-color: white;
+        }
+    }
+}
