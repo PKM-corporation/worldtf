@@ -17,6 +17,8 @@ import {
     ISanctionCommandOptions,
     TWebsocketError,
     IClientEmitWarning,
+    IWebsocketVerboseWithOptions,
+    IWebsocketSanctionLog,
 } from './websocket.interface';
 import { DateTime } from 'luxon';
 import { UsersService } from 'src/users/users.service';
@@ -152,10 +154,32 @@ export class WebsocketService {
                     } as ICommand;
                 }
                 break;
+            case '/cancel':
+                if (splittedCommand[1] && splittedCommand[2]) {
+                    const sanctionType = this.convertSanctionTypeFromCommandToTSanction(splittedCommand[1]);
+                    if (!sanctionType) break;
+                    return {
+                        type: 'cancel',
+                        sanctionType,
+                        target: splittedCommand[2],
+                    } as ICommand;
+                }
+                break;
         }
         return {
             type: 'help',
         } as ICommand;
+    }
+
+    convertSanctionTypeFromCommandToTSanction(type: string): TSanction {
+        switch (type.toLowerCase()) {
+            case 'ban':
+                return 'Ban';
+            case 'kick':
+                return 'Kick';
+            case 'mute':
+                return 'Mute';
+        }
     }
 
     sendMpTo(target: Player, message: string, client: Socket, player: Player) {
@@ -179,6 +203,7 @@ export class WebsocketService {
         };
         client.emit(WebsocketEvent.PlayerAction, positionData);
         this.move(target.position, player);
+        client.emit(WebsocketEvent.Verbose, { type: 'Tp', options: { target: target.username } } as IWebsocketVerboseWithOptions);
     }
 
     askHelp(client: Socket) {
@@ -200,7 +225,24 @@ export class WebsocketService {
             this.logger.warn(`Sanction ${type} by ${user._id.toString()} (${user.pseudo}) with incorrect target: ${pseudo}`);
             return;
         }
-
+        if (type === 'Kick' && !options?.time && !options?.targetPlayer) {
+            clientAdmin.emit(WebsocketEvent.Warning, { type: 'DisconnectedTarget' } as IClientEmitWarning);
+            this.logger.warn(`Sanction ${type} by ${user._id.toString()} (${user.pseudo}) with disconnected target: ${pseudo}`);
+            return;
+        }
+        try {
+            await this.sanctionsService.newSanction(target._id.toString(), type, user._id.toString(), {
+                duration: options.time,
+                reason: options.message,
+            });
+        } catch (e) {
+            if (e.message !== SanctionErrorMessages.UserAlreadySanctioned) {
+                this.logger.error(`sanctionUser failed with user: ${target._id.toString} (${target.pseudo})`);
+                throw e;
+            }
+            clientAdmin.emit(WebsocketEvent.Warning, { type: 'UserAlreadySanctioned' } as IClientEmitWarning);
+            return;
+        }
         const clientTarget = this.getClientById(options?.targetPlayer?.clientId);
         if (clientTarget) {
             switch (type) {
@@ -220,16 +262,39 @@ export class WebsocketService {
                     break;
             }
         }
+        this.server.emit(WebsocketEvent.Logs, { type, options: { target: pseudo } } as IWebsocketSanctionLog);
+    }
+
+    async cancelUserSanction(pseudo: string, admin: Player, type: TSanction) {
+        const user = await this.usersService.findUserById(admin.id);
+        const target = await this.usersService.findUserByPseudo(pseudo);
+
+        const clientAdmin = this.getClientById(admin.clientId);
+        if (user?.role !== 'Admin') {
+            clientAdmin.emit(WebsocketEvent.Warning, { type: 'InsufficientRights' } as IClientEmitWarning);
+            this.logger.warn(
+                `User ${admin.id} (${user.pseudo}) tries to cancel ${type} ${target?._id?.toString()} (${target.pseudo}) but isn't admin`,
+            );
+            return;
+        }
+        if (!target) {
+            clientAdmin.emit(WebsocketEvent.Warning, { type: 'IncorrectTarget' } as IClientEmitWarning);
+            this.logger.warn(`Cancel sanction ${type} by ${user._id.toString()} (${user.pseudo}) with incorrect target: ${pseudo}`);
+            return;
+        }
         try {
-            await this.sanctionsService.newSanction(target._id.toString(), type, user._id.toString(), {
-                duration: options.time,
-                reason: options.message,
-            });
+            await this.sanctionsService.cancelSanction(target._id.toString(), type);
+            clientAdmin.emit(WebsocketEvent.Verbose, {
+                type: 'Cancel',
+                options: { target: pseudo, sanctionType: type },
+            } as IWebsocketVerboseWithOptions);
         } catch (e) {
-            if (e.message !== SanctionErrorMessages.UserAlreadySanctioned) {
-                this.logger.error(`sanctionUser failed with user: ${target._id.toString} (${target.pseudo})`);
+            if (e.message !== SanctionErrorMessages.UserNotSanctioned) {
+                this.logger.error(`CancelSanctionUser failed with user: ${target._id.toString} (${target.pseudo})`);
                 throw e;
             }
+            clientAdmin.emit(WebsocketEvent.Warning, { type: 'UserNotSanctioned' } as IClientEmitWarning);
+            return;
         }
     }
 

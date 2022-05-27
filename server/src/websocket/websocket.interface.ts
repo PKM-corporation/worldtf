@@ -1,6 +1,6 @@
 import { HttpStatus } from '@nestjs/common';
 import { ParsedUrlQuery } from 'querystring';
-import { TRole } from 'src/db/db.interface';
+import { TRole, TSanction } from 'src/db/db.interface';
 import { Player } from 'src/player/player.class';
 import { ICoordinates, TAnimation, TModel } from 'src/player/player.interface';
 
@@ -19,9 +19,18 @@ export type TWebsocketDataType =
     | 'Error'
     | 'Kick';
 
-export type TWebsocketWarning = 'Spam' | 'IncorrectTarget' | 'InsufficientRights' | 'Muted';
+export type TWebsocketWarning =
+    | 'Spam'
+    | 'IncorrectTarget'
+    | 'DisconnectedTarget'
+    | 'InsufficientRights'
+    | 'Muted'
+    | 'UserAlreadySanctioned'
+    | 'UserNotSanctioned';
 
 export type TWebsocketLog = 'Connection' | 'Disconnection';
+
+export type TWebsocketVerbose = 'Tp' | 'Ban' | 'Kick' | 'Mute' | 'Cancel';
 
 export type TWebsocketError = 'AlreadyLogin' | 'Kicked' | 'Banned' | 'IncorrectToken';
 
@@ -105,14 +114,30 @@ export interface IWebsocketLog {
     date: string;
 }
 
+export interface IWebsocketVerbose {
+    type: TWebsocketVerbose;
+}
+export interface IWebsocketVerboseWithOptions extends IWebsocketVerbose {
+    options: {
+        target?: string;
+        sanctionType?: string;
+    };
+}
+export interface IWebsocketSanctionLog {
+    type: TSanction;
+    options?: {
+        target?: string;
+    };
+}
 export interface IWebsocketConnectionLog extends IWebsocketLog {
     pseudo: string;
 }
 
-export type TCommand = 'mp' | 'tp' | 'help' | 'kick' | 'mute' | 'ban';
+export type TCommand = 'mp' | 'tp' | 'help' | 'kick' | 'mute' | 'ban' | 'cancel';
 export interface ICommand {
     type: TCommand;
     target?: string;
+    sanctionType?: TSanction;
     time?: number;
     content?: string;
 }

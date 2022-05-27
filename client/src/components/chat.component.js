@@ -2,9 +2,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { server } from '../hooks/websocket.hooks';
 import { useTranslation } from 'react-i18next';
-import HelpCommandsComponent from './help-commands.component';
+import HelpCommandsComponent from './chat/help-commands.component';
 import { setIsChatting } from '../store/slices/interface.slice';
 import { MessageTypes } from '../common/constant';
+import VerboseComponent from './chat/verbose.component';
+import SanctionComponent from './chat/sanction.component';
 
 const ChatComponent = () => {
     const dispatch = useDispatch();
@@ -18,8 +20,6 @@ const ChatComponent = () => {
         e.stopPropagation();
         dispatch(setIsChatting(true));
     };
-
-    const now = new Date();
 
     useEffect(() => {
         chatRef.current.scrollTop = chatRef.current.scrollHeight;
@@ -39,7 +39,9 @@ const ChatComponent = () => {
                                 ''
                             )}
                             {message.type === MessageTypes.Logs && <span className="content">{t(`log.${message.content}`, message.options)}</span>}
+                            {message.type === MessageTypes.Verbose && <VerboseComponent verbose={message} />}
                             {message.type === MessageTypes.Help && <HelpCommandsComponent />}
+                            {message.type === MessageTypes.Sanction && <SanctionComponent sanction={message} />}
                             {(message.type === MessageTypes.Chat || message.type === MessageTypes.Mp) && (
                                 <span className="content">{message.content}</span>
                             )}

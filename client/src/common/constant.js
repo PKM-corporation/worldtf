@@ -4,6 +4,8 @@ export const MessageTypes = {
     Logs: 'Logs',
     Warning: 'Warning',
     Help: 'Help',
+    Verbose: 'Verbose',
+    Sanction: 'Sanction',
 };
 
 export const WebsocketEvent = {

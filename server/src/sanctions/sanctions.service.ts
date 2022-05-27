@@ -56,9 +56,10 @@ export class SanctionsService {
 
         for (const sanction of sanctions) {
             if (
-                (sanction.isActive && type === 'Ban' && sanction.type === 'Ban') ||
-                (type === 'Kick' && sanction.type === 'Ban') ||
-                (sanction.type === type && sanction.date + sanction.duration > date)
+                sanction.isActive &&
+                ((type === 'Ban' && sanction.type === 'Ban') ||
+                    (type === 'Kick' && sanction.type === 'Ban') ||
+                    (sanction.type === type && sanction.date + sanction.duration > date))
             ) {
                 return true;
             }

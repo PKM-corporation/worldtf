@@ -225,6 +225,9 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
                     targetPlayer: target,
                 });
                 break;
+            case 'cancel':
+                await this.websocketService.cancelUserSanction(command.target, player, command.sanctionType);
+                break;
             case 'help':
                 this.websocketService.askHelp(client);
                 break;

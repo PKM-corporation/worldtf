@@ -43,11 +43,23 @@ export const ChatSlice = createSlice({
                         date: action.payload.date,
                     });
                     break;
+                case 'Ban':
+                case 'Kick':
+                    state.chatList.push({
+                        type: MessageTypes.Sanction,
+                        sanction: action.payload.type,
+                        options: action.payload.options,
+                        date: action.payload.date,
+                    });
+                    break;
             }
+        },
+        addVerbose: (state, action) => {
+            state.chatList.push({ type: MessageTypes.Verbose, options: action.payload.options, verboseType: action.payload.type });
         },
     },
 });
 
-export const { addMessage, addLog, setChatColor } = ChatSlice.actions;
+export const { addMessage, addLog, setChatColor, addVerbose } = ChatSlice.actions;
 
 export default ChatSlice.reducer;
