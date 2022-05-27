@@ -1,4 +1,3 @@
-
 .text-large {
     font-size: 3rem;
 }
@@ -7,30 +6,23 @@
     font-size: 2rem;
 }
 
-.navButton{
+.navButton {
     z-index: 999;
     font-size: 3rem;
     cursor: pointer;
-    -webkit-transform: translate3d(0,0,0);
-    transform: translate3d(0,0,0);
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
 }
 
-.navButton:hover{
+.navButton:hover {
     font-size: 3rem;
     cursor: pointer;
-    text-shadow:
-    0 0 4px #fff,
-    0 0 11px #fff,
-    0 0 19px #fff,
-    0 0 40px rgb(238, 0, 255),
-    0 0 80px rgb(238, 0, 255),
-    0 0 90px rgb(238, 0, 255),
-    0 0 100px rgb(238, 0, 255),
-    0 0 150px rgb(238, 0, 255);
+    text-shadow: 0 0 4px #fff, 0 0 11px #fff, 0 0 19px #fff, 0 0 40px rgb(238, 0, 255), 0 0 80px rgb(238, 0, 255), 0 0 90px rgb(238, 0, 255),
+        0 0 100px rgb(238, 0, 255), 0 0 150px rgb(238, 0, 255);
 }
 
 @media only screen and (max-width: 600px) {
-    .homePageConnexion{
+    .homePageConnexion {
         position: absolute;
         top: 50%;
         left: 50%;
@@ -39,10 +31,12 @@
     .vertical-line {
         display: none;
     }
-  }
+}
 
-.home, .AuthPage, .settings{
-    .content{
+.home,
+.AuthPage,
+.settings {
+    .content {
         position: absolute;
         width: 100%;
         height: 100%;
@@ -50,11 +44,11 @@
     }
 
     @media only screen and (max-width: 600px) {
-        .menu>*{
+        .menu > * {
             text-align: center;
             width: fit-content;
         }
-        .menu{
+        .menu {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -64,11 +58,8 @@
             align-items: center;
             justify-content: center;
         }
-        
     }
-    
 }
-
 
 .playersOnline {
     color: #fff;
