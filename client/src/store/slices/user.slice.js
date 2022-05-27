@@ -7,15 +7,17 @@ export const UserSlice = createSlice({
         id: '',
         pseudo: '',
         email: '',
+        role: '',
         avatar: '',
         accessToken: '',
     },
     reducers: {
         setUser: (state, action) => {
-            if (action.payload.id && action.payload.pseudo && action.payload.email) {
+            if (action.payload.id && action.payload.pseudo && action.payload.email && action.payload.role) {
                 state.id = action.payload.id;
                 state.pseudo = action.payload.pseudo;
                 state.email = action.payload.email;
+                state.role = action.payload.role;
                 if (action.payload.avatar) state.avatar = action.payload.avatar;
                 if (action.payload.accessToken) {
                     state.accessToken = action.payload.accessToken;
@@ -31,6 +33,7 @@ export const UserSlice = createSlice({
             state.id = '';
             state.pseudo = '';
             state.email = '';
+            state.role = '';
             state.avatar = '';
             state.updated = 0;
             window.localStorage.removeItem('userId');

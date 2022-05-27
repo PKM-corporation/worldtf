@@ -1,13 +1,12 @@
 import { Controller, Get, Param, Logger, HttpStatus, HttpCode, HttpException, UseGuards } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
-import { AuthService } from 'src/auth/auth.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guards';
 import { UserDto } from './dto/users.dto';
 import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
-    constructor(private readonly usersService: UsersService, private authService: AuthService) {}
+    constructor(private readonly usersService: UsersService) {}
 
     private logger: Logger = new Logger('UsersController');
 
@@ -17,7 +16,7 @@ export class UsersController {
     @HttpCode(HttpStatus.OK)
     async getUser(@Param('id') id: string): Promise<UserDto> {
         try {
-            const user = await this.usersService.findUser(id);
+            const user = await this.usersService.findUserById(id);
             this.logger.debug(`User ${user.pseudo} found with id ${user._id}`);
             return new UserDto(user);
         } catch (e) {

@@ -69,6 +69,16 @@
                 color: #FFFF55;
             }
 
+            &.Sanction {
+                font-weight: bold;
+                color: #fa361c;
+            }
+
+            &.Verbose {
+                font-style: italic;
+                color: #a0a0a0;
+            }
+
             .sender {
                 margin-right: 10px;
                 font-weight: bold;

@@ -1,11 +1,14 @@
+import { TRole } from 'src/db/db.interface';
 import { ICoordinates, TModel, TAnimation, IPlayer } from './player.interface';
 
 export class Player {
-    constructor(id: string, username: string, model?: TModel, position?: ICoordinates, rotation?: ICoordinates) {
+    constructor(id: string, clientId: string, role: TRole, username: string, model?: TModel, position?: ICoordinates, rotation?: ICoordinates) {
         this.id = id;
+        this.clientId = clientId;
         this.username = username;
         this.animation = 'idle';
         this.model = model ?? 'Alien';
+        this.role = role;
         this.position = position ?? { x: 0, y: 0, z: 0 };
         this.rotation = rotation ?? { x: 0, y: 0, z: 0 };
     }
@@ -63,4 +66,6 @@ export class Player {
     username: string;
     model: TModel;
     animation: TAnimation;
+    role: TRole;
+    clientId: string;
 }

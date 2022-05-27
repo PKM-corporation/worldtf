@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
-import { addLog, addMessage } from '../store/slices/chat.slice';
+import { addLog, addMessage, addVerbose } from '../store/slices/chat.slice';
 import { setWebsocketConnected, setWebsocketError } from '../store/slices/websocket.slice';
 import { setPlayerPosition } from '../store/slices/player.slice';
 import { addPlayer, animPlayer, choiceModelPlayer, initPlayers, movePlayer, removePlayer, rotatePlayer } from '../store/slices/players.slice';
@@ -71,11 +71,15 @@ export const useWebsocketServer = () => {
                     sender: data.id,
                     color: data.color,
                     date: data.date,
+                    role: data.role,
                 }),
             );
         });
         server.on('Logs', (data) => {
             dispatch(addLog(data));
+        });
+        server.on('Verbose', (data) => {
+            dispatch(addVerbose(data));
         });
         server.on('Warning', (data) => {
             console.log(data);

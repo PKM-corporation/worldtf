@@ -3,8 +3,8 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { isObject } from 'class-validator';
 import jwtDecode from 'jwt-decode';
-import { User } from 'src/users/schemas/users.schema';
-import { UsersRepository } from 'src/users/users.repository';
+import { User } from 'src/db/schemas/users.schema';
+import { UsersRepository } from 'src/db/users.repository';
 import { IUserTokenPayload } from './auth.interface';
 
 @Injectable()

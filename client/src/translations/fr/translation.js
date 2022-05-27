@@ -30,5 +30,22 @@ export const TRANSLATION_FR = {
     },
     command: {
         help: 'Liste des commandes',
+        description: '{}: arguments nécessaires, []: arguments optionnels',
+    },
+    error: {
+        alreadyLogin: 'Vous êtes connecté ailleurs',
+        incorrectToken: "Vous n'êtes pas connecté correctement",
+        kicked: 'Vous avez été kick par {{sender}}',
+        banned: 'Vous avez été bannis par {{sender}}',
+        reason: 'Raison : {{reason}}',
+        date: 'Le {{day}} à {{time}}',
+    },
+    verbose: {
+        tp: 'Vous vous êtes téléporté à {{target}}',
+        cancel: 'Vous avez annulé la sanction {{sanctionType}} de {{target}}',
+    },
+    sanction: {
+        ban: 'Le marteau du bannissement a frappé {{target}}',
+        kick: "{{target}} s'est fait sortir ",
     },
 };

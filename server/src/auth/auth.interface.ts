@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { User } from 'src/users/schemas/users.schema';
+import { User } from 'src/db/schemas/users.schema';
 
 export interface IUserTokenPayload {
     username: string;

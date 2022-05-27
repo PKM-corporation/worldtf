@@ -6,4 +6,11 @@ export const WebsocketEvent = {
     Players: 'Players',
     Command: 'Command',
     Error: 'Error',
+    Verbose: 'Verbose',
+    Sanction: 'Sanction',
+};
+
+export const SanctionErrorMessages = {
+    UserAlreadySanctioned: 'UserAlreadySanctioned',
+    UserNotSanctioned: 'UserNotSanctioned',
 };
