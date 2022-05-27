@@ -10,6 +10,9 @@ export const TRANSLATION_EN = {
         onlinePlayers: '{{onlinePlayers}} online players',
         loading: 'Loading',
     },
+    interface: {
+        playerList: 'Online players',
+    },
     log: {
         signup: 'Sign up',
         username: 'Username',

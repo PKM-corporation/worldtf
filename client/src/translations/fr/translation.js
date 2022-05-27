@@ -10,6 +10,9 @@ export const TRANSLATION_FR = {
         onlinePlayers: '{{onlinePlayers}} joueurs en ligne',
         loading: 'Chargement',
     },
+    interface: {
+        playerList: 'Joueurs en ligne',
+    },
     log: {
         signup: 'Inscription',
         username: 'Pseudo',
