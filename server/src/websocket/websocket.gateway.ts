@@ -72,7 +72,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
             client.emit(WebsocketEvent.Error, {
                 type: this.websocketService.getErrorTypeBySanctionType(sanction.type),
                 duration: sanction.duration,
-                day: DateTime.fromSeconds(sanction.date).toFormat('yyyy-MM-dd'),
+                day: DateTime.fromSeconds(sanction.date).toLocaleString(DateTime.DATE_SHORT),
                 time: DateTime.fromSeconds(sanction.date).toFormat('HH:mm'),
                 sender: admin.pseudo,
             } as IClientEmitError);

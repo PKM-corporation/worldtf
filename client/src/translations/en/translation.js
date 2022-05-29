@@ -40,8 +40,8 @@ export const TRANSLATION_EN = {
         incorrectToken: 'You are not properly connected',
         kicked: 'You have been kicked by {{sender}}',
         banned: 'You have been banned by {{sender}}',
-        reason: 'Reason : {{reason}}',
-        date: 'On {{day}} at {{time}}',
+        reason: 'Reason : {{- reason}}',
+        date: 'On {{- day}} at {{- time}}',
     },
     verbose: {
         tp: 'You teleported to {{target}}',
