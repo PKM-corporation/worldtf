@@ -1,4 +1,4 @@
-import { CACHE_MANAGER, Inject, Logger } from '@nestjs/common';
+import { CACHE_MANAGER, Inject, Logger, UseGuards } from '@nestjs/common';
 import {
     ConnectedSocket,
     MessageBody,
@@ -34,6 +34,7 @@ import { DateTime } from 'luxon';
 import { User } from 'src/db/schemas/users.schema';
 import { SanctionsService } from 'src/sanctions/sanctions.service';
 import { UsersService } from 'src/users/users.service';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guards';
 
 @WebSocketGateway({ cors: true })
 export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
@@ -122,7 +123,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         this.logger.log(`client ${client.id} disconnected`);
     }
 
-    //@UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard)
     @SubscribeMessage(WebsocketEvent.PlayerAction)
     handleEventPlayerAction(@MessageBody() data: IWebsocketData, @ConnectedSocket() client: Socket) {
         const player = this.players.get(client.id);
@@ -151,7 +152,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
                 break;
         }
     }
-    //@UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard)
     @SubscribeMessage(WebsocketEvent.Chat)
     async handleEventChat(@MessageBody() data: IWebsocketChatData, @ConnectedSocket() client: Socket) {
         const player = this.players.get(client.id);
@@ -172,7 +173,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         this.websocketService.chat(data.message, data.color, player);
     }
 
-    //@UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard)
     @SubscribeMessage(WebsocketEvent.Command)
     async handleEventCommand(@MessageBody() data: IWebsocketCommandData, @ConnectedSocket() client: Socket) {
         const player = this.players.get(client.id);

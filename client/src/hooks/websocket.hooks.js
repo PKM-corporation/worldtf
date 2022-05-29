@@ -17,7 +17,10 @@ export const useWebsocketServer = () => {
     useEffect(() => {
         if (!user.updated || !user.accessToken) return navigate('/authenticate');
 
-        server = io(process.env.REACT_APP_BASE_WEBSOCKET_SERVER_URI, { auth: { token: user.accessToken } });
+        server = io(process.env.REACT_APP_BASE_WEBSOCKET_SERVER_URI, {
+            auth: { token: user.accessToken },
+            extraHeaders: { Authorization: 'Bearer ' + user.accessToken },
+        });
 
         server.on('disconnect', () => {
             dispatch(setWebsocketConnected(false));
