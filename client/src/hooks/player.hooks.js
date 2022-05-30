@@ -24,7 +24,7 @@ export const useKeyboardControls = () => {
 
     useEffect(() => {
         const handleKeyDown = (e) => {
-            if (e.code === 'Tab') {
+            if (e.code === 'Tab' || e.code === 'Escape') {
                 e.preventDefault();
             }
             // Movement key

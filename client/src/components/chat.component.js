@@ -13,13 +13,21 @@ const ChatComponent = () => {
     const [text, setText] = useState('');
     const messages = useSelector((state) => state.chat.chatList);
     const color = useSelector((state) => state.chat.color);
+    const isChatting = useSelector((state) => state.interface.isChatting);
     const chatRef = useRef();
+    const inputRef = useRef();
     const { t } = useTranslation();
 
     const chat = (e) => {
         e.stopPropagation();
         dispatch(setIsChatting(true));
     };
+
+    useEffect(() => {
+        if (isChatting) {
+            inputRef.current.focus();
+        }
+    }, [isChatting]);
 
     useEffect(() => {
         chatRef.current.scrollTop = chatRef.current.scrollHeight;
@@ -64,6 +72,7 @@ const ChatComponent = () => {
                     onClick={(e) => chat(e)}
                     onChange={(e) => setText(e.target.value)}
                     value={text}
+                    ref={inputRef}
                     autoComplete="off"
                     type="text"
                     id="inputChat"

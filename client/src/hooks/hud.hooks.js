@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { setShowPlayerlist } from '../store/slices/interface.slice';
+import { setIsChatting, setShowPlayerlist } from '../store/slices/interface.slice';
 
 export const useKeyboardHUDControls = () => {
     const dispatch = useDispatch();
@@ -10,14 +10,14 @@ export const useKeyboardHUDControls = () => {
 
     useEffect(() => {
         const handleKeyDown = (e) => {
-            if (e.code === 'Tab') {
+            if (e.code === 'Tab' || e.code === 'Escape' || e.ctrlKey) {
                 e.preventDefault();
             }
             setKeyUp(null);
             setKeyDown(e.code);
         };
         const handleKeyUp = (e) => {
-            if (e.code === 'Tab') {
+            if (e.code === 'Tab' || e.code === 'Escape' || e.ctrlKey) {
                 e.preventDefault();
             }
             setKeyDown(null);
@@ -49,6 +49,11 @@ export const useKeyboardHUDControls = () => {
         switch (keyUp) {
             case 'Tab':
                 dispatch(setShowPlayerlist(false));
+                break;
+            case 'KeyT':
+                if (!interfaceStore.showSettings && !interfaceStore.isChatting) {
+                    dispatch(setIsChatting(true));
+                }
                 break;
             default:
                 break;

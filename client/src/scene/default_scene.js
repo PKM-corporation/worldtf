@@ -21,10 +21,18 @@ const DefaultScene = () => {
     const { camera, gl } = useThree();
     const controls = useRef();
     const players = useSelector((state) => state.players.playerList);
+    const interfaceStore = useSelector((state) => state.interface);
+
     useEffect(() => {
         camera.layers.enable(0);
         camera.layers.enable(1);
     }, [camera]);
+
+    useEffect(() => {
+        for (const bool of Object.values(interfaceStore)) {
+            if (bool) document.exitPointerLock();
+        }
+    }, [interfaceStore]);
 
     useEffect(() => {
         const handleFocus = () => {
