@@ -13,9 +13,9 @@ const SkyComponent = () => {
     useFrame(({ clock }) => {
         const second = Math.floor(Date.now() / 1000);
         if (second > oldSecond) {
-            // ambientLightRef.current.intensity = Math.max(Math.sin(second / 60), 0.1) * 0.3;
-            // pointLightRef.current.position.x = Math.cos(second / 60) * 10;
-            // pointLightRef.current.position.y = Math.sin(second / 60) * 20;
+            ambientLightRef.current.intensity = Math.max(Math.sin(second / 60), 0.1) * 0.3;
+            pointLightRef.current.position.x = Math.cos(second / 60) * 10;
+            pointLightRef.current.position.y = Math.sin(second / 60) * 20;
             skyRef.current.material.uniforms.sunPosition.value.x = Math.cos(second / 60) * 100;
             skyRef.current.material.uniforms.sunPosition.value.y = Math.sin(second / 60) * 50;
             oldSecond = second;
