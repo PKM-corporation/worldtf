@@ -34,7 +34,7 @@ export class JwtTokenValidationStrategy extends PassportStrategy(Strategy, 'JwtT
                 )) as User;
             }
             if (user) {
-                this.success(user);
+                return this.success(user);
             }
             this.error(new UnauthorizedException());
         } catch (e) {
