@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import CrosshairComponent from '../components/crosshair.component';
 import DefaultScene from '../scene/default-scene';
 import ChatComponent from '../components/chat/chat.component';
@@ -25,6 +25,8 @@ const PixelRatioSetting = () => {
 };
 
 const GamePage = () => {
+    const canvasRef = useRef();
+    const favicon = document.getElementById('favicon');
     const dispatch = useDispatch();
     const connected = useSelector((state: IStoreStates) => state.websocket.connected);
     const error = useSelector((state: IStoreStates) => state.websocket.error);
@@ -49,6 +51,16 @@ const GamePage = () => {
     const play = () => {
         dispatch(InterfaceSliceActions.setIsChatting(false));
     };
+
+    /*useEffect(() => {
+        const interval = setInterval(() => {
+            favicon.href = canvasRef.current.toDataURL();
+        }, 1000);
+
+        return () => {
+            clearInterval(interval);
+        };
+    }, []);*/
 
     if (connected) {
         return (
