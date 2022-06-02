@@ -1,0 +1,73 @@
+.text-large {
+    font-size: 3rem;
+}
+
+.text-small {
+    font-size: 2rem;
+}
+
+.navButton {
+    z-index: 999;
+    font-size: 3rem;
+    cursor: pointer;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+}
+
+.navButton:hover {
+    font-size: 3rem;
+    cursor: pointer;
+    text-shadow: 0 0 4px #fff, 0 0 11px #fff, 0 0 19px #fff, 0 0 40px rgb(238, 0, 255), 0 0 80px rgb(238, 0, 255), 0 0 90px rgb(238, 0, 255),
+        0 0 100px rgb(238, 0, 255), 0 0 150px rgb(238, 0, 255);
+}
+
+@media only screen and (max-width: 600px) {
+    .homePageConnexion {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    .vertical-line {
+        display: none;
+    }
+}
+
+.home,
+.AuthPage,
+.settings {
+    .content {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        color: rgb(255, 255, 255);
+    }
+
+    @media only screen and (max-width: 600px) {
+        .menu > * {
+            text-align: center;
+            width: fit-content;
+        }
+        .menu {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+}
+
+.playersOnline {
+    color: #fff;
+    position: absolute;
+    bottom: 0;
+    left: 2rem;
+}
+
+.textOnlinePlayer {
+    font-size: 1.5em;
+}

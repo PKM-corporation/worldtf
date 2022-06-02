@@ -1,0 +1,138 @@
+@font-face {
+    font-family: Beon;
+    src: url('../../public/fonts/BeonMedium-6d51.otf');
+}
+
+.AuthPage {
+    height: 100vh;
+}
+
+#pink-background {
+    background-color: rgba(118, 29, 123, 0.7);
+    border: solid rgb(185, 227, 255) 3px;
+    box-shadow: 0 0 0.2rem #fff, 0 0 0.2rem #fff, 0 0 2rem rgba(0, 153, 255, 0.508), 0 0 0.8rem rgba(0, 153, 255, 0.508),
+        0 0 2.8rem rgba(0, 153, 255, 0.508), inset 0 0 1.3rem rgba(0, 153, 255, 0.508);
+}
+.invalid-message {
+    color: rgb(231, 80, 80);
+}
+
+.neonText {
+    //animation: flicker 1.5s infinite alternate;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    text-shadow: 0 0 4px #fff, 0 0 11px #fff, 0 0 19px #fff, 0 0 40px rgb(0, 153, 255), 0 0 80px rgb(0, 153, 255), 0 0 90px rgb(0, 153, 255),
+        0 0 100px rgb(0, 153, 255), 0 0 150px rgb(0, 153, 255);
+    color: #fff;
+    font-size: 4.2rem;
+    font-family: 'Beon';
+}
+
+@media only screen and (max-width: 600px) {
+    #pink-background {
+        left: 0;
+        top: 0;
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    #registerForm {
+        margin-top: 3em;
+    }
+}
+
+/* Animate neon flicker */
+@keyframes flicker {
+    0%,
+    18%,
+    22%,
+    25%,
+    53%,
+    57%,
+    100% {
+        text-shadow: 0 0 4px #fff, 0 0 11px #fff, 0 0 19px #fff, 0 0 40px rgb(0, 153, 255), 0 0 80px rgb(0, 153, 255), 0 0 90px rgb(0, 153, 255),
+            0 0 100px rgb(0, 153, 255), 0 0 150px rgb(0, 153, 255);
+    }
+
+    20%,
+    24%,
+    55% {
+        text-shadow: none;
+    }
+}
+.form-control {
+    background-color: #2907289f;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-color: rgb(0, 153, 255);
+    color: #fff;
+}
+.form-control:focus {
+    background-color: #2907289f;
+    color: #fff;
+    ::-webkit-input-placeholder {
+        /* Chrome/Opera/Safari */
+        color: pink;
+    }
+}
+.vertical-line {
+    border-left: 2px solid rgb(255, 255, 255);
+    display: inline-block;
+    height: 100%;
+    position: sticky;
+    top: 50%;
+    left: 50%;
+}
+
+.btnForm {
+    position: relative;
+    color: #fff;
+    background: transparent;
+    border: none;
+    z-index: 2;
+    font-size: 1.5rem;
+    padding: 0.5rem;
+}
+.btnForm:hover {
+    animation: flicker 2s infinite alternate;
+}
+
+.btnForm:before,
+.btnForm:after {
+    position: absolute;
+    content: '';
+    width: 20%;
+    height: 20%;
+    border: 1px solid;
+
+    z-index: -1;
+    transition: all 0.3s ease;
+}
+.btnForm:before {
+    top: 0;
+    left: 0;
+    border-bottom-color: transparent;
+    border-right-color: transparent;
+    border-top-color: #fff;
+    border-left-color: #fff;
+}
+.btnForm:after {
+    bottom: 0;
+    right: 0;
+    border-top-color: transparent;
+    border-left-color: transparent;
+    border-bottom-color: #fff;
+    border-right-color: #fff;
+}
+.btnForm:hover:before,
+.btnForm:hover:after {
+    border-color: #fff;
+    height: 100%;
+    width: 100%;
+    box-shadow: 0 0 5px #00aced, 0 0 5px #00aced inset;
+}
+
+h3 {
+    font-family: 'Beon';
+}
