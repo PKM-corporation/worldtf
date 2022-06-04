@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import '../style/profil.scss';
 
 const ProfileComponent = () => {
     const navigate = useNavigate();
@@ -27,7 +26,7 @@ const ProfileComponent = () => {
 
     return (
         <div className="main-div-content-profile">
-            <p>Mon profil</p>
+            <p>Mes informations</p>
         </div>
     );
 };

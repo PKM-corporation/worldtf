@@ -5,14 +5,19 @@
 }
 
 .content-profile{
-    background-color: rgba($color: #001B86, $alpha: 0.7);
+    background-image: url('../assets/background_accueil.png');
+    background-size: cover ;
+    background-repeat: no-repeat;
+    font-family: "koho-light";
     hr{
         width: 25%;
         color: #00DDDD;
-        height: 2px;
+        height: 3px;
         border-top-right-radius: 4px;
         border-bottom-right-radius: 4px;
-        border: 1px solid #33E9C6;
+        border: 1px solid rgba($color: #FFFFFF, $alpha: 0.5);
+        opacity: 1;
+        outline: 1px solid rgba($color: #00DDDD, $alpha: 0.9);
     }
 }
 
@@ -21,7 +26,7 @@
         border: none;
         background-color: transparent;
         padding: 1rem;
-        font-size: 1rem;
+        font-size: 1.5rem;
         color: white;
         cursor: pointer;
     }
@@ -50,4 +55,18 @@
     color: #00DDDD;
     font-size: 2.5rem;
     font-weight: lighter; 
+}
+
+.picture-profile-div{
+    border: 2px solid rgba($color: #FFFFFF, $alpha: 0.9);
+    outline: 2px solid rgba($color: #00DDDD, $alpha: 0.9);
+    box-shadow: 0px 0px 48px 1px #00DDDD;
+    border-radius: 50%;
+}
+
+.div-statistics{
+    border: 2px solid rgba($color: #FFFFFF, $alpha: 0.9);
+    outline: 2px solid rgba($color: #00DDDD, $alpha: 0.9);
+    box-shadow: 0px 0px 48px 1px #00DDDD;
+    background-color: rgba($color: #FFFFFF, $alpha: 0.1);
 }

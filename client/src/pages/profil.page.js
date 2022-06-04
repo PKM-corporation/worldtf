@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import MyVideo from '../components/backgroundVid.mp4';
-import SideBarProfilComponent from '../components/side-bar-profil.component';
+import BackgroundComponent from '../components/background.component';
+import SideBarProfilComponent from '../components/profil-components/side-bar-profil.component';
 
 const ProfilPage = () => {
     const navigate = useNavigate();
@@ -10,26 +10,8 @@ const ProfilPage = () => {
         navigate('/authenticate');
     };
     const isConnected = window.localStorage.access_token;
-
     return (
         <div className="main-div-profile">
-            <video
-                autoPlay
-                muted
-                loop
-                style={{
-                    position: 'absolute',
-                    width: '100%',
-                    left: '50%',
-                    top: '50%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    transform: 'translate(-50%,-50%)',
-                    zZIndex: '-9',
-                }}
-            >
-                <source src={MyVideo} type="video/mp4" />
-            </video>
             <div className="content content-profile">
                 <span className="text neonTextMenu m-4">Compte</span>
                 <hr />
