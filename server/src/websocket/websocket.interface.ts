@@ -1,5 +1,6 @@
 import { HttpStatus } from '@nestjs/common';
 import { ParsedUrlQuery } from 'querystring';
+import { TRole, TSanction } from 'src/db/db.interface';
 import { Player } from 'src/player/player.class';
 import { ICoordinates, TAnimation, TModel } from 'src/player/player.interface';
 
@@ -15,11 +16,23 @@ export type TWebsocketDataType =
     | 'Mp'
     | 'Help'
     | 'Tp'
-    | 'Error';
+    | 'Error'
+    | 'Kick';
 
-export type TWarning = 'Spam' | 'IncorrectTarget';
+export type TWebsocketWarning =
+    | 'Spam'
+    | 'IncorrectTarget'
+    | 'DisconnectedTarget'
+    | 'InsufficientRights'
+    | 'Muted'
+    | 'UserAlreadySanctioned'
+    | 'UserNotSanctioned';
 
 export type TWebsocketLog = 'Connection' | 'Disconnection';
+
+export type TWebsocketVerbose = 'Tp' | 'Ban' | 'Kick' | 'Mute' | 'Cancel';
+
+export type TWebsocketError = 'AlreadyLogin' | 'Kicked' | 'Banned' | 'IncorrectToken';
 
 export interface IWebsocketData {
     type: TWebsocketDataType;
@@ -38,6 +51,7 @@ export interface IWebsocketModelChoiceData extends IWebsocketData {
 }
 export interface IWebsocketChatData extends IWebsocketData {
     message: string;
+    color: string;
 }
 export interface IWebsocketCommandData extends IWebsocketData {
     command: string;
@@ -55,11 +69,17 @@ export interface IClientEmitData {
     id?: string;
 }
 export interface IClientEmitWarning {
-    type: TWarning;
+    type: TWebsocketWarning;
 }
-export interface IClientEmitError extends IClientEmitData {
-    status: HttpStatus;
-    message: string;
+export interface IClientEmitError {
+    type: TWebsocketError;
+    status?: HttpStatus;
+    message?: string;
+    sender?: string;
+    day?: string;
+    time?: string;
+    // In seconds
+    duration?: number;
 }
 export interface IClientEmitPlayer extends IClientEmitData {
     player: Player;
@@ -81,20 +101,49 @@ export interface IClientEmitModel extends IClientEmitData {
 }
 export interface IClientEmitMessage extends IClientEmitData {
     message: string;
+    date: string;
+}
+export interface IClientEmitChatMessage extends IClientEmitMessage {
+    color: string;
+    role: TRole;
 }
 
 export interface IWebsocketLog {
     id: string;
     type: TWebsocketLog;
+    date: string;
 }
 
+export interface IWebsocketVerbose {
+    type: TWebsocketVerbose;
+}
+export interface IWebsocketVerboseWithOptions extends IWebsocketVerbose {
+    options: {
+        target?: string;
+        sanctionType?: string;
+    };
+}
+export interface IWebsocketSanctionLog {
+    type: TSanction;
+    options?: {
+        target?: string;
+    };
+}
 export interface IWebsocketConnectionLog extends IWebsocketLog {
     pseudo: string;
 }
 
-export type TCommand = 'mp' | 'tp' | 'help';
+export type TCommand = 'mp' | 'tp' | 'help' | 'kick' | 'mute' | 'ban' | 'cancel';
 export interface ICommand {
     type: TCommand;
     target?: string;
+    sanctionType?: TSanction;
+    time?: number;
     content?: string;
+}
+
+export interface ISanctionCommandOptions {
+    message?: string;
+    time?: number;
+    targetPlayer?: Player;
 }

@@ -1,12 +1,13 @@
-import { UsersRepository } from './users.repository';
-import { Injectable, Logger } from '@nestjs/common';
-import { User } from './schemas/users.schema';
+import { UsersRepository } from '../db/users.repository';
+import { CACHE_MANAGER, Inject, Injectable, Logger } from '@nestjs/common';
+import { User } from '../db/schemas/users.schema';
 import * as bcrypt from 'bcrypt';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class UsersService {
     private logger: Logger = new Logger('UsersService');
-    constructor(private readonly userRepository: UsersRepository) {}
+    constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache, private readonly userRepository: UsersRepository) {}
 
     async createUser(pseudo: string, email: string, password: string): Promise<User> {
         if (await this.isUserExist(email, pseudo)) {
@@ -17,6 +18,7 @@ export class UsersService {
             pseudo,
             email,
             password: hashPassword,
+            role: 'User',
         });
     }
 
@@ -26,11 +28,26 @@ export class UsersService {
         return users;
     }
 
-    async findUser(id: string): Promise<User> {
-        return await this.userRepository.findOne({ _id: id });
+    async findUserById(id: string): Promise<User> {
+        const cacheUser: User = await this.cacheManager.get(id);
+        if (cacheUser) {
+            this.logger.debug(`User found in cache: ${cacheUser.pseudo}`);
+            return cacheUser;
+        }
+        const user = await this.userRepository.findOne({ _id: id });
+        await this.cacheManager.set(user._id.toString(), user, { ttl: 60 });
+        this.logger.debug(`User store in cache: ${user.pseudo}`);
+        return user;
+    }
+
+    async findUserByPseudo(pseudo: string): Promise<User> {
+        const user = await this.userRepository.findOne({ pseudo });
+        this.logger.debug(`User ${user._id.toString()} found with pseudo ${pseudo}`);
+        return user;
     }
 
     async storeAccessToken(userId: string, token: string): Promise<void> {
+        await this.cacheManager.del(userId.toString());
         try {
             await this.userRepository.update(userId, { accessToken: token });
         } catch (e) {
@@ -40,6 +57,7 @@ export class UsersService {
     }
 
     async removeAccessToken(userId: string): Promise<void> {
+        await this.cacheManager.del(userId.toString());
         try {
             await this.userRepository.update(userId, { accessToken: null });
         } catch (e) {

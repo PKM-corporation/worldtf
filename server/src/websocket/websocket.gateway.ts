@@ -1,4 +1,4 @@
-import { CACHE_MANAGER, Inject, Logger } from '@nestjs/common';
+import { CACHE_MANAGER, Inject, Logger, UseGuards } from '@nestjs/common';
 import {
     ConnectedSocket,
     MessageBody,
@@ -14,7 +14,6 @@ import { Server, Socket } from 'socket.io';
 import { AuthService } from 'src/auth/auth.service';
 import { WebsocketEvent } from 'src/common/constant';
 import { Player } from 'src/player/player.class';
-import { User } from 'src/users/schemas/users.schema';
 import {
     IClientEmitError,
     IClientEmitPlayer,
@@ -31,6 +30,11 @@ import {
     IWebsocketRotateData,
 } from './websocket.interface';
 import { WebsocketService } from './websocket.service';
+import { DateTime } from 'luxon';
+import { User } from 'src/db/schemas/users.schema';
+import { SanctionsService } from 'src/sanctions/sanctions.service';
+import { UsersService } from 'src/users/users.service';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guards';
 
 @WebSocketGateway({ cors: true })
 export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
@@ -38,7 +42,13 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
     private logger: Logger = new Logger('WebsocketGateway');
     private players: Map<string, Player> = new Map();
 
-    constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache, private websocketService: WebsocketService, private authService: AuthService) {}
+    constructor(
+        @Inject(CACHE_MANAGER) private cacheManager: Cache,
+        private websocketService: WebsocketService,
+        private authService: AuthService,
+        private sanctionsService: SanctionsService,
+        private usersService: UsersService,
+    ) {}
 
     afterInit() {
         this.websocketService.init(this.wss);
@@ -48,19 +58,34 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         const user = (await this.authService.checkIfAccessTokenValid(client.handshake.auth.token, true)) as User;
         if (!user) {
             this.logger.warn(`Client ${client.id} tries to login with invalid token ${client.handshake.auth.token}`);
-            client.emit(WebsocketEvent.Error, { type: 'Error', status: 401, message: 'IncorrectToken' } as IClientEmitError);
-            return client.disconnect(true);
+            client.emit(WebsocketEvent.Error, { type: 'IncorrectToken', status: 401 } as IClientEmitError);
+            return client.disconnect();
         }
         if (this.findPlayerByPseudo(user.pseudo)) {
             this.logger.warn(`Client ${client.id} tries to login with user ${user.pseudo} who is already logged in`);
-            client.emit(WebsocketEvent.Error, { type: 'Error', status: 409, message: 'AlreadyLogin' } as IClientEmitError);
-            return client.disconnect(true);
+            client.emit(WebsocketEvent.Error, { type: 'AlreadyLogin', status: 409 } as IClientEmitError);
+            return client.disconnect();
+        }
+        const sanction = await this.sanctionsService.getUserBannedOrKickedSanction(user._id.toString());
+        if (sanction) {
+            this.logger.warn(`User ${user.pseudo} is kicked or banned and tries to login`);
+            const admin = await this.usersService.findUserById(sanction.adminId);
+            client.emit(WebsocketEvent.Error, {
+                type: this.websocketService.getErrorTypeBySanctionType(sanction.type),
+                duration: sanction.duration,
+                day: DateTime.fromSeconds(sanction.date).toLocaleString(DateTime.DATE_SHORT),
+                time: DateTime.fromSeconds(sanction.date).toFormat('HH:mm'),
+                sender: admin.pseudo,
+            } as IClientEmitError);
+            return client.disconnect();
         }
 
         const options = client.handshake.query as IWebsocketConnectionOptions;
         const players = Array.from(this.players.values());
         const player = new Player(
+            user._id.toString(),
             client.id,
+            user.role,
             user.pseudo,
             options.model,
             options.position ? JSON.parse(options.position) : null,
@@ -70,25 +95,35 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         client.emit(WebsocketEvent.Players, { type: 'InitPlayers', players } as IClientEmitPlayers);
         this.players.set(client.id, player);
 
-        const newPlayer: IClientEmitPlayer = { type: 'AddPlayer', id: client.id, player };
+        const newPlayer: IClientEmitPlayer = { type: 'AddPlayer', id: player.id, player };
         this.websocketService.emit(this.websocketService.getClientsWithoutOne(client.id), WebsocketEvent.Players, newPlayer);
 
-        this.wss.emit(WebsocketEvent.Logs, { type: 'Connection', id: client.id, pseudo: user.pseudo } as IWebsocketConnectionLog);
+        this.wss.emit(WebsocketEvent.Logs, {
+            type: 'Connection',
+            id: player.id,
+            pseudo: user.pseudo,
+            date: DateTime.now().toFormat('HH:mm'),
+        } as IWebsocketConnectionLog);
         this.logger.log(`client ${client.id}, pseudo: ${user.pseudo} connected`);
     }
     handleDisconnect(client: Socket) {
         const player = this.players.get(client.id);
         if (!player) return;
 
-        const removedPlayer: IClientEmitPlayer = { type: 'RemovePlayer', id: client.id, player };
+        const removedPlayer: IClientEmitPlayer = { type: 'RemovePlayer', id: player.id, player };
         this.websocketService.emit(this.websocketService.getClientsWithoutOne(client.id), WebsocketEvent.Players, removedPlayer);
         this.players.delete(client.id);
 
-        this.wss.emit(WebsocketEvent.Logs, { type: 'Disconnection', id: client.id, pseudo: player.username } as IWebsocketConnectionLog);
+        this.wss.emit(WebsocketEvent.Logs, {
+            type: 'Disconnection',
+            id: player.id,
+            pseudo: player.username,
+            date: DateTime.now().toFormat('HH:mm'),
+        } as IWebsocketConnectionLog);
         this.logger.log(`client ${client.id} disconnected`);
     }
 
-    //@UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard)
     @SubscribeMessage(WebsocketEvent.PlayerAction)
     handleEventPlayerAction(@MessageBody() data: IWebsocketData, @ConnectedSocket() client: Socket) {
         const player = this.players.get(client.id);
@@ -117,7 +152,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
                 break;
         }
     }
-    //@UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard)
     @SubscribeMessage(WebsocketEvent.Chat)
     async handleEventChat(@MessageBody() data: IWebsocketChatData, @ConnectedSocket() client: Socket) {
         const player = this.players.get(client.id);
@@ -130,11 +165,15 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         } else {
             await this.cacheManager.set(client.id, client, { ttl: 0.5 });
         }
+        if (!/^#([0-9a-f]{6})$/i.test(data.color)) {
+            this.logger.warn(`Incorrect hex color in message chat user: ${player.username}, color: ${data.color}`);
+            data.color = '#000000';
+        }
         this.logger.verbose(`[${player.username}]: ${data.message}`);
-        this.websocketService.chat(data.message, player);
+        this.websocketService.chat(data.message, data.color, player);
     }
 
-    //@UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard)
     @SubscribeMessage(WebsocketEvent.Command)
     async handleEventCommand(@MessageBody() data: IWebsocketCommandData, @ConnectedSocket() client: Socket) {
         const player = this.players.get(client.id);
@@ -166,6 +205,29 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
                     this.logger.warn(`${player.username} type ${command.type} command with incorrect target: ${command.target}`);
                     client.emit(WebsocketEvent.Warning, { type: 'IncorrectTarget' } as IClientEmitWarning);
                 }
+                break;
+            case 'kick':
+                await this.websocketService.sanctionUser(command.target, player, 'Kick', {
+                    message: command.content,
+                    time: command.time,
+                    targetPlayer: target,
+                });
+                break;
+            case 'ban':
+                await this.websocketService.sanctionUser(command.target, player, 'Ban', {
+                    message: command.content,
+                    targetPlayer: target,
+                });
+                break;
+            case 'mute':
+                await this.websocketService.sanctionUser(command.target, player, 'Mute', {
+                    message: command.content,
+                    time: command.time,
+                    targetPlayer: target,
+                });
+                break;
+            case 'cancel':
+                await this.websocketService.cancelUserSanction(command.target, player, command.sanctionType);
                 break;
             case 'help':
                 this.websocketService.askHelp(client);

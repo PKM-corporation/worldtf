@@ -8,11 +8,13 @@ import SettingsPage from './pages/settings.page';
 import { useDispatch } from 'react-redux';
 import { removeUser, setUser } from './store/slices/user.slice';
 import { getUserById } from './services/users.service';
+import { useTranslation } from 'react-i18next';
 
 const AppRouter = () => {
     const [invalid, setInvalid] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const getUserAndStore = async (id, accessToken) => {
         try {
@@ -21,7 +23,7 @@ const AppRouter = () => {
             dispatch(setUser(user));
             navigate('/');
         } catch (e) {
-            if (e.status === 401) {
+            if (e.status === 401 || e.response.status === 401) {
                 dispatch(removeUser());
                 navigate('/');
             } else {
@@ -45,7 +47,7 @@ const AppRouter = () => {
     if (invalid) {
         return (
             <div className="error">
-                <div>Une erreur est survenue, revenez plus tard...</div>
+                <div>{t('warn.error')}</div>
             </div>
         );
     }

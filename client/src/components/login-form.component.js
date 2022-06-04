@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { loginUser } from '../services/auth.service';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../store/slices/user.slice';
+import { useTranslation } from 'react-i18next';
+import '../translations/i18n';
 
 const LoginFormComponent = () => {
     const dispatch = useDispatch();
@@ -10,9 +12,10 @@ const LoginFormComponent = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [invalidMessage, setInvalidMessage] = useState();
+    const { t } = useTranslation();
 
     const login = async () => {
-        if (!username || !password) return setInvalidMessage(<p className="mb-3 text-center invalid-message">Veuillez remplir les champs</p>);
+        if (!username || !password) return setInvalidMessage(<p className="mb-3 text-center invalid-message">{t('warn.empty')}</p>);
         try {
             const user = await loginUser(username, password);
             dispatch(setUser(user));
@@ -20,15 +23,15 @@ const LoginFormComponent = () => {
             navigate('/');
         } catch (e) {
             if (e.response.status === 401) {
-                return setInvalidMessage(<p className="mb-3 text-center invalid-message">Mot de passe ou login incorrects</p>);
+                return setInvalidMessage(<p className="mb-3 text-center invalid-message">{t('warn.log')}</p>);
             }
             throw e;
         }
     };
 
     return (
-        <div className="col-5">
-            <h3 className="p-3 text-center ">Connexion</h3>
+        <div className="col-sm-5  col-12 ">
+            <h3 className="p-3 text-center ">{t('home.login')}</h3>
             {invalidMessage}
             <div className="row" id="loginForm">
                 <div className="form-floating  mb-3">
@@ -38,9 +41,9 @@ const LoginFormComponent = () => {
                         type="text"
                         className="form-control"
                         id="floatingInputLogin"
-                        placeholder="E-mail"
+                        placeholder={t('log.username')}
                     />
-                    <label htmlFor="floatingInputLogin">Adresse mail</label>
+                    <label htmlFor="floatingInputLogin">{t('log.email')}</label>
                 </div>
                 <div className="form-floating  mb-3">
                     <input
@@ -49,13 +52,13 @@ const LoginFormComponent = () => {
                         type="password"
                         className="form-control"
                         id="floatingPasswordLogin"
-                        placeholder="Mot de passe"
+                        placeholder={t('log.password')}
                     />
-                    <label htmlFor="floatingPasswordLogin">Mot de passe</label>
+                    <label htmlFor="floatingPasswordLogin">{t('log.password')}</label>
                 </div>
                 <span className="mt-3 d-flex justify-content-center">
                     <button className="btnForm" onClick={login}>
-                        <span>Connexion</span>
+                        <span>{t('home.login')}</span>
                     </button>
                 </span>
             </div>
