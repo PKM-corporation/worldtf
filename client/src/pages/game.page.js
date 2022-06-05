@@ -18,7 +18,7 @@ import { useKeyboardHUDControls } from '../hooks/hud.hooks';
 
 const PixelRatioSetting = () => {
     const { gl } = useThree();
-    gl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    gl.setPixelRatio(Math.min(window.devicePixelRatio, 1));
 };
 const GamePage = () => {
     const dispatch = useDispatch();

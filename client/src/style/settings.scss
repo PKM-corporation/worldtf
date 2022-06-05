@@ -1,5 +1,111 @@
-.language {
-    table {
-        width: 100%;
+#settings {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    width: 60vw;
+    height: 60vh;
+    background: rgba(101, 78, 121, 0.95);
+    border-radius: 14px;
+
+    .nav-tabs,
+    .card {
+        border: none;
+    }
+    .nav-item button {
+        border-radius: 10px;
+        border: none;
+    }
+
+    .nav-item button.active {
+        background: #d5a4cb;
+    }
+
+    .card {
+        background: rgba(101, 78, 121, 0.95);
+    }
+
+    .settings-right-side {
+        height: 45vh;
+        overflow-y: scroll;
+    }
+
+    .setting-item {
+        background: #785d93;
+    }
+
+    /* width */
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: #d5a4cb;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #e7b3dd;
+    }
+
+    scrollbar-width: 10px;
+    scrollbar-color: #d5a4cb transparent;
+
+    &:hover {
+        scrollbar-color: #e7b3dd transparent;
+    }
+
+    .input-keybind {
+        background: #8d74a6;
+    }
+
+    /* Chrome, Safari, Edge, Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Firefox */
+    input[type='number'] {
+        -moz-appearance: textfield;
+    }
+
+    .form-check-input {
+        height: 1.5em;
+        width: 3em;
+    }
+
+    .accordion-item{
+        background: transparent;
+        border: none;
+    }
+
+    button:focus{
+        border-color: transparent;
+        box-shadow: none;
+    }
+
+    .accordion-button {
+        background: transparent;
+
+        &::after {
+            background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='white'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>");
+        }
+
+        &:not(.collapsed) {
+            box-shadow: none;
+
+            &::after {
+                background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='white'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>");
+            }
+        }
     }
 }

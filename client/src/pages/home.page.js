@@ -7,6 +7,7 @@ import { removeUser } from '../store/slices/user.slice';
 import { useTranslation } from 'react-i18next';
 import '../translations/i18n';
 import { getConnectedPlayers } from '../services/users.service';
+import SettingsComponent from '../components/settings.component';
 
 const HomePage = () => {
     const dispatch = useDispatch();
@@ -23,6 +24,7 @@ const HomePage = () => {
 
     return (
         <div className="home">
+            <SettingsComponent />
             <BackgroundComponent />
             <div className="content">
                 <div className="playersOnline">
