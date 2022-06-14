@@ -15,6 +15,7 @@ import { removeUser } from '../store/slices/user.slice';
 import { setIsChatting } from '../store/slices/interface.slice';
 import { setChatColor } from '../store/slices/chat.slice';
 import { useKeyboardHUDControls } from '../hooks/hud.hooks';
+import FPSLimiter from '../components/fpslimiter.component';
 
 const PixelRatioSetting = () => {
     const { gl } = useThree();
