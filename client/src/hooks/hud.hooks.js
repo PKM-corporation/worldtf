@@ -27,7 +27,6 @@ export const useKeyboardHUDControls = () => {
             setKeyDown(e.code);
         };
         const handleKeyUp = (e) => {
-            console.log(e.code);
             if (e.code === 'Tab' || e.code === 'Escape' || e.ctrlKey) {
                 e.preventDefault();
             }

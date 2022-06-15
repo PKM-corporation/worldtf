@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { Suspense, useEffect, useRef, useState } from 'react';
 
 // Physics
@@ -11,19 +12,27 @@ import { PointerLockControls, Stats, OrbitControls } from '@react-three/drei';
 import { PlayerComponent } from '../components/player.component';
 import SkyboxComponent from '../components/skybox.component';
 import PlaneComponent from '../components/plane.component';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { OtherPlayerComponent } from '../components/other-player.component';
 
 // Models
 import WorldMap from '../models/map/Map';
+import { setShowSettings } from '../store/slices/interface.slice';
 
-const DefaultScene = () => {
+const DefaultScene = (props) => {
     const { camera, gl } = useThree();
     const controls = useRef();
     const players = useSelector((state) => state.players.playerList);
     const interfaceStore = useSelector((state) => state.interface);
-    const [click, setClick] = useState(false);
-    const clickRef = useRef(click);
+    const interfaceStoreRef = useRef(interfaceStore);
+    const dispatch = useDispatch();
+
+    const isLocked = () => {
+        if (interfaceStoreRef.current.showSettings || interfaceStoreRef.current.isChatting) {
+            return false;
+        }
+        return true;
+    };
 
     useEffect(() => {
         camera.layers.enable(0);
@@ -31,42 +40,28 @@ const DefaultScene = () => {
     }, [camera]);
 
     useEffect(() => {
-        if (interfaceStore.showSettings || interfaceStore.isChatting) {
+        interfaceStoreRef.current = interfaceStore;
+        if (!isLocked()) {
             controls.current.unlock();
-            controls.current.disconnect();
-            setTimeout(() => {
-                controls.current.unlock();
-            }, 10);
         } else {
-            controls.current.connect();
             controls.current.lock();
         }
     }, [interfaceStore]);
 
     useEffect(() => {
-        clickRef.current = click;
-        if (interfaceStore.showSettings || interfaceStore.isChatting) {
-            controls.current.unlock();
-            controls.current.disconnect();
-            setTimeout(() => {
-                controls.current.unlock();
-            }, 10);
-        } else {
-            controls.current.connect();
-            controls.current.lock();
-        }
-    }, [click]);
-
-    useEffect(() => {
-        const handleFocus = (e) => {
+        const handleFocus = async (e) => {
             e.preventDefault();
-            setClick(!clickRef.current);
+            e.stopPropagation();
+            if (!isLocked()) {
+                controls.current.unlock();
+            } else {
+                controls.current.lock();
+            }
         };
         document.addEventListener('click', handleFocus);
 
         return () => {
             document.removeEventListener('click', handleFocus);
-            document.removeEventListener('keydown', handleKeyDown);
         };
     }, []);
 
@@ -75,7 +70,20 @@ const DefaultScene = () => {
             {/** Skybox */}
             <SkyboxComponent />
             {/* Pointer lock */}
-            <PointerLockControls ref={controls} args={[camera, gl.domElement]} />
+            <PointerLockControls
+                onLock={() => {
+                    if (!isLocked()) {
+                        controls.current.unlock();
+                    }
+                }}
+                onUnlock={() => {
+                    if (isLocked()) {
+                        dispatch(setShowSettings(true));
+                    }
+                }}
+                ref={controls}
+                args={[camera, gl.domElement]}
+            />
             {/* Lighting */}
             <directionalLight position={[3, 0, 3]} intensity={0.5} castShadow />
             <pointLight position={[0, 0, -3]} intensity={0.6} castShadow />
