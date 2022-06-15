@@ -24,8 +24,8 @@ const HomePage = () => {
 
     return (
         <div className="home">
-            <SettingsComponent />
             <BackgroundComponent />
+            <SettingsComponent />
             <div className="content">
                 <div className="playersOnline">
                     {Number.isInteger(connectedPlayers) ? (

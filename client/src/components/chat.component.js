@@ -26,6 +26,8 @@ const ChatComponent = () => {
     useEffect(() => {
         if (isChatting) {
             inputRef.current.focus();
+        } else {
+            inputRef.current.blur();
         }
     }, [isChatting]);
 
@@ -33,7 +35,7 @@ const ChatComponent = () => {
         chatRef.current.scrollTop = chatRef.current.scrollHeight;
     }, [messages]);
     return (
-        <>
+        <div className="chat-container">
             <div className="chat" id="chat">
                 <div className="chatContent" ref={chatRef} id="chatContent">
                     {messages.map((message, i) => (
@@ -78,7 +80,7 @@ const ChatComponent = () => {
                     id="inputChat"
                 />
             </form>
-        </>
+        </div>
     );
 };
 export default ChatComponent;

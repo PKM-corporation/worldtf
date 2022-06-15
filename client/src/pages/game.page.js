@@ -15,6 +15,7 @@ import { removeUser } from '../store/slices/user.slice';
 import { setIsChatting } from '../store/slices/interface.slice';
 import { setChatColor } from '../store/slices/chat.slice';
 import { useKeyboardHUDControls } from '../hooks/hud.hooks';
+import SettingsComponent from '../components/settings.component';
 
 const PixelRatioSetting = () => {
     const { gl } = useThree();
@@ -51,6 +52,7 @@ const GamePage = () => {
             <div id="canvas-container" onClick={play}>
                 <CrosshairComponent />
                 <ChatComponent />
+                <SettingsComponent />
                 <PlayerlistComponent />
                 <Canvas
                     shadows={{ type: 'VSMShadowMap' }}

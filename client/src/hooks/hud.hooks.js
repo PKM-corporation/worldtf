@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { setIsChatting, setShowPlayerlist } from '../store/slices/interface.slice';
+import { setIsChatting, setShowPlayerlist, setShowSettings } from '../store/slices/interface.slice';
 
 export const useKeyboardHUDControls = () => {
     const dispatch = useDispatch();
@@ -8,7 +8,17 @@ export const useKeyboardHUDControls = () => {
     const [keyDown, setKeyDown] = useState(null);
     const [keyUp, setKeyUp] = useState(null);
 
+    const lockKeys = async () => {
+        if ('keyboard' in navigator && 'lock' in navigator.keyboard) {
+            await document.documentElement.requestFullscreen();
+            if (window.location.pathname !== '/universe') document.exitFullscreen();
+            const keys = ['Escape'];
+            await navigator.keyboard.lock(keys);
+        }
+    };
+
     useEffect(() => {
+        lockKeys();
         const handleKeyDown = (e) => {
             if (e.code === 'Tab' || e.code === 'Escape' || e.ctrlKey) {
                 e.preventDefault();
@@ -17,6 +27,7 @@ export const useKeyboardHUDControls = () => {
             setKeyDown(e.code);
         };
         const handleKeyUp = (e) => {
+            console.log(e.code);
             if (e.code === 'Tab' || e.code === 'Escape' || e.ctrlKey) {
                 e.preventDefault();
             }
@@ -53,6 +64,14 @@ export const useKeyboardHUDControls = () => {
             case 'KeyT':
                 if (!interfaceStore.showSettings && !interfaceStore.isChatting) {
                     dispatch(setIsChatting(true));
+                }
+                break;
+            case 'Escape':
+                if (!interfaceStore.showSettings) {
+                    dispatch(setIsChatting(false));
+                    dispatch(setShowSettings(true));
+                } else {
+                    dispatch(setShowSettings(false));
                 }
                 break;
             default:

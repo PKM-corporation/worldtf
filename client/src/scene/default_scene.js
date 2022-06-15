@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useRef } from 'react';
+import React, { Suspense, useEffect, useRef, useState } from 'react';
 
 // Physics
 import { Physics } from '@react-three/cannon';
@@ -22,6 +22,8 @@ const DefaultScene = () => {
     const controls = useRef();
     const players = useSelector((state) => state.players.playerList);
     const interfaceStore = useSelector((state) => state.interface);
+    const [click, setClick] = useState(false);
+    const clickRef = useRef(click);
 
     useEffect(() => {
         camera.layers.enable(0);
@@ -29,21 +31,44 @@ const DefaultScene = () => {
     }, [camera]);
 
     useEffect(() => {
-        for (const bool of Object.values(interfaceStore)) {
-            if (bool) document.exitPointerLock();
+        if (interfaceStore.showSettings || interfaceStore.isChatting) {
+            controls.current.unlock();
+            controls.current.disconnect();
+            setTimeout(() => {
+                controls.current.unlock();
+            }, 10);
+        } else {
+            controls.current.connect();
+            controls.current.lock();
         }
     }, [interfaceStore]);
 
     useEffect(() => {
-        const handleFocus = () => {
+        clickRef.current = click;
+        if (interfaceStore.showSettings || interfaceStore.isChatting) {
+            controls.current.unlock();
+            controls.current.disconnect();
+            setTimeout(() => {
+                controls.current.unlock();
+            }, 10);
+        } else {
+            controls.current.connect();
             controls.current.lock();
+        }
+    }, [click]);
+
+    useEffect(() => {
+        const handleFocus = (e) => {
+            e.preventDefault();
+            setClick(!clickRef.current);
         };
         document.addEventListener('click', handleFocus);
 
         return () => {
             document.removeEventListener('click', handleFocus);
+            document.removeEventListener('keydown', handleKeyDown);
         };
-    }, [gl]);
+    }, []);
 
     return (
         <>

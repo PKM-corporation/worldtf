@@ -3,11 +3,13 @@
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    z-index: 1;
+    z-index: 100;
     width: 60vw;
     height: 60vh;
     background: rgba(101, 78, 121, 0.95);
     border-radius: 14px;
+    box-shadow: 00 0 0.2rem #fff, 0 0 2rem rgba(255, 0, 128, 0.508), 0 0 0.8rem rgba(255, 0, 128, 0.508), inset 0 0 1.3rem rgba(255, 0, 128, 0.508);
+    border-color: #ff0080d2;
 
     .nav-tabs,
     .card {
@@ -83,12 +85,12 @@
         width: 3em;
     }
 
-    .accordion-item{
+    .accordion-item {
         background: transparent;
         border: none;
     }
 
-    button:focus{
+    button:focus {
         border-color: transparent;
         box-shadow: none;
     }

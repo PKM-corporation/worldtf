@@ -54,3 +54,13 @@ h5,
 h6 {
     font-family: 'Beon';
 }
+
+.hide-background {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    background-color: rgba(35, 8, 36, 0.5);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

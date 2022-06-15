@@ -5,11 +5,16 @@ import SettingGameTabsComponent from './settings/tabs/game/game.component';
 import SettingDisplayTabsComponent from './settings/tabs/display/display.component';
 import SettingSoundsTabsComponent from './settings/tabs/sounds/sounds.component';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 
 const SettingsComponent = () => {
     const { t } = useTranslation();
+    const showSettings = useSelector((state) => state.interface.showSettings);
+
+    if (!showSettings) return;
     return (
         <div id="settings">
+            <div className="hide-background"></div>
             <div className="position-relative">
                 <div className="row align-items-center p-3">
                     <div className="col-3 ps-4">
