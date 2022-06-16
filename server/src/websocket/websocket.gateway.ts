@@ -18,16 +18,16 @@ import {
     IClientEmitError,
     IClientEmitPlayer,
     IClientEmitPlayers,
-    IClientEmitWarning,
     IWebsocketAnimData,
     IWebsocketChatData,
     IWebsocketCommandData,
-    IWebsocketConnectionLog,
     IWebsocketConnectionOptions,
     IWebsocketData,
+    IWebsocketLog,
     IWebsocketModelChoiceData,
     IWebsocketMoveData,
     IWebsocketRotateData,
+    IWebsocketWarning,
 } from './websocket.interface';
 import { WebsocketService } from './websocket.service';
 import { DateTime } from 'luxon';
@@ -98,12 +98,14 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         const newPlayer: IClientEmitPlayer = { type: 'AddPlayer', id: player.id, player };
         this.websocketService.emit(this.websocketService.getClientsWithoutOne(client.id), WebsocketEvent.Players, newPlayer);
 
-        this.wss.emit(WebsocketEvent.Logs, {
-            type: 'Connection',
-            id: player.id,
-            pseudo: user.pseudo,
+        this.wss.emit(WebsocketEvent.Message, {
+            type: 'Log',
+            category: 'Connection',
+            options: {
+                pseudo: user.pseudo,
+            },
             date: DateTime.now().toFormat('HH:mm'),
-        } as IWebsocketConnectionLog);
+        } as IWebsocketLog);
         this.logger.log(`client ${client.id}, pseudo: ${user.pseudo} connected`);
     }
     handleDisconnect(client: Socket) {
@@ -114,12 +116,14 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         this.websocketService.emit(this.websocketService.getClientsWithoutOne(client.id), WebsocketEvent.Players, removedPlayer);
         this.players.delete(client.id);
 
-        this.wss.emit(WebsocketEvent.Logs, {
-            type: 'Disconnection',
-            id: player.id,
-            pseudo: player.username,
+        this.wss.emit(WebsocketEvent.Message, {
+            type: 'Log',
+            category: 'Disconnection',
+            options: {
+                pseudo: player.username,
+            },
             date: DateTime.now().toFormat('HH:mm'),
-        } as IWebsocketConnectionLog);
+        } as IWebsocketLog);
         this.logger.log(`client ${client.id} disconnected`);
     }
 
@@ -153,7 +157,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         }
     }
     @UseGuards(JwtAuthGuard)
-    @SubscribeMessage(WebsocketEvent.Chat)
+    @SubscribeMessage(WebsocketEvent.Message)
     async handleEventChat(@MessageBody() data: IWebsocketChatData, @ConnectedSocket() client: Socket) {
         const player = this.players.get(client.id);
         if (!player) {
@@ -161,7 +165,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         }
         const cachedClient = await this.cacheManager.get(client.id);
         if (cachedClient) {
-            return client.emit(WebsocketEvent.Warning, 'please do not spam');
+            return client.emit(WebsocketEvent.Message, { type: 'Warning', category: 'Spam' } as IWebsocketWarning);
         } else {
             await this.cacheManager.set(client.id, client, { ttl: 0.5 });
         }
@@ -182,7 +186,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         }
         const cachedClient = await this.cacheManager.get(client.id);
         if (cachedClient) {
-            return client.emit(WebsocketEvent.Warning, { type: 'Spam' } as IClientEmitWarning);
+            return client.emit(WebsocketEvent.Message, { type: 'Warning', category: 'Spam' } as IWebsocketWarning);
         } else {
             await this.cacheManager.set(client.id, client, { ttl: 0.5 });
         }
@@ -195,7 +199,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
                     this.websocketService.sendMpTo(target, command.content, client, player);
                 } else {
                     this.logger.warn(`${player.username} type ${command.type} command with incorrect target: ${command.target}`);
-                    client.emit(WebsocketEvent.Warning, { type: 'IncorrectTarget' } as IClientEmitWarning);
+                    client.emit(WebsocketEvent.Message, { type: 'Warning', category: 'IncorrectTarget' } as IWebsocketWarning);
                 }
                 break;
             case 'tp':
@@ -203,7 +207,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
                     this.websocketService.tpTo(target, player, client);
                 } else {
                     this.logger.warn(`${player.username} type ${command.type} command with incorrect target: ${command.target}`);
-                    client.emit(WebsocketEvent.Warning, { type: 'IncorrectTarget' } as IClientEmitWarning);
+                    client.emit(WebsocketEvent.Message, { type: 'Warning', category: 'IncorrectTarget' } as IWebsocketWarning);
                 }
                 break;
             case 'kick':

@@ -10,7 +10,7 @@ module.exports = {
         ecmaVersion: 13,
         sourceType: 'module',
     },
-    extends: ['plugin:prettier/recommended', 'plugin:react/recommended'],
+    extends: ['plugin:prettier/recommended', 'prettier', 'plugin:react/recommended', 'plugin:@typescript-eslint/recommended'],
     plugins: ['react'],
     rules: {},
 };
