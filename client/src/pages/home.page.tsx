@@ -5,10 +5,10 @@ import BackgroundComponent from '../components/background.component';
 import { useTranslation } from 'react-i18next';
 import '../translations/i18n';
 import { getConnectedPlayers } from '../services/users.service';
-import SettingsComponent from '../components/settings.component';
 import { IStoreStates } from '../interfaces/store.interface';
 import { InterfaceSliceActions } from '../store/slices/interface.slice';
 import { logout } from '../services/auth.service';
+import SettingsComponent from '../components/settings/settings.component';
 
 const HomePage = () => {
     const navigate = useNavigate();

@@ -18,8 +18,14 @@ export const TRANSLATION_EN = {
         email: 'Email address',
         nameTaken: 'Username or email already taken',
         password: 'Password',
-        connection: '{{pseudo}} just arrived on the server',
-        disconnection: '{{pseudo}} leave the server',
+        Connection: '{{pseudo}} just arrived on the server',
+        Disconnection: '{{pseudo}} leave the server',
+        Ban: 'The hammer of banishment has struck {{target}}',
+        Kick: '{{target}} got out',
+    },
+    warning: {
+        Spam: 'Please do not spam',
+        UserAlreadySanctioned: 'Target is already sanctioned',
     },
     warn: {
         invalidName: 'Please enter a valid username (2 characters or more, special characters are not allowed)',
@@ -44,11 +50,7 @@ export const TRANSLATION_EN = {
     },
     verbose: {
         tp: 'You teleported to {{target}}',
-        cancel: 'You cancelled the sanction {{sanctionType}} of {{target}}',
-    },
-    sanction: {
-        ban: 'The hammer of banishment has struck {{target}}',
-        kick: '{{target}} got out',
+        Cancel: 'You cancelled the sanction {{sanction}} of {{target}}',
     },
     settings: {
         display: 'Display',

@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { IStoreStates } from '../interfaces/store.interface';
-import { InterfaceSliceActions } from '../store/slices/interface.slice';
-import { TMessage } from '../interfaces/chat.interface';
-import ChatMessageComponent from './chat/chat-message.component';
-import LogMessageComponent from './chat/log-message.component';
-import MpMessageComponent from './chat/mp-message.component';
-import VerboseMessageComponent from './chat/verbose-message.component';
-import WarningMessageComponent from './chat/warning-message.component';
-import { websocketEmitData } from '../services/websocket.service';
+import { IStoreStates } from '../../interfaces/store.interface';
+import { InterfaceSliceActions } from '../../store/slices/interface.slice';
+import { TMessage } from '../../interfaces/chat.interface';
+import { websocketEmitData } from '../../services/websocket.service';
+import ChatMessageComponent from './messages/chat-message.component';
+import LogMessageComponent from './messages/log-message.component';
+import MpMessageComponent from './messages/mp-message.component';
+import VerboseMessageComponent from './messages/verbose-message.component';
+import WarningMessageComponent from './messages/warning-message.component';
 
 const ChatComponent = () => {
     const dispatch = useDispatch();
@@ -61,6 +61,7 @@ const ChatComponent = () => {
                         websocketEmitData('Message', { type: 'Chat', message: text, color });
                     }
                     setText('');
+                    dispatch(InterfaceSliceActions.setIsChatting(false));
                 }}
             >
                 <input

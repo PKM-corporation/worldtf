@@ -25,17 +25,15 @@ body {
 }
 
 .crosshair {
-    height: 10px;
-    width: 10px;
-    background-color: black;
-    border-radius: 50%;
-    border: solid 1px rgb(172, 172, 172);
-    margin: auto;
     z-index: 100;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: black;
 }
 
 .error {
@@ -60,6 +58,7 @@ h6 {
     height: 100vh;
     position: absolute;
     background-color: rgba(35, 8, 36, 0.5);
+    z-index: 100;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);

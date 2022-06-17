@@ -30,6 +30,7 @@ export interface IInterfaceSlice {
     isChatting: boolean;
     showPlayerlist: boolean;
     showSettings: boolean;
+    showGameMenu: boolean;
 }
 
 export interface IWebsocketSlice {

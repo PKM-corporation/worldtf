@@ -58,7 +58,7 @@ export const useKeyboardControls = () => {
     useEffect(() => {
         switch (keyDown) {
             case 'Tab':
-                if (!interfaceStore.showSettings && !interfaceStore.isChatting) {
+                if (!interfaceStore.showGameMenu && !interfaceStore.isChatting) {
                     dispatch(InterfaceSliceActions.setShowPlayerlist(true));
                 }
                 break;
@@ -97,15 +97,19 @@ export const useKeyboardControls = () => {
                 dispatch(InterfaceSliceActions.setShowPlayerlist(false));
                 break;
             case 'KeyT':
-                if (!interfaceStore.showSettings && !interfaceStore.isChatting) {
+                if (!interfaceStore.showGameMenu && !interfaceStore.isChatting) {
                     dispatch(InterfaceSliceActions.setIsChatting(true));
                 }
                 break;
             case 'Escape':
-                if (!interfaceStore.showSettings) {
+                if (interfaceStore.isChatting) {
                     dispatch(InterfaceSliceActions.setIsChatting(false));
-                    dispatch(InterfaceSliceActions.setShowSettings(true));
+                    break;
+                }
+                if (!interfaceStore.showGameMenu) {
+                    dispatch(InterfaceSliceActions.setShowGameMenu(true));
                 } else {
+                    dispatch(InterfaceSliceActions.setShowGameMenu(false));
                     dispatch(InterfaceSliceActions.setShowSettings(false));
                 }
                 break;

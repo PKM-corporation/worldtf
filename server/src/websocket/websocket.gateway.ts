@@ -188,7 +188,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         if (cachedClient) {
             return client.emit(WebsocketEvent.Message, { type: 'Warning', category: 'Spam' } as IWebsocketWarning);
         } else {
-            await this.cacheManager.set(client.id, client, { ttl: 0.5 });
+            await this.cacheManager.set(client.id, client, { ttl: 0.8 });
         }
         const command = this.websocketService.splitCommand(data.command);
         this.logger.debug(`[${player.username}]: /${command.type}: target: ${command.target}, content: ${command.content}`);

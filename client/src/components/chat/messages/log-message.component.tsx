@@ -1,15 +1,15 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { Log } from '../../class/chat.class';
-import { IStoreStates } from '../../interfaces/store.interface';
+import { ILogObject } from '../../../class/chat.class';
+import { IStoreStates } from '../../../interfaces/store.interface';
 
 interface IProps {
     id: number;
 }
 
 const LogMessageComponent = ({ id }: IProps) => {
-    const log = useSelector((state: IStoreStates) => state.chat.data[id] as Log);
+    const log = useSelector((state: IStoreStates) => state.chat.data[id] as ILogObject);
     const { t } = useTranslation();
     return (
         <div className={`${log.type} ${log.category} message`}>

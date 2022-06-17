@@ -18,8 +18,14 @@ export const TRANSLATION_FR = {
         email: 'Adresse mail',
         nameTaken: 'Adresse mail ou pseudo déjà pris',
         password: 'Mot de passe',
-        connection: "{{pseudo}} vient d'arriver sur le serveur",
-        disconnection: '{{pseudo}} quitte le serveur',
+        Connection: "{{pseudo}} vient d'arriver sur le serveur",
+        Disconnection: '{{pseudo}} quitte le serveur',
+        Ban: 'Le marteau du bannissement a frappé {{target}}',
+        Kick: "{{target}} s'est fait sortir ",
+    },
+    warning: {
+        Spam: 'Veuillez ne pas spam le chat',
+        UserAlreadySanctioned: 'La cible est déjà sanctionnée',
     },
     warn: {
         invalidName: 'Veuillez entrer un pseudo valide (plus de 2 caratères, sans caractères spéciaux)',
@@ -44,11 +50,7 @@ export const TRANSLATION_FR = {
     },
     verbose: {
         tp: 'Vous vous êtes téléporté à {{target}}',
-        cancel: 'Vous avez annulé la sanction {{sanctionType}} de {{target}}',
-    },
-    sanction: {
-        ban: 'Le marteau du bannissement a frappé {{target}}',
-        kick: "{{target}} s'est fait sortir ",
+        Cancel: 'Vous avez annulé la sanction {{sanction}} de {{target}}',
     },
     settings: {
         display: 'Affichage',

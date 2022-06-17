@@ -12,26 +12,20 @@ import { PointerLockControls, Stats } from '@react-three/drei';
 import { PlayerComponent } from '../components/player.component';
 import SkyboxComponent from '../components/skybox.component';
 import PlaneComponent from '../components/plane.component';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { OtherPlayerComponent } from '../components/other-player.component';
 import { IStoreStates } from '../interfaces/store.interface';
 import { PointerLockControls as PointerLockControlsImpl } from 'three-stdlib';
+import { useDispatch } from 'react-redux';
 import { InterfaceSliceActions } from '../store/slices/interface.slice';
 
 const DefaultScene = () => {
+    const dispatch = useDispatch();
     const { camera, gl } = useThree();
     const controls = useRef<PointerLockControlsImpl>(null);
     const players = useSelector((state: IStoreStates) => state.players.ids);
     const interfaceStore = useSelector((state: IStoreStates) => state.interface);
     const interfaceStoreRef = useRef(interfaceStore);
-    const dispatch = useDispatch();
-
-    const isLocked = () => {
-        if (interfaceStoreRef.current.showSettings || interfaceStoreRef.current.isChatting) {
-            return false;
-        }
-        return true;
-    };
 
     useEffect(() => {
         camera.layers.enable(0);
@@ -40,29 +34,12 @@ const DefaultScene = () => {
 
     useEffect(() => {
         interfaceStoreRef.current = interfaceStore;
-        if (!isLocked()) {
+        if (controls.current?.isLocked && (interfaceStore.showGameMenu || interfaceStore.isChatting)) {
             controls.current && controls.current.unlock();
-        } else {
+        } else if (controls.current && !controls.current.isLocked && !interfaceStore.showGameMenu && !interfaceStore.isChatting) {
             controls.current && controls.current.lock();
         }
     }, [interfaceStore]);
-
-    useEffect(() => {
-        const handleFocus = async (e: MouseEvent) => {
-            e.preventDefault();
-            e.stopPropagation();
-            if (!isLocked()) {
-                controls.current && controls.current.unlock();
-            } else {
-                controls.current && controls.current.lock();
-            }
-        };
-        document.addEventListener('click', handleFocus);
-
-        return () => {
-            document.removeEventListener('click', handleFocus);
-        };
-    }, []);
 
     return (
         <>
@@ -70,16 +47,12 @@ const DefaultScene = () => {
             <SkyboxComponent />
             {/* Pointer lock */}
             <PointerLockControls
-                onLock={() => {
-                    if (!isLocked()) {
-                        controls.current && controls.current.unlock();
-                    }
-                }}
                 onUnlock={() => {
-                    if (isLocked()) {
-                        dispatch(InterfaceSliceActions.setShowSettings(true));
+                    if (!interfaceStoreRef.current.showGameMenu && !interfaceStoreRef.current.isChatting) {
+                        dispatch(InterfaceSliceActions.setShowGameMenu(true));
                     }
                 }}
+                selector="#canvas"
                 ref={controls}
                 args={[camera, gl.domElement]}
             />

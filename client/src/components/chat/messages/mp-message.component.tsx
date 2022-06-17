@@ -1,14 +1,14 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Mp } from '../../class/chat.class';
-import { IStoreStates } from '../../interfaces/store.interface';
+import { IMpObject } from '../../../class/chat.class';
+import { IStoreStates } from '../../../interfaces/store.interface';
 
 interface IProps {
     id: number;
 }
 
 const MpMessageComponent = ({ id }: IProps) => {
-    const mp = useSelector((state: IStoreStates) => state.chat.data[id] as Mp);
+    const mp = useSelector((state: IStoreStates) => state.chat.data[id] as IMpObject);
     return (
         <div className={`${mp.type} message`}>
             <span className="me-1">[{mp.date}]</span>

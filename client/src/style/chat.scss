@@ -55,14 +55,19 @@
                     color: rgb(215, 5, 230);
                 }
 
-                &.Logs {
+                &.Log.Connection,
+                &.Log.Disconnection {
                     font-weight: bold;
                     color: #ffff55;
                 }
 
-                &.Sanction {
+                &.Log.Ban,
+                &.Log.Kick {
                     font-weight: bold;
                     color: #fa361c;
+                }
+                &.Warning {
+                    color: #ff0000;
                 }
 
                 &.Verbose {

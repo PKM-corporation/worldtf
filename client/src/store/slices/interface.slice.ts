@@ -7,6 +7,7 @@ export const InterfaceSlice = createSlice({
         isChatting: false,
         showPlayerlist: false,
         showSettings: false,
+        showGameMenu: false,
     } as IInterfaceSlice,
     reducers: {
         setIsChatting: (state: IInterfaceSlice, action: ISetBooleanAction) => {
@@ -17,6 +18,9 @@ export const InterfaceSlice = createSlice({
         },
         setShowSettings: (state: IInterfaceSlice, action: ISetBooleanAction) => {
             state.showSettings = action.payload;
+        },
+        setShowGameMenu: (state, action: ISetBooleanAction) => {
+            state.showGameMenu = action.payload;
         },
     },
 });

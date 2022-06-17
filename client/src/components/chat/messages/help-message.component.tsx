@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { IStoreStates } from '../../interfaces/store.interface';
+import { IStoreStates } from '../../../interfaces/store.interface';
 
 const HelpMessageComponent = () => {
     const user = useSelector((state: IStoreStates) => state.user.data);

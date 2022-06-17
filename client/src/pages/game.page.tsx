@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import CrosshairComponent from '../components/crosshair.component';
 import DefaultScene from '../scene/default-scene';
-import ChatComponent from '../components/chat.component';
+import ChatComponent from '../components/chat/chat.component';
 import PlayerlistComponent from '../components/player-list.component';
 import { Canvas } from '@react-three/fiber';
 import { useThree } from '@react-three/fiber';
@@ -11,12 +11,12 @@ import store from '../store/store';
 import ErrorComponent from '../components/error.component';
 import LoaderComponent from '../components/loader.component';
 import { useNavigate } from 'react-router-dom';
-import SettingsComponent from '../components/settings.component';
 import { IStoreStates } from '../interfaces/store.interface';
 import { useKeyboardControls } from '../hooks/keyboard.hooks';
 import { UserSliceActions } from '../store/slices/user.slice';
 import { InterfaceSliceActions } from '../store/slices/interface.slice';
 import { ChatSliceActions } from '../store/slices/chat.slice';
+import GameMenuComponent from '../components/game-menu.component';
 
 const PixelRatioSetting = () => {
     const { gl } = useThree();
@@ -55,9 +55,9 @@ const GamePage = () => {
             <div id="canvas-container" onClick={play}>
                 <CrosshairComponent />
                 <ChatComponent />
-                <SettingsComponent />
+                <GameMenuComponent />
                 <PlayerlistComponent />
-                <Canvas camera={{ position: [0, 0, 5], fov: 70, near: 0.01, far: 100, aspect: window.innerWidth / window.innerHeight }}>
+                <Canvas id="canvas" camera={{ position: [0, 0, 5], fov: 70, near: 0.01, far: 100, aspect: window.innerWidth / window.innerHeight }}>
                     <PixelRatioSetting />
                     <Provider store={store}>
                         <DefaultScene />
