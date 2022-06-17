@@ -17,10 +17,11 @@ import {
 import { IStoreStates } from '../interfaces/store.interface';
 import { setNewPlayer, synchronizePlayers } from '../services/player.service';
 import { PlayersSliceActions } from '../store/slices/players.slice';
-import { ICoordinates, TAnimation } from '../interfaces/player.interface';
+import { ICoordinates } from '../interfaces/player.interface';
 import { synchronizeWebsocketError } from '../services/websocket.service';
 import { PlayerSliceActions } from '../store/slices/player.slice';
 import { pushChatMessage } from '../services/chat.service';
+import { TAnimation } from '../interfaces/model.interface';
 
 export let server: Socket;
 

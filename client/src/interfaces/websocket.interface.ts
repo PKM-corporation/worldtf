@@ -1,5 +1,6 @@
 import { TLog, TMessage, TVerbose, TWarning } from './chat.interface';
-import { ICoordinates, TAnimation } from './player.interface';
+import { TAnimation } from './model.interface';
+import { ICoordinates } from './player.interface';
 import { TAvatar, TRole, TSanction } from './user.interface';
 
 export type TWebsocketError = 'AlreadyLogin' | 'Kicked' | 'Banned' | 'IncorrectToken';

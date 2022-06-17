@@ -1,4 +1,5 @@
-import { ICoordinates, TAnimation } from '../interfaces/player.interface';
+import { TAnimation } from '../interfaces/model.interface';
+import { ICoordinates } from '../interfaces/player.interface';
 import { TAvatar } from '../interfaces/user.interface';
 import { IWebsocketPlayerDto } from '../interfaces/websocket.interface';
 

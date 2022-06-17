@@ -16,6 +16,7 @@ declare global {
 export const useKeyboardControls = () => {
     const dispatch = useDispatch();
     const interfaceStore = useSelector((state: IStoreStates) => state.interface);
+    const player = useSelector((state: IStoreStates) => state.player);
     const [keyDown, setKeyDown] = useState('');
     const [keyUp, setKeyUp] = useState('');
 
@@ -62,27 +63,27 @@ export const useKeyboardControls = () => {
                 }
                 break;
             case 'KeyW':
-                if (interfaceStore.isChatting) break;
+                if (player.isMoveForward || interfaceStore.isChatting) break;
                 dispatch(PlayerSliceActions.setIsMoveForward(true));
                 break;
             case 'KeyA':
-                if (interfaceStore.isChatting) break;
+                if (player.isMoveLeft || interfaceStore.isChatting) break;
                 dispatch(PlayerSliceActions.setIsMoveLeft(true));
                 break;
             case 'KeyD':
-                if (interfaceStore.isChatting) break;
+                if (player.isMoveRight || interfaceStore.isChatting) break;
                 dispatch(PlayerSliceActions.setIsMoveRight(true));
                 break;
             case 'KeyS':
-                if (interfaceStore.isChatting) break;
+                if (player.isMoveBackward || interfaceStore.isChatting) break;
                 dispatch(PlayerSliceActions.setIsMoveBackward(true));
                 break;
             case 'ShiftLeft':
-                if (interfaceStore.isChatting) break;
+                if (player.sprinting || interfaceStore.isChatting) break;
                 dispatch(PlayerSliceActions.setSprinting(true));
                 break;
             case 'Space':
-                if (interfaceStore.isChatting) break;
+                if (player.jumping || interfaceStore.isChatting) break;
                 jumpIfPossible();
                 break;
             default:
@@ -109,19 +110,19 @@ export const useKeyboardControls = () => {
                 }
                 break;
             case 'KeyW':
-                dispatch(PlayerSliceActions.setIsMoveForward(false));
+                player.isMoveForward && dispatch(PlayerSliceActions.setIsMoveForward(false));
                 break;
             case 'KeyA':
-                dispatch(PlayerSliceActions.setIsMoveLeft(false));
+                player.isMoveLeft && dispatch(PlayerSliceActions.setIsMoveLeft(false));
                 break;
             case 'KeyD':
-                dispatch(PlayerSliceActions.setIsMoveRight(false));
+                player.isMoveRight && dispatch(PlayerSliceActions.setIsMoveRight(false));
                 break;
             case 'KeyS':
-                dispatch(PlayerSliceActions.setIsMoveBackward(false));
+                player.isMoveBackward && dispatch(PlayerSliceActions.setIsMoveBackward(false));
                 break;
             case 'ShiftLeft':
-                dispatch(PlayerSliceActions.setSprinting(false));
+                player.sprinting && dispatch(PlayerSliceActions.setSprinting(false));
                 break;
             default:
                 break;

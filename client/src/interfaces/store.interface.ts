@@ -2,7 +2,8 @@ import { IChatObject, IMpObject, IVerboseObject, IWarningObject, ILogObject } fr
 import { IPlayerObject } from '../class/player.class';
 import { IUserObject } from '../class/user.class';
 import { IWebsocketErrorObject } from '../class/websocket.class';
-import { ICoordinates, TAnimation } from './player.interface';
+import { TAnimation } from './model.interface';
+import { ICoordinates } from './player.interface';
 
 export interface IUserSlice {
     updated: number;

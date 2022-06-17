@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { IPlayerObject } from '../../class/player.class';
-import { ICoordinates, TAnimation } from '../../interfaces/player.interface';
+import { TAnimation } from '../../interfaces/model.interface';
+import { ICoordinates } from '../../interfaces/player.interface';
 import { IPlayersSlice, IStoreAction } from '../../interfaces/store.interface';
 
 export const PlayersSlice = createSlice({

@@ -80,7 +80,7 @@ export const setAnimationIfNecessary = () => {
     if (store.getState().player.isMoveForward) {
         if (sprinting && currentAnimation !== 'Running_forward') {
             return store.dispatch(PlayerSliceActions.setCurrentAnimation('Running_forward'));
-        } else if (currentAnimation !== 'Walking_forward') {
+        } else if (!sprinting && currentAnimation !== 'Walking_forward') {
             return store.dispatch(PlayerSliceActions.setCurrentAnimation('Walking_forward'));
         }
         return;
@@ -88,7 +88,7 @@ export const setAnimationIfNecessary = () => {
     if (store.getState().player.isMoveBackward) {
         if (sprinting && currentAnimation !== 'Running_backward') {
             return store.dispatch(PlayerSliceActions.setCurrentAnimation('Running_backward'));
-        } else if (currentAnimation !== 'Walking_backward') {
+        } else if (!sprinting && currentAnimation !== 'Walking_backward') {
             return store.dispatch(PlayerSliceActions.setCurrentAnimation('Walking_backward'));
         }
         return;
@@ -96,7 +96,7 @@ export const setAnimationIfNecessary = () => {
     if (store.getState().player.isMoveLeft && !store.getState().player.isMoveRight) {
         if (sprinting && currentAnimation !== 'Running_left') {
             return store.dispatch(PlayerSliceActions.setCurrentAnimation('Running_left'));
-        } else if (currentAnimation !== 'Walking_left') {
+        } else if (!sprinting && currentAnimation !== 'Walking_left') {
             return store.dispatch(PlayerSliceActions.setCurrentAnimation('Walking_left'));
         }
         return;
@@ -104,7 +104,7 @@ export const setAnimationIfNecessary = () => {
     if (store.getState().player.isMoveRight && !store.getState().player.isMoveLeft) {
         if (sprinting && currentAnimation !== 'Running_right') {
             return store.dispatch(PlayerSliceActions.setCurrentAnimation('Running_right'));
-        } else if (currentAnimation !== 'Walking_right') {
+        } else if (!sprinting && currentAnimation !== 'Walking_right') {
             return store.dispatch(PlayerSliceActions.setCurrentAnimation('Walking_right'));
         }
         return;

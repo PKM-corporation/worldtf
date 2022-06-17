@@ -79,15 +79,17 @@ export const PlayerComponent = ({ position }: IProps) => {
         setPlayerRotationIfNecessary(camera.rotation);
 
         if (player.jumping) {
-            if (!jump) {
+            if (jump) {
+                const raycaster = new Raycaster(ref.current.position, new Vector3(0, -1, 0), 0, 1);
+                const intersects = raycaster.intersectObjects(scene.children);
+
+                if (intersects.length !== 0) {
+                    dispatch(PlayerSliceActions.setJumping(false));
+                    jump = false;
+                }
+            } else {
                 api.velocity.set(direction.x, PlayerJumpSpeed, direction.z);
                 jump = true;
-            }
-            const raycaster = new Raycaster(ref.current.position, new Vector3(0, -1, 0), 0, 1);
-            const intersects = raycaster.intersectObjects(scene.children);
-            if (intersects.length !== 0) {
-                dispatch(PlayerSliceActions.setJumping(false));
-                jump = false;
             }
         }
     });
