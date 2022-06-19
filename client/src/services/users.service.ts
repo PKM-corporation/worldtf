@@ -25,6 +25,7 @@ export const synchronizeUser = async (): Promise<void> => {
     } catch (e) {
         if (e instanceof AxiosError && (e.response?.status === 401 || e.status === '401')) {
             store.dispatch(UserSliceActions.reset());
+            window.localStorage.removeItem('user');
         } else {
             throw e;
         }
