@@ -306,4 +306,13 @@ export class WebsocketService {
                 return 'Banned';
         }
     }
+
+    spam(player: Player, client: Socket) {
+        player.spamCount++;
+        if (player.spamCount > 3) {
+            client.emit(WebsocketEvent.Error, { type: 'Kicked', message: 'Spam' } as IClientEmitError);
+            return client.disconnect();
+        }
+        return client.emit(WebsocketEvent.Message, { type: 'Warning', category: 'Spam' } as IWebsocketWarning);
+    }
 }

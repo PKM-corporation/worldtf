@@ -43,7 +43,8 @@ export const TRANSLATION_FR = {
     error: {
         AlreadyLogin: 'Vous êtes connecté ailleurs',
         IncorrectToken: "Vous n'êtes pas connecté correctement",
-        kicked: 'Vous avez été kick par {{sender}}',
+        Kicked: 'Vous avez été kick par {{sender}}',
+        KickedWithoutSender: 'Vous avez été kick',
         Banned: 'Vous avez été bannis par {{sender}}',
         reason: 'Raison : {{- reason}}',
         date: 'Le {{- day}} à {{- time}}',

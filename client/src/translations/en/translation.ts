@@ -44,6 +44,7 @@ export const TRANSLATION_EN = {
         AlreadyLogin: 'You are logged in elsewhere',
         IncorrectToken: 'You are not properly connected',
         Kicked: 'You have been kicked by {{sender}}',
+        KickedWithoutSender: 'You have been kicked',
         Banned: 'You have been banned by {{sender}}',
         reason: 'Reason : {{- reason}}',
         date: 'On {{- day}} at {{- time}}',

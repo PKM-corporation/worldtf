@@ -165,9 +165,10 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         }
         const cachedClient = await this.cacheManager.get(client.id);
         if (cachedClient) {
-            return client.emit(WebsocketEvent.Message, { type: 'Warning', category: 'Spam' } as IWebsocketWarning);
+            this.websocketService.spam(player, client);
         } else {
-            await this.cacheManager.set(client.id, client, { ttl: 0.5 });
+            player.spamCount = 0;
+            await this.cacheManager.set(client.id, client, { ttl: 0.8 });
         }
         if (!/^#([0-9a-f]{6})$/i.test(data.color)) {
             this.logger.warn(`Incorrect hex color in message chat user: ${player.username}, color: ${data.color}`);
@@ -186,9 +187,10 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         }
         const cachedClient = await this.cacheManager.get(client.id);
         if (cachedClient) {
-            return client.emit(WebsocketEvent.Message, { type: 'Warning', category: 'Spam' } as IWebsocketWarning);
+            this.websocketService.spam(player, client);
         } else {
-            await this.cacheManager.set(client.id, client, { ttl: 0.8 });
+            player.spamCount = 0;
+            await this.cacheManager.set(client.id, client, { ttl: 1 });
         }
         const command = this.websocketService.splitCommand(data.command);
         this.logger.debug(`[${player.username}]: /${command.type}: target: ${command.target}, content: ${command.content}`);
