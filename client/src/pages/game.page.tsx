@@ -55,7 +55,7 @@ const GamePage = () => {
     useEffect(() => {
         const interval = setInterval(() => {
             if (canvasRef.current) favicon.href = canvasRef.current.toDataURL();
-        }, 1000);
+        }, 5000);
 
         return () => {
             clearInterval(interval);
