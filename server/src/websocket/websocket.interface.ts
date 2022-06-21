@@ -28,11 +28,13 @@ export type TWebsocketWarning =
     | 'UserAlreadySanctioned'
     | 'UserNotSanctioned';
 
-export type TWebsocketLog = 'Connection' | 'Disconnection';
+export type TWebsocketLog = 'Connection' | 'Disconnection' | 'Kick' | 'Ban' | 'Mute';
 
-export type TWebsocketVerbose = 'Tp' | 'Ban' | 'Kick' | 'Mute' | 'Cancel';
+export type TWebsocketVerbose = 'Tp' | 'Cancel' | 'Help';
 
 export type TWebsocketError = 'AlreadyLogin' | 'Kicked' | 'Banned' | 'IncorrectToken';
+
+export type TWebsocketMessage = 'Log' | 'Verbose' | 'Chat' | 'Mp' | 'Warning';
 
 export interface IWebsocketData {
     type: TWebsocketDataType;
@@ -99,38 +101,46 @@ export interface IClientEmitAnimation extends IClientEmitData {
 export interface IClientEmitModel extends IClientEmitData {
     model: TModel;
 }
-export interface IClientEmitMessage extends IClientEmitData {
-    message: string;
+
+export interface IWebsocketChat {
+    sender: string;
+    type: TWebsocketMessage;
     date: string;
-}
-export interface IClientEmitChatMessage extends IClientEmitMessage {
     color: string;
     role: TRole;
+    content: string;
+}
+
+export interface IWebsocketMp {
+    sender: string;
+    type: TWebsocketMessage;
+    date: string;
+    content: string;
 }
 
 export interface IWebsocketLog {
-    id: string;
-    type: TWebsocketLog;
+    type: TWebsocketMessage;
+    category: TWebsocketLog;
     date: string;
+    options?: {
+        pseudo?: string;
+        target?: string;
+    };
 }
 
 export interface IWebsocketVerbose {
-    type: TWebsocketVerbose;
-}
-export interface IWebsocketVerboseWithOptions extends IWebsocketVerbose {
-    options: {
-        target?: string;
-        sanctionType?: string;
-    };
-}
-export interface IWebsocketSanctionLog {
-    type: TSanction;
+    type: TWebsocketMessage;
+    category: TWebsocketVerbose;
     options?: {
+        pseudo?: string;
         target?: string;
+        sanction?: TSanction;
     };
 }
-export interface IWebsocketConnectionLog extends IWebsocketLog {
-    pseudo: string;
+
+export interface IWebsocketWarning {
+    type: TWebsocketMessage;
+    category: TWebsocketWarning;
 }
 
 export type TCommand = 'mp' | 'tp' | 'help' | 'kick' | 'mute' | 'ban' | 'cancel';

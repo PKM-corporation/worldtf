@@ -11,6 +11,7 @@ export class Player {
         this.role = role;
         this.position = position ?? { x: 0, y: 0, z: 0 };
         this.rotation = rotation ?? { x: 0, y: 0, z: 0 };
+        this.spamCount = 0;
     }
 
     private moveX(x: number) {
@@ -68,4 +69,5 @@ export class Player {
     animation: TAnimation;
     role: TRole;
     clientId: string;
+    spamCount: number;
 }
