@@ -14,7 +14,7 @@ const PlaneComponent = () => {
 
     return (
         <>
-            <mesh ref={ref as RefObject<Mesh<BufferGeometry, Material | Material[]>>} receiveShadow={true} scale={[1000, 1000, 1000]}>
+            <mesh visible={false} ref={ref as RefObject<Mesh<BufferGeometry, Material | Material[]>>} receiveShadow={true} scale={[20, 20, 20]}>
                 <planeBufferGeometry />
                 <meshPhongMaterial color={'skyblue'} />
             </mesh>

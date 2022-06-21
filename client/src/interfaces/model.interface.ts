@@ -43,3 +43,23 @@ export type TStoolGLTF = GLTF & {
         [key in TStoolNodes]: SkinnedMesh;
     };
 };
+
+export type TMapMaterials =
+    | 'Material.001'
+    | 'Material.002'
+    | 'Material.003'
+    | 'Material.004'
+    | 'Material.005'
+    | 'Material.006'
+    | 'Material.007'
+    | 'Material.008';
+export type TMapNodes = 'Cube_1' | 'Cube_2' | 'Cube_3' | 'Cube_4' | 'Cube004' | 'Cube004_1' | 'Cube004_2' | 'Cube005' | 'Cube005_1' | 'Cube005_2';
+
+export type TMapGLTF = GLTF & {
+    materials: {
+        [key in TMapMaterials]: MeshStandardMaterial;
+    };
+    nodes: {
+        [key in TMapNodes]: SkinnedMesh;
+    };
+};

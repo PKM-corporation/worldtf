@@ -2,7 +2,7 @@
 import React, { Suspense, useEffect, useRef } from 'react';
 
 // Physics
-import { Physics } from '@react-three/cannon';
+import { Physics, Debug } from '@react-three/cannon';
 
 // Three
 import { useThree } from '@react-three/fiber';
@@ -19,6 +19,7 @@ import { useDispatch } from 'react-redux';
 import { InterfaceSliceActions } from '../store/slices/interface.slice';
 import { Stool } from '../prefabs/stool.prefab';
 import SkyComponent from '../components/sky.component';
+import Map from '../models/map/Map';
 
 const DefaultScene = () => {
     const dispatch = useDispatch();
@@ -59,10 +60,13 @@ const DefaultScene = () => {
             />
             {/** Physic objects */}
             <Physics isPaused={false} gravity={[0, -9.81, 0]} tolerance={0} iterations={50} broadphase={'Naive'}>
-                <PlaneComponent />
-                <Stool position={[0, -0.25, 5]} rotation={[0, Math.PI / 8, 0]} />
-                <PlayerComponent position={[0, 1, 0]} key="player" />
-                <Suspense fallback={null}></Suspense>
+                <Debug color="#ff0000">
+                    <PlaneComponent />
+                    <Stool position={[-5, -0.25, 5]} rotation={[0, Math.PI / 8, 0]} />
+                    <PlayerComponent position={[0, 1, 0]} key="player" />
+                    <Suspense fallback={null}></Suspense>
+                    <Map position={[0, -0.25, 0]} />
+                </Debug>
                 {/* <WorldMap position={[0, 2.35, 0]} /> */}
             </Physics>
             {players.map((id) => {
