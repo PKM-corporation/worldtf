@@ -34,7 +34,6 @@ const SkyComponent = () => {
         if (starsRef.current) {
             starsRef.current.position.x = player.position.x;
             starsRef.current.position.z = player.position.z;
-            starsRef.current.position.y = player.position.y + 10;
         }
     }, [player.position]);
 
