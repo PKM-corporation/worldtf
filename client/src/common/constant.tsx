@@ -39,8 +39,8 @@ export const Animations = {
     Idle: 'Idle',
 };
 
-export const PlayerSpeed = 6;
-export const PlayerRunSpeed = 10;
+export const PlayerSpeed = 4;
+export const PlayerRunSpeed = 8;
 export const PlayerJumpSpeed = 5;
 export const PlayerJumpCooldown = 1250;
 

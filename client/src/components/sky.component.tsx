@@ -40,7 +40,7 @@ const SkyComponent = () => {
     return (
         <>
             <ambientLight ref={ambientLightRef} intensity={0.3} />
-            <pointLight ref={pointLightRef} position={[10, 15, 10]} castShadow color="rgb(255, 220, 187)" intensity={0.7} />
+            <pointLight ref={pointLightRef} position={[10, 15, 10]} castShadow color="rgb(255, 220, 187)" intensity={0.6} />
             <Sky ref={skyRef} sunPosition={[100, 50, 100]} distance={width * 4} />
             <Stars ref={starsRef} radius={1} depth={width} count={5000} factor={1} saturation={0} fade />
             {/* <Cloud position={[0, width, 0]} speed={0.001} opacity={0.5} /> */}
