@@ -25,8 +25,8 @@ const PixelRatioSetting = () => {
 };
 
 const GamePage = () => {
-    const canvasRef = useRef();
-    const favicon = document.getElementById('favicon');
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+    const favicon = document.getElementById('favicon') as HTMLLinkElement;
     const dispatch = useDispatch();
     const connected = useSelector((state: IStoreStates) => state.websocket.connected);
     const error = useSelector((state: IStoreStates) => state.websocket.error);
@@ -52,15 +52,15 @@ const GamePage = () => {
         dispatch(InterfaceSliceActions.setIsChatting(false));
     };
 
-    /*useEffect(() => {
+    useEffect(() => {
         const interval = setInterval(() => {
-            favicon.href = canvasRef.current.toDataURL();
+            if (canvasRef.current) favicon.href = canvasRef.current.toDataURL();
         }, 1000);
 
         return () => {
             clearInterval(interval);
         };
-    }, []);*/
+    }, []);
 
     if (connected) {
         return (
@@ -69,7 +69,11 @@ const GamePage = () => {
                 <ChatComponent />
                 <GameMenuComponent />
                 <PlayerlistComponent />
-                <Canvas id="canvas" camera={{ position: [0, 0, 5], fov: 70, near: 0.01, far: 100, aspect: window.innerWidth / window.innerHeight }}>
+                <Canvas
+                    id="canvas"
+                    ref={canvasRef}
+                    camera={{ position: [0, 0, 5], fov: 70, near: 0.01, far: 100, aspect: window.innerWidth / window.innerHeight }}
+                >
                     <PixelRatioSetting />
                     <Provider store={store}>
                         <DefaultScene />

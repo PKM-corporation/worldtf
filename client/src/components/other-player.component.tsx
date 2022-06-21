@@ -1,9 +1,10 @@
 import React, { Suspense, useEffect, useRef } from 'react';
-import { Html } from '@react-three/drei';
 import Aj from '../models/aj/Aj';
 import { useSelector } from 'react-redux';
 import { IStoreStates } from '../interfaces/store.interface';
 import { BufferGeometry, Material, Mesh } from 'three';
+import { useFrame } from '@react-three/fiber';
+import { Text } from '@react-three/drei';
 
 interface IProps {
     playerId: string;
@@ -13,7 +14,7 @@ export const OtherPlayerComponent = ({ playerId }: IProps) => {
     const player = useSelector((state: IStoreStates) => state.players.data[playerId]);
 
     const boxRef = useRef<Mesh<BufferGeometry, Material | Material[]>>(null);
-    const textRef = useRef<HTMLDivElement>(null);
+    const textRef = useRef<Mesh>(null);
 
     useEffect(() => {
         if (!player.position) return;
@@ -30,17 +31,24 @@ export const OtherPlayerComponent = ({ playerId }: IProps) => {
             boxRef.current.rotation.y = player.rotation.y - Math.PI;
         }
     }, [player.rotation]);
+
+    useFrame(({ camera }) => {
+        if (boxRef.current && Math.abs(boxRef.current.position.distanceTo(camera.position)) > 10) {
+            if (textRef.current) textRef.current.visible = false;
+        } else {
+            if (textRef.current) textRef.current.visible = true;
+        }
+        textRef.current && textRef.current.lookAt(camera.position);
+    });
     return (
         <>
             <mesh ref={boxRef}>
                 <Suspense fallback={null}>
                     <Aj position={[0, 0, 0]} playerId={playerId} />
                 </Suspense>
-                <Html distanceFactor={10} style={{ transform: 'translate(-50%,-800%)' }}>
-                    <div ref={textRef} className="pseudo-label">
-                        {player.pseudo}
-                    </div>
-                </Html>
+                <Text ref={textRef} color="black" anchorX="center" anchorY="middle" position={[0, 2, 0]}>
+                    {player.pseudo}
+                </Text>
             </mesh>
         </>
     );

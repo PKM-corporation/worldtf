@@ -1,5 +1,5 @@
 import React, { RefObject, useEffect, useRef } from 'react';
-import { useSphere } from '@react-three/cannon';
+import { useBox } from '@react-three/cannon';
 import { useThree, useFrame } from '@react-three/fiber';
 import { BufferGeometry, Material, Mesh, Raycaster, Vector3 } from 'three';
 import { useDispatch, useSelector } from 'react-redux';
@@ -26,10 +26,10 @@ export const PlayerComponent = ({ position }: IProps) => {
     const player = useSelector((state: IStoreStates) => state.player);
     const isChatting = useSelector((state: IStoreStates) => state.interface.isChatting);
     const { camera, scene } = useThree();
-    const [ref, api] = useSphere(() => ({
+    const [ref, api] = useBox(() => ({
         mass: 10,
         fixedRotation: true,
-        args: [1],
+        args: [0.5, 1, 0.5],
         material: {
             friction: 0,
         },
@@ -50,6 +50,7 @@ export const PlayerComponent = ({ position }: IProps) => {
 
     useEffect(() => {
         websocketEmitData('PlayerAction', { type: 'Rotate', rotation: player.rotation } as IWebsocketEmitDataPlayerActionDto);
+        api.rotation.set(0, player.rotation.y, 0);
     }, [player.rotation]);
 
     useFrame(() => {
