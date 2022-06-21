@@ -10,7 +10,6 @@ import { PointerLockControls, Stats } from '@react-three/drei';
 
 // Components
 import { PlayerComponent } from '../components/player.component';
-import SkyboxComponent from '../components/skybox.component';
 import PlaneComponent from '../components/plane.component';
 import { useSelector } from 'react-redux';
 import { OtherPlayerComponent } from '../components/other-player.component';
@@ -18,6 +17,8 @@ import { IStoreStates } from '../interfaces/store.interface';
 import { PointerLockControls as PointerLockControlsImpl } from 'three-stdlib';
 import { useDispatch } from 'react-redux';
 import { InterfaceSliceActions } from '../store/slices/interface.slice';
+import { Stool } from '../prefabs/stool.prefab';
+import SkyComponent from '../components/sky.component';
 
 const DefaultScene = () => {
     const dispatch = useDispatch();
@@ -44,7 +45,7 @@ const DefaultScene = () => {
     return (
         <>
             {/** Skybox */}
-            <SkyboxComponent />
+            <SkyComponent />
             {/* Pointer lock */}
             <PointerLockControls
                 onUnlock={() => {
@@ -56,14 +57,10 @@ const DefaultScene = () => {
                 ref={controls}
                 args={[camera, gl.domElement]}
             />
-            {/* Lighting */}
-            <directionalLight position={[3, 0, 3]} intensity={0.5} castShadow />
-            <pointLight position={[0, 0, -3]} intensity={0.6} castShadow />
-            <pointLight position={[0, 0, 4]} intensity={0.6} castShadow />
-            <ambientLight intensity={0.6} />
             {/** Physic objects */}
             <Physics isPaused={false} gravity={[0, -9.81, 0]} tolerance={0} iterations={50} broadphase={'Naive'}>
                 <PlaneComponent />
+                <Stool position={[0, -0.25, 5]} rotation={[0, Math.PI / 8, 0]} />
                 <PlayerComponent position={[0, 1, 0]} key="player" />
                 <Suspense fallback={null}></Suspense>
                 {/* <WorldMap position={[0, 2.35, 0]} /> */}

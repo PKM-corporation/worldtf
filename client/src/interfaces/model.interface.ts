@@ -32,3 +32,14 @@ export type TAjObjectMap = ObjectMap & {
         [key in TAjNodes]: SkinnedMesh;
     };
 };
+
+export type TStoolMaterials = 'stool';
+export type TStoolNodes = 'stool';
+export type TStoolGLTF = GLTF & {
+    materials: {
+        [key in TStoolMaterials]: MeshStandardMaterial;
+    };
+    nodes: {
+        [key in TStoolNodes]: SkinnedMesh;
+    };
+};
