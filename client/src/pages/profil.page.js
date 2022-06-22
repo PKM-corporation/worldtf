@@ -18,7 +18,7 @@ const ProfilPage = () => {
                 <div className=" h-75">
                     <div>
                         <span className="mt-3">
-                            {isConnected && <SideBarProfilComponent />}
+                            <SideBarProfilComponent />
                             {!isConnected && (
                                 <div className="menu">
                                     <h2 className="navButton" onClick={() => navigate('/authenticate')}>

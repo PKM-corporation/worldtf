@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import '../../style/index.scss';
 import ProfileComponent from './profile.component';
-import PrivatesInformations from './privates-informations.component';
+import PrivatesInformationsComponent from './privates-informations.component';
 import AvatarComponent from './avatar.component';
 
 const SideBarProfilComponent = () => {
@@ -55,7 +55,7 @@ const SideBarProfilComponent = () => {
             </nav>
             <div className="w-100">
                 {isOpen ? <ProfileComponent /> : null}
-                {isOpenInformations ? <PrivatesInformations /> : null}
+                {isOpenInformations ? <PrivatesInformationsComponent /> : null}
                 {isOpenAvatar ? <AvatarComponent /> : null}
             </div>
         </div>

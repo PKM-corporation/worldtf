@@ -9,3 +9,8 @@ export const getConnectedPlayers = async () => {
     const result = await httpClient.get('/server/clients');
     return result.data;
 };
+
+export const putUserEmail = async () => {
+    const result = await httpClient.put(`/users/${email}`, { email: email });
+    return result.data;
+};
