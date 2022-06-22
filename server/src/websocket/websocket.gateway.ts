@@ -35,7 +35,6 @@ import { User } from 'src/db/schemas/users.schema';
 import { SanctionsService } from 'src/sanctions/sanctions.service';
 import { UsersService } from 'src/users/users.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guards';
-import * as crypto from 'crypto';
 
 @WebSocketGateway({ cors: true })
 export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
@@ -136,7 +135,6 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         }
         switch (data.type) {
             case 'Move':
-                console.log(crypto.randomUUID());
                 const moveData = data as IWebsocketMoveData;
                 this.websocketService.move(moveData.position, player);
                 break;
