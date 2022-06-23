@@ -3,7 +3,7 @@ import MapModel from './Model';
 import { Stool } from '../../prefabs/stool.prefab';
 import MapHitbox from './map.hitbox';
 import SpotLightDiscoLight from '../../scene/lights/spotlight-disco.light';
-import { Table } from '../../prefabs/Table';
+import { Table } from '../../prefabs/table.prefab';
 import CeilingLight from '../../scene/lights/ceiling.light';
 import WindowLight from '../../scene/lights/window.light';
 
