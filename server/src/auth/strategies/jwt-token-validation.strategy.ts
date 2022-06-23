@@ -5,7 +5,9 @@ import { ParamsDictionary } from 'express-serve-static-core';
 import { Strategy, ExtractJwt } from 'passport-jwt';
 import { ParsedQs } from 'qs';
 import { Socket } from 'socket.io';
+import { WebsocketEvent } from 'src/common/constant';
 import { User } from 'src/db/schemas/users.schema';
+import { IClientEmitError } from 'src/websocket/websocket.interface';
 import { AuthService } from '../auth.service';
 
 @Injectable()
@@ -32,6 +34,10 @@ export class JwtTokenValidationStrategy extends PassportStrategy(Strategy, 'JwtT
                     this.authService.getAccessTokenFromAuthorizationHeader(req.handshake.headers.authorization),
                     true,
                 )) as User;
+                if (!user) {
+                    req.emit(WebsocketEvent.Error, { type: 'IncorrectToken', status: 401 } as IClientEmitError);
+                    return;
+                }
             }
             if (user) {
                 return this.success(user);

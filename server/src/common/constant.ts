@@ -1,13 +1,9 @@
 export const WebsocketEvent = {
     PlayerAction: 'PlayerAction',
-    Chat: 'Chat',
-    Logs: 'Logs',
-    Warning: 'Warning',
+    Message: 'Message',
     Players: 'Players',
     Command: 'Command',
     Error: 'Error',
-    Verbose: 'Verbose',
-    Sanction: 'Sanction',
 };
 
 export const SanctionErrorMessages = {

@@ -18,16 +18,16 @@ import {
     IClientEmitError,
     IClientEmitPlayer,
     IClientEmitPlayers,
-    IClientEmitWarning,
     IWebsocketAnimData,
     IWebsocketChatData,
     IWebsocketCommandData,
-    IWebsocketConnectionLog,
     IWebsocketConnectionOptions,
     IWebsocketData,
+    IWebsocketLog,
     IWebsocketModelChoiceData,
     IWebsocketMoveData,
     IWebsocketRotateData,
+    IWebsocketWarning,
 } from './websocket.interface';
 import { WebsocketService } from './websocket.service';
 import { DateTime } from 'luxon';
@@ -75,6 +75,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
                 duration: sanction.duration,
                 day: DateTime.fromSeconds(sanction.date).toLocaleString(DateTime.DATE_SHORT),
                 time: DateTime.fromSeconds(sanction.date).toFormat('HH:mm'),
+                message: sanction.reason,
                 sender: admin.pseudo,
             } as IClientEmitError);
             return client.disconnect();
@@ -98,12 +99,14 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         const newPlayer: IClientEmitPlayer = { type: 'AddPlayer', id: player.id, player };
         this.websocketService.emit(this.websocketService.getClientsWithoutOne(client.id), WebsocketEvent.Players, newPlayer);
 
-        this.wss.emit(WebsocketEvent.Logs, {
-            type: 'Connection',
-            id: player.id,
-            pseudo: user.pseudo,
+        this.wss.emit(WebsocketEvent.Message, {
+            type: 'Log',
+            category: 'Connection',
+            options: {
+                pseudo: user.pseudo,
+            },
             date: DateTime.now().toFormat('HH:mm'),
-        } as IWebsocketConnectionLog);
+        } as IWebsocketLog);
         this.logger.log(`client ${client.id}, pseudo: ${user.pseudo} connected`);
     }
     handleDisconnect(client: Socket) {
@@ -114,16 +117,17 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         this.websocketService.emit(this.websocketService.getClientsWithoutOne(client.id), WebsocketEvent.Players, removedPlayer);
         this.players.delete(client.id);
 
-        this.wss.emit(WebsocketEvent.Logs, {
-            type: 'Disconnection',
-            id: player.id,
-            pseudo: player.username,
+        this.wss.emit(WebsocketEvent.Message, {
+            type: 'Log',
+            category: 'Disconnection',
+            options: {
+                pseudo: player.username,
+            },
             date: DateTime.now().toFormat('HH:mm'),
-        } as IWebsocketConnectionLog);
+        } as IWebsocketLog);
         this.logger.log(`client ${client.id} disconnected`);
     }
 
-    @UseGuards(JwtAuthGuard)
     @SubscribeMessage(WebsocketEvent.PlayerAction)
     handleEventPlayerAction(@MessageBody() data: IWebsocketData, @ConnectedSocket() client: Socket) {
         const player = this.players.get(client.id);
@@ -153,7 +157,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         }
     }
     @UseGuards(JwtAuthGuard)
-    @SubscribeMessage(WebsocketEvent.Chat)
+    @SubscribeMessage(WebsocketEvent.Message)
     async handleEventChat(@MessageBody() data: IWebsocketChatData, @ConnectedSocket() client: Socket) {
         const player = this.players.get(client.id);
         if (!player) {
@@ -161,9 +165,10 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         }
         const cachedClient = await this.cacheManager.get(client.id);
         if (cachedClient) {
-            return client.emit(WebsocketEvent.Warning, 'please do not spam');
+            this.websocketService.spam(player, client);
         } else {
-            await this.cacheManager.set(client.id, client, { ttl: 0.5 });
+            player.spamCount = 0;
+            await this.cacheManager.set(client.id, client, { ttl: 0.8 });
         }
         if (!/^#([0-9a-f]{6})$/i.test(data.color)) {
             this.logger.warn(`Incorrect hex color in message chat user: ${player.username}, color: ${data.color}`);
@@ -182,9 +187,10 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         }
         const cachedClient = await this.cacheManager.get(client.id);
         if (cachedClient) {
-            return client.emit(WebsocketEvent.Warning, { type: 'Spam' } as IClientEmitWarning);
+            this.websocketService.spam(player, client);
         } else {
-            await this.cacheManager.set(client.id, client, { ttl: 0.5 });
+            player.spamCount = 0;
+            await this.cacheManager.set(client.id, client, { ttl: 1 });
         }
         const command = this.websocketService.splitCommand(data.command);
         this.logger.debug(`[${player.username}]: /${command.type}: target: ${command.target}, content: ${command.content}`);
@@ -195,7 +201,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
                     this.websocketService.sendMpTo(target, command.content, client, player);
                 } else {
                     this.logger.warn(`${player.username} type ${command.type} command with incorrect target: ${command.target}`);
-                    client.emit(WebsocketEvent.Warning, { type: 'IncorrectTarget' } as IClientEmitWarning);
+                    client.emit(WebsocketEvent.Message, { type: 'Warning', category: 'IncorrectTarget' } as IWebsocketWarning);
                 }
                 break;
             case 'tp':
@@ -203,7 +209,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
                     this.websocketService.tpTo(target, player, client);
                 } else {
                     this.logger.warn(`${player.username} type ${command.type} command with incorrect target: ${command.target}`);
-                    client.emit(WebsocketEvent.Warning, { type: 'IncorrectTarget' } as IClientEmitWarning);
+                    client.emit(WebsocketEvent.Message, { type: 'Warning', category: 'IncorrectTarget' } as IWebsocketWarning);
                 }
                 break;
             case 'kick':

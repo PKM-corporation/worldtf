@@ -6,19 +6,19 @@ import { ICoordinates, TAnimation, TModel } from 'src/player/player.interface';
 import { Vector3 } from 'three';
 import {
     IClientEmitPosition,
-    IClientEmitMessage,
     IClientEmitModel,
     IClientEmitData,
     IClientEmitAnimation,
     ICommand,
     IClientEmitRotation,
-    IClientEmitChatMessage,
     IClientEmitError,
     ISanctionCommandOptions,
     TWebsocketError,
-    IClientEmitWarning,
-    IWebsocketVerboseWithOptions,
-    IWebsocketSanctionLog,
+    IWebsocketChat,
+    IWebsocketMp,
+    IWebsocketVerbose,
+    IWebsocketWarning,
+    IWebsocketLog,
 } from './websocket.interface';
 import { DateTime } from 'luxon';
 import { UsersService } from 'src/users/users.service';
@@ -81,15 +81,15 @@ export class WebsocketService {
     }
 
     chat(message: string, color: string, player: Player) {
-        const playerMessage: IClientEmitChatMessage = {
+        const playerMessage: IWebsocketChat = {
+            sender: player.username,
             type: 'Chat',
-            id: player.username,
-            message: message,
+            content: message,
             role: player.role,
             color: player.role === 'Admin' ? '#FF0000' : color,
             date: DateTime.now().toFormat('HH:mm'),
         };
-        this.server.emit(WebsocketEvent.Chat, playerMessage);
+        this.server.emit(WebsocketEvent.Message, playerMessage);
     }
 
     emit(clients: Socket[], event: string, data: IClientEmitData) {
@@ -184,15 +184,15 @@ export class WebsocketService {
 
     sendMpTo(target: Player, message: string, client: Socket, player: Player) {
         const clientTarget = this.getClientById(target.clientId);
-        const mp: IClientEmitMessage = {
+        const mp: IWebsocketMp = {
             type: 'Mp',
-            id: player.username,
-            message,
+            sender: player.username,
+            content: message,
             date: DateTime.now().toFormat('HH:mm'),
         };
         if (clientTarget) {
-            clientTarget.emit(WebsocketEvent.Chat, mp);
-            client.emit(WebsocketEvent.Chat, mp);
+            clientTarget.emit(WebsocketEvent.Message, mp);
+            client.emit(WebsocketEvent.Message, mp);
         }
     }
 
@@ -203,12 +203,12 @@ export class WebsocketService {
         };
         client.emit(WebsocketEvent.PlayerAction, positionData);
         this.move(target.position, player);
-        client.emit(WebsocketEvent.Verbose, { type: 'Tp', options: { target: target.username } } as IWebsocketVerboseWithOptions);
+        client.emit(WebsocketEvent.Message, { type: 'Verbose', category: 'Tp', options: { target: target.username } } as IWebsocketVerbose);
     }
 
     askHelp(client: Socket) {
-        const playerData: IClientEmitData = { type: 'Help' };
-        client.emit(WebsocketEvent.Chat, playerData);
+        const playerData: IWebsocketVerbose = { type: 'Verbose', category: 'Help' };
+        client.emit(WebsocketEvent.Message, playerData);
     }
 
     async sanctionUser(pseudo: string, admin: Player, type: TSanction, options?: ISanctionCommandOptions) {
@@ -216,17 +216,17 @@ export class WebsocketService {
         const target = await this.usersService.findUserByPseudo(pseudo);
         const clientAdmin = this.getClientById(admin.clientId);
         if (user?.role !== 'Admin') {
-            clientAdmin.emit(WebsocketEvent.Warning, { type: 'InsufficientRights' } as IClientEmitWarning);
+            clientAdmin.emit(WebsocketEvent.Message, { type: 'Warning', category: 'InsufficientRights' } as IWebsocketWarning);
             this.logger.warn(`User ${admin.id} (${user.pseudo}) tries to ${type} ${target?._id?.toString()} (${target.pseudo}) but isn't admin`);
             return;
         }
         if (!target) {
-            clientAdmin.emit(WebsocketEvent.Warning, { type: 'IncorrectTarget' } as IClientEmitWarning);
+            clientAdmin.emit(WebsocketEvent.Message, { type: 'Warning', category: 'IncorrectTarget' } as IWebsocketWarning);
             this.logger.warn(`Sanction ${type} by ${user._id.toString()} (${user.pseudo}) with incorrect target: ${pseudo}`);
             return;
         }
         if (type === 'Kick' && !options?.time && !options?.targetPlayer) {
-            clientAdmin.emit(WebsocketEvent.Warning, { type: 'DisconnectedTarget' } as IClientEmitWarning);
+            clientAdmin.emit(WebsocketEvent.Message, { type: 'Warning', category: 'DisconnectedTarget' } as IWebsocketWarning);
             this.logger.warn(`Sanction ${type} by ${user._id.toString()} (${user.pseudo}) with disconnected target: ${pseudo}`);
             return;
         }
@@ -240,7 +240,7 @@ export class WebsocketService {
                 this.logger.error(`sanctionUser failed with user: ${target._id.toString} (${target.pseudo})`);
                 throw e;
             }
-            clientAdmin.emit(WebsocketEvent.Warning, { type: 'UserAlreadySanctioned' } as IClientEmitWarning);
+            clientAdmin.emit(WebsocketEvent.Message, { type: 'Warning', category: 'UserAlreadySanctioned' } as IWebsocketWarning);
             return;
         }
         const clientTarget = this.getClientById(options?.targetPlayer?.clientId);
@@ -258,11 +258,15 @@ export class WebsocketService {
                     clientTarget.disconnect();
                     break;
                 case 'Mute':
-                    clientAdmin.emit(WebsocketEvent.Warning, { type: 'Muted' } as IClientEmitWarning);
                     break;
             }
         }
-        this.server.emit(WebsocketEvent.Logs, { type, options: { target: pseudo } } as IWebsocketSanctionLog);
+        this.server.emit(WebsocketEvent.Message, {
+            type: 'Log',
+            category: type,
+            date: DateTime.now().toFormat('HH:mm'),
+            options: { target: pseudo },
+        } as IWebsocketLog);
     }
 
     async cancelUserSanction(pseudo: string, admin: Player, type: TSanction) {
@@ -271,29 +275,30 @@ export class WebsocketService {
 
         const clientAdmin = this.getClientById(admin.clientId);
         if (user?.role !== 'Admin') {
-            clientAdmin.emit(WebsocketEvent.Warning, { type: 'InsufficientRights' } as IClientEmitWarning);
+            clientAdmin.emit(WebsocketEvent.Message, { type: 'Warning', category: 'InsufficientRights' } as IWebsocketWarning);
             this.logger.warn(
                 `User ${admin.id} (${user.pseudo}) tries to cancel ${type} ${target?._id?.toString()} (${target.pseudo}) but isn't admin`,
             );
             return;
         }
         if (!target) {
-            clientAdmin.emit(WebsocketEvent.Warning, { type: 'IncorrectTarget' } as IClientEmitWarning);
+            clientAdmin.emit(WebsocketEvent.Message, { type: 'Warning', category: 'IncorrectTarget' } as IWebsocketWarning);
             this.logger.warn(`Cancel sanction ${type} by ${user._id.toString()} (${user.pseudo}) with incorrect target: ${pseudo}`);
             return;
         }
         try {
             await this.sanctionsService.cancelSanction(target._id.toString(), type);
-            clientAdmin.emit(WebsocketEvent.Verbose, {
-                type: 'Cancel',
-                options: { target: pseudo, sanctionType: type },
-            } as IWebsocketVerboseWithOptions);
+            clientAdmin.emit(WebsocketEvent.Message, {
+                type: 'Verbose',
+                category: 'Cancel',
+                options: { target: pseudo, sanction: type },
+            } as IWebsocketVerbose);
         } catch (e) {
             if (e.message !== SanctionErrorMessages.UserNotSanctioned) {
                 this.logger.error(`CancelSanctionUser failed with user: ${target._id.toString} (${target.pseudo})`);
                 throw e;
             }
-            clientAdmin.emit(WebsocketEvent.Warning, { type: 'UserNotSanctioned' } as IClientEmitWarning);
+            clientAdmin.emit(WebsocketEvent.Message, { type: 'Warning', category: 'UserNotSanctioned' } as IWebsocketWarning);
             return;
         }
     }
@@ -305,5 +310,14 @@ export class WebsocketService {
             case 'Ban':
                 return 'Banned';
         }
+    }
+
+    spam(player: Player, client: Socket) {
+        player.spamCount++;
+        if (player.spamCount > 3) {
+            client.emit(WebsocketEvent.Error, { type: 'Kicked', message: 'Spam' } as IClientEmitError);
+            return client.disconnect();
+        }
+        return client.emit(WebsocketEvent.Message, { type: 'Warning', category: 'Spam' } as IWebsocketWarning);
     }
 }

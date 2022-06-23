@@ -1,93 +1,112 @@
-#inputChat {
+.chat-container {
     position: fixed;
-    left: 80px;
-    bottom: 73px;
-    z-index: 100000;
-    background-color: rgba(67, 13, 69, 0.4);
-    border: 1px solid rgb(95, 95, 95);
-    outline: none;
-    width: 20%;
-    min-width: 500px;
-    transition: all ease 0.3s;
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    border-bottom: 3px;
-    border-color: rgb(0, 153, 255);
-    box-shadow: 00 0 0.2rem #fff;
-    color: #fff;
-    padding: 5px;
-    border-radius: 10px;
-}
-
-.chat {
-    margin-bottom: 25px;
-    color: white;
-    box-shadow: 00 0 0.2rem #fff, 0 0 2rem rgba(255, 0, 128, 0.508), 0 0 0.8rem rgba(255, 0, 128, 0.508), inset 0 0 1.3rem rgba(255, 0, 128, 0.508);
-    border-color: #ff0080d2;
-    border-radius: 10px;
+    width: 500px;
+    height: fit-content;
     left: 80px;
     bottom: 100px;
     z-index: 99;
-    border: 1px solid #5f5f5f;
-    background-color: rgba(67, 13, 69, 0.6);
-    position: fixed;
-    width: 500px;
-    text-align: bottom;
-    overflow: hidden;
-    &::-webkit-scrollbar {
-        width: 200px;
-    }
-    * {
-        scrollbar-width: thin;
-        scrollbar-color: #fcfcfcd2 #ffffff00;
-    }
 
-    .chatContent {
+    .chat {
+        margin-bottom: 25px;
+        color: white;
+        box-shadow: 00 0 0.2rem #fff, 0 0 2rem rgba(255, 0, 128, 0.508), 0 0 0.8rem rgba(255, 0, 128, 0.508),
+            inset 0 0 1.3rem rgba(255, 0, 128, 0.508);
+        border-color: #ff0080d2;
+        border-radius: 10px;
         position: relative;
+        border: 1px solid #5f5f5f;
+        background-color: rgba(67, 13, 69, 0.6);
         width: 100%;
-        max-height: 200px;
-        padding: 10px;
-        overflow-y: scroll;
-        overflow-x: hidden;
+        text-align: bottom;
+        overflow: hidden;
 
-        .message {
-            width: 480px;
-            display: flex;
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d5a4cb;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #e7b3dd;
+        }
+        scrollbar-width: 10px;
+        scrollbar-color: #d5a4cb transparent;
 
-            &.Mp {
-                color: rgb(215, 5, 230);
-            }
+        &:hover {
+            scrollbar-color: #e7b3dd transparent;
+        }
 
-            &.Logs {
-                font-weight: bold;
-                color: #ffff55;
-            }
+        .chatContent {
+            position: relative;
+            width: 100%;
+            max-height: 200px;
+            padding: 10px;
+            overflow-y: auto;
+            overflow-x: hidden;
 
-            &.Sanction {
-                font-weight: bold;
-                color: #fa361c;
-            }
+            .message {
+                width: 480px;
+                display: flex;
 
-            &.Verbose {
-                font-style: italic;
-                color: #a0a0a0;
-            }
+                &.Mp {
+                    color: rgb(215, 5, 230);
+                }
 
-            .sender {
-                margin-right: 10px;
-                font-weight: bold;
-                white-space: nowrap;
-            }
-            .content {
-                overflow-wrap: anywhere;
+                &.Log.Connection,
+                &.Log.Disconnection {
+                    font-weight: bold;
+                    color: #ffff55;
+                }
+
+                &.Log.Ban,
+                &.Log.Kick {
+                    font-weight: bold;
+                    color: #fa361c;
+                }
+                &.Warning {
+                    color: #ff0000;
+                }
+
+                &.Verbose {
+                    font-style: italic;
+                    color: #a0a0a0;
+                }
+
+                .sender {
+                    margin-right: 10px;
+                    font-weight: bold;
+                    white-space: nowrap;
+                }
+                .content {
+                    overflow-wrap: anywhere;
+                }
             }
         }
+    }
+    #inputChat {
+        position: relative;
+        background-color: rgba(67, 13, 69, 0.4);
+        border: 1px solid rgb(95, 95, 95);
+        outline: none;
+        width: 100%;
+        transition: all ease 0.3s;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        border-bottom: 3px;
+        border-color: rgb(0, 153, 255);
+        box-shadow: 00 0 0.2rem #fff;
+        color: #fff;
+        padding: 5px;
+        border-radius: 10px;
     }
 }
 
 .help-command {
-    color: #00000080;
+    color: #ffffff;
     display: flex;
     flex-flow: column nowrap;
 }
