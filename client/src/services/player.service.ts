@@ -71,7 +71,7 @@ export const setAnimationIfNecessary = () => {
     const currentAnimation = store.getState().player.currentAnimation;
     const sprinting = store.getState().player.sprinting;
 
-    if (store.getState().player.jumping) {
+    if (store.getState().player.falling) {
         if (currentAnimation !== 'Falling_idle') {
             return store.dispatch(PlayerSliceActions.setCurrentAnimation('Falling_idle'));
         }
@@ -115,14 +115,14 @@ export const setAnimationIfNecessary = () => {
 };
 
 export const jumpIfPossible = () => {
-    const jumping = store.getState().player.jumping;
+    const falling = store.getState().player.falling;
     const timeToJump = store.getState().player.timeToJump;
 
-    if (!jumping) {
+    if (!falling) {
         const now = Date.now();
         if (now > timeToJump) {
             store.dispatch(PlayerSliceActions.setTimeToJump(now + PlayerJumpCooldown));
-            store.dispatch(PlayerSliceActions.setJumping(true));
+            store.dispatch(PlayerSliceActions.setJump(true));
         }
     }
 };

@@ -63,7 +63,8 @@ export interface IPlayerSlice {
     rotation: ICoordinates;
     currentAnimation: TAnimation;
     sprinting: boolean;
-    jumping: boolean;
+    jump: boolean;
+    falling: boolean;
     isMoveForward: boolean;
     isMoveBackward: boolean;
     isMoveLeft: boolean;

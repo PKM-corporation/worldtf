@@ -10,11 +10,12 @@ export const PlayerSlice = createSlice({
         rotation: { x: 0, y: 0, z: 0 },
         currentAnimation: 'Idle',
         sprinting: false,
-        jumping: false,
+        falling: false,
         isMoveBackward: false,
         isMoveForward: false,
         isMoveLeft: false,
         isMoveRight: false,
+        jump: false,
         speed: 0,
         timeToJump: 0,
     } as IPlayerSlice,
@@ -35,8 +36,11 @@ export const PlayerSlice = createSlice({
         setSprinting: (state, action: ISetBooleanAction) => {
             state.sprinting = action.payload;
         },
-        setJumping: (state, action: ISetBooleanAction) => {
-            state.jumping = action.payload;
+        setJump: (state, action: ISetBooleanAction) => {
+            state.jump = action.payload;
+        },
+        setFalling: (state, action: ISetBooleanAction) => {
+            state.falling = action.payload;
         },
         setIsMoveBackward: (state, action: ISetBooleanAction) => {
             state.isMoveBackward = action.payload;

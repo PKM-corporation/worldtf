@@ -85,7 +85,7 @@ export const useKeyboardControls = () => {
                 dispatch(PlayerSliceActions.setSprinting(true));
                 break;
             case 'Space':
-                if (player.jumping || interfaceStore.isChatting) break;
+                if (player.falling || interfaceStore.isChatting) break;
                 jumpIfPossible();
                 break;
             default:

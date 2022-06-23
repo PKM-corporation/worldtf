@@ -15,8 +15,6 @@ import {
 import { PlayerSliceActions } from '../store/slices/player.slice';
 import { PlayerJumpSpeed } from '../common/constant';
 
-let jump = false;
-
 interface IProps {
     position: [x: number, y: number, z: number];
 }
@@ -35,7 +33,6 @@ export const PlayerComponent = ({ position }: IProps) => {
         },
         position,
     }));
-    const isJumpStart = useRef(false);
     const velocity = useRef([0, 0, 0]);
     useEffect(() => {
         api.velocity.subscribe((v) => (velocity.current = v));
@@ -80,24 +77,18 @@ export const PlayerComponent = ({ position }: IProps) => {
         setPlayerPositionIfNecessary(ref.current.position);
         setPlayerRotationIfNecessary(camera.rotation);
 
-        if (player.jumping) {
-            if (jump) {
-                const raycaster = new Raycaster(ref.current.position, new Vector3(0, -1, 0), 0, 1);
-                const intersects = raycaster.intersectObjects(scene.children);
+        const raycaster = new Raycaster(ref.current.position, new Vector3(0, -1, 0), 0, 1);
+        const intersects = raycaster.intersectObjects(scene.children);
 
-                console.log(intersects);
-                if (!isJumpStart.current && intersects.length === 0) {
-                    isJumpStart.current = true;
-                }
-                if (isJumpStart.current && intersects.length !== 0) {
-                    dispatch(PlayerSliceActions.setJumping(false));
-                    jump = false;
-                    isJumpStart.current = false;
-                }
-            } else {
-                api.velocity.set(direction.x, PlayerJumpSpeed, direction.z);
-                jump = true;
-            }
+        if (intersects.length === 0 && !player.falling) {
+            dispatch(PlayerSliceActions.setFalling(true));
+        } else if (intersects.length !== 0 && player.falling) {
+            dispatch(PlayerSliceActions.setFalling(false));
+        }
+
+        if (player.jump) {
+            api.velocity.set(direction.x, PlayerJumpSpeed, direction.z);
+            dispatch(PlayerSliceActions.setJump(false));
         }
     });
 
