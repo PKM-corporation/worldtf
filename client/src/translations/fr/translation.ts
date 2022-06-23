@@ -26,6 +26,7 @@ export const TRANSLATION_FR = {
     warning: {
         Spam: 'Veuillez ne pas spam le chat',
         UserAlreadySanctioned: 'La cible est déjà sanctionnée',
+        DisconnectedTarget: 'La cible est déconnectée',
     },
     warn: {
         invalidName: 'Veuillez entrer un pseudo valide (plus de 2 caratères, sans caractères spéciaux)',
@@ -50,7 +51,7 @@ export const TRANSLATION_FR = {
         date: 'Le {{- day}} à {{- time}}',
     },
     verbose: {
-        tp: 'Vous vous êtes téléporté à {{target}}',
+        Tp: 'Vous vous êtes téléporté à {{target}}',
         Cancel: 'Vous avez annulé la sanction {{sanction}} de {{target}}',
     },
     settings: {

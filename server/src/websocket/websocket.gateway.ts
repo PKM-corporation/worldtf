@@ -75,6 +75,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
                 duration: sanction.duration,
                 day: DateTime.fromSeconds(sanction.date).toLocaleString(DateTime.DATE_SHORT),
                 time: DateTime.fromSeconds(sanction.date).toFormat('HH:mm'),
+                message: sanction.reason,
                 sender: admin.pseudo,
             } as IClientEmitError);
             return client.disconnect();

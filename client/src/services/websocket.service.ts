@@ -12,7 +12,7 @@ import store from '../store/store';
 
 export const synchronizeWebsocketError = (errorDto: IWebsocketErrorDto) => {
     const websocketError = new WebsocketError(errorDto);
-    store.dispatch(WebsocketSliceActions.setWebsocketError(websocketError));
+    store.dispatch(WebsocketSliceActions.setWebsocketError(websocketError.toObject()));
 };
 
 export const websocketEmitData = (

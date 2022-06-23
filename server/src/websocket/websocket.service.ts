@@ -261,7 +261,12 @@ export class WebsocketService {
                     break;
             }
         }
-        this.server.emit(WebsocketEvent.Message, { type: 'Log', category: type, options: { target: pseudo } } as IWebsocketLog);
+        this.server.emit(WebsocketEvent.Message, {
+            type: 'Log',
+            category: type,
+            date: DateTime.now().toFormat('HH:mm'),
+            options: { target: pseudo },
+        } as IWebsocketLog);
     }
 
     async cancelUserSanction(pseudo: string, admin: Player, type: TSanction) {

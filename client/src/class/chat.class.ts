@@ -40,7 +40,7 @@ export interface IChatObject {
 
 export class Mp {
     constructor(message: IWebsocketMpDto) {
-        this.type = 'Chat';
+        this.type = 'Mp';
         this.sender = message.sender;
         this.date = message.date;
         this.content = message.content;

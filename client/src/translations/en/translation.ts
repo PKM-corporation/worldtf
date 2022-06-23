@@ -26,6 +26,7 @@ export const TRANSLATION_EN = {
     warning: {
         Spam: 'Please do not spam',
         UserAlreadySanctioned: 'Target is already sanctioned',
+        DisconnectedTarget: 'Target is disconnected',
     },
     warn: {
         invalidName: 'Please enter a valid username (2 characters or more, special characters are not allowed)',
@@ -50,7 +51,7 @@ export const TRANSLATION_EN = {
         date: 'On {{- day}} at {{- time}}',
     },
     verbose: {
-        tp: 'You teleported to {{target}}',
+        Tp: 'You teleported to {{target}}',
         Cancel: 'You cancelled the sanction {{sanction}} of {{target}}',
     },
     settings: {
