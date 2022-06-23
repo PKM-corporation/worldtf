@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { Suspense, useRef } from 'react';
 import { Group } from 'three';
 import Aj from './Model';
 
@@ -16,7 +16,7 @@ const Ajs = ({ position, playerId }: IProps) => {
 
     return (
         <group ref={group} position={position} dispose={null}>
-            {ajs}
+            <Suspense fallback={null}>{ajs}</Suspense>
         </group>
     );
 };

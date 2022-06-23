@@ -13,6 +13,10 @@ export const SceneSlice = createSlice({
             far: 150,
             near: 10,
         },
+        loader: {
+            total: 10,
+            progress: 0,
+        },
     } as ISceneSlice,
     reducers: {
         setIsDebug: (state, action: ISetBooleanAction) => {
@@ -32,6 +36,12 @@ export const SceneSlice = createSlice({
         },
         setFogNear: (state, action: Omit<IStoreAction, 'payload'> & { payload: number }) => {
             state.fog.near = action.payload;
+        },
+        setLoaderProgress: (state, action: Omit<IStoreAction, 'payload'> & { payload: number }) => {
+            state.loader.progress = action.payload;
+        },
+        setLoaderTotal: (state, action: Omit<IStoreAction, 'payload'> & { payload: number }) => {
+            state.loader.total = action.payload;
         },
     },
 });

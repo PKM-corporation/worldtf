@@ -100,4 +100,8 @@ export const TRANSLATION_FR = {
         ambientVolume: 'Volume ambiant',
         actionVolume: 'Volume des actions',
     },
+    loading: {
+        elements: 'Chargement des assets...',
+        connection: 'Tentative de connexion...',
+    },
 };

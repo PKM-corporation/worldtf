@@ -48,6 +48,10 @@ export interface ISceneSlice {
         near: number;
         far: number;
     };
+    loader: {
+        total: number;
+        progress: number;
+    };
 }
 
 export interface IPlayersSlice {

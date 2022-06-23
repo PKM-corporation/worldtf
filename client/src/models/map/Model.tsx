@@ -6,10 +6,22 @@ import React, { useRef } from 'react';
 import { useGLTF } from '@react-three/drei';
 import { TMapGLTF } from '../../interfaces/model.interface';
 import { Group } from 'three';
+import { useDispatch } from 'react-redux';
+import { SceneSliceActions } from '../../store/slices/scene.slice';
+import { useSelector } from 'react-redux';
+import { IStoreStates } from '../../interfaces/store.interface';
 
 export default function Model({ ...props }) {
     const group = useRef<Group>(null);
-    const { nodes, materials } = useGLTF('/models/map-worldtf.glb') as unknown as TMapGLTF;
+    const dispatch = useDispatch();
+    const scene = useSelector((state: IStoreStates) => state.scene);
+
+    const { nodes, materials } = useGLTF('/models/map-worldtf.glb', false, undefined, (loader) => {
+        loader.manager.onProgress = (_url, loaded, total) => {
+            dispatch(SceneSliceActions.setLoaderProgress(loaded));
+            if (scene.loader.total !== total) dispatch(SceneSliceActions.setLoaderTotal(total));
+        };
+    }) as unknown as TMapGLTF;
 
     return (
         <group ref={group} {...props} dispose={null}>

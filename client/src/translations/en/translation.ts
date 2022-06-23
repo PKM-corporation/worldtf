@@ -100,4 +100,8 @@ export const TRANSLATION_EN = {
         ambientVolume: 'Ambient volume',
         actionVolume: 'Action volume',
     },
+    loading: {
+        elements: 'Assets loading...',
+        connection: 'Connection attempt...',
+    },
 };
