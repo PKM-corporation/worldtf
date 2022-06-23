@@ -6,132 +6,106 @@ import React, { useRef } from 'react';
 import { useGLTF } from '@react-three/drei';
 import { TMapGLTF } from '../../interfaces/model.interface';
 import { Group } from 'three';
-import { Stool } from '../../prefabs/stool.prefab';
-import MapHitbox from './map.hitbox';
-import SpotLightDiscoLight from '../../scene/lights/spotlight-disco.light';
-import { Table } from '../../prefabs/Table';
-import CeilingLight from '../../scene/lights/ceiling.light';
-import WindowLight from '../../scene/lights/window.light';
 
 export default function Model({ ...props }) {
     const group = useRef<Group>(null);
     const { nodes, materials } = useGLTF('/models/map-worldtf.glb') as unknown as TMapGLTF;
 
     return (
-        <>
-            <Stool position={[-5.5, 0, 3]} rotation={[0, Math.PI / 2, 0]} />
-            <Stool position={[-5.5, 0, 4]} rotation={[0, Math.PI / 8, 0]} />
-            <Stool position={[-5.5, 0, 5]} rotation={[0, Math.PI / 6, 0]} />
-            <Stool position={[-5.5, 0, 6]} rotation={[0, Math.PI / 8, 0]} />
-            <Stool position={[-5.5, 0, 7]} rotation={[0, Math.PI / 8, 0]} />
-            <Stool position={[-5.5, 0, 8]} rotation={[0, Math.PI / 4, 0]} />
-            <Table position={[-7.5, 0, -4]} />
-            <Table position={[-6, 0, -7.5]} />
-            <Table position={[7.5, 0, -7.5]} />
-            <WindowLight position={[-5.25, 2, -11]} rotation={[0, Math.PI, 0]} width={6} height={2} intensity={5} />
-            <SpotLightDiscoLight color={'#ff0000'} position={[5, 5, 9]} angle={0.2} distance={10} target={[4, 0, 10]} />
-            <SpotLightDiscoLight color={'#00ff00'} position={[0, 5, 9]} angle={0.2} distance={10} target={[3, 0, 5]} />
-            {/*<StronboscopeLight position={[10, 5, -10]} target={[-10, 4, 10]} count={20} interval={50} angle={0.8} delay={50} distance={30} />*/}
-            <MapHitbox />
-            <CeilingLight position={[5, 4.9, 5]} width={5} rotation={[Math.PI / 2, Math.PI, 0]} height={2} isAtNight={true} intensity={4} />
-            <CeilingLight position={[5, 4.9, -5]} width={5} rotation={[Math.PI / 2, Math.PI, 0]} height={2} isAtNight={true} intensity={4} />
-            <CeilingLight position={[-5, 4.9, 5]} width={5} rotation={[Math.PI / 2, Math.PI, 0]} height={2} isAtNight={true} intensity={4} />
-            <CeilingLight position={[-5, 4.9, -5]} width={5} rotation={[Math.PI / 2, Math.PI, 0]} height={2} isAtNight={true} intensity={4} />
-            <group ref={group} {...props} dispose={null}>
-                <group name="Scene">
-                    <group name="Cube001" position={[-6.76, 0.63, 4.28]}>
-                        <mesh name="Cube004" geometry={nodes.Cube004.geometry} material={materials['Material.001']} />
-                        <mesh name="Cube004_1" geometry={nodes.Cube004_1.geometry} material={materials['Material.002']} />
-                        <mesh name="Cube004_2" geometry={nodes.Cube004_2.geometry} material={materials['Material.003']} />
-                        <mesh name="Cube004_3" geometry={nodes.Cube004_3.geometry} material={materials['Material.004']} />
-                        <mesh name="Cube004_4" geometry={nodes.Cube004_4.geometry} material={materials['Material.006']} />
-                        <mesh name="Cube004_5" geometry={nodes.Cube004_5.geometry} material={materials['Material.008']} />
-                        <mesh name="Cube004_6" geometry={nodes.Cube004_6.geometry} material={materials['Material.005']} />
-                        <mesh name="Cube004_7" geometry={nodes.Cube004_7.geometry} material={materials['Material.007']} />
-                    </group>
-                    <group name="Plane001" position={[-27.49, 0, -11.33]} scale={[2.19, 1, 1]}>
-                        <mesh name="Plane002" geometry={nodes.Plane002.geometry} material={materials['Material.009']} />
-                        <mesh name="Plane002_1" geometry={nodes.Plane002_1.geometry} material={materials['Material.010']} />
-                    </group>
-                    <group name="Cube009" position={[-36.09, 1.32, -127.13]} rotation={[Math.PI, -1.57, 0]} scale={-0.84}>
-                        <mesh name="Cube025" geometry={nodes.Cube025.geometry} material={materials['Material.013']} />
-                        <mesh name="Cube025_1" geometry={nodes.Cube025_1.geometry} material={materials['Material.003']} />
-                        <mesh name="Cube025_2" geometry={nodes.Cube025_2.geometry} material={materials['Material.012']} />
-                        <mesh name="Cube025_3" geometry={nodes.Cube025_3.geometry} material={materials.Grass} />
-                        <mesh name="Cube025_4" geometry={nodes.Cube025_4.geometry} material={materials.Haie} />
-                        <mesh name="Cube025_5" geometry={nodes.Cube025_5.geometry} material={materials.Wood1} />
-                    </group>
-                    <group name="Cube015" position={[56.25, 1.33, -55.55]} scale={0.84}>
-                        <mesh name="Cube030" geometry={nodes.Cube030.geometry} material={materials['Material.013']} />
-                        <mesh name="Cube030_1" geometry={nodes.Cube030_1.geometry} material={materials['Material.003']} />
-                        <mesh name="Cube030_2" geometry={nodes.Cube030_2.geometry} material={materials['Material.012']} />
-                        <mesh name="Cube030_3" geometry={nodes.Cube030_3.geometry} material={materials.Grass} />
-                        <mesh name="Cube030_4" geometry={nodes.Cube030_4.geometry} material={materials.Haie} />
-                        <mesh name="Cube030_5" geometry={nodes.Cube030_5.geometry} material={materials.Wood1} />
-                    </group>
-                    <group name="Car_Cube" position={[-24, -0.2, -14]} rotation={[Math.PI / 2, 0, Math.PI / 2]}>
-                        <mesh name="Car_Cube_1" geometry={nodes.Car_Cube_1.geometry} material={materials.Body} />
-                        <mesh name="Car_Cube_2" geometry={nodes.Car_Cube_2.geometry} material={materials.Black} />
-                        <mesh name="Car_Cube_3" geometry={nodes.Car_Cube_3.geometry} material={materials.Window} />
-                        <mesh name="Car_Cube_4" geometry={nodes.Car_Cube_4.geometry} material={materials.Bumpers} />
-                        <mesh name="Car_Cube_5" geometry={nodes.Car_Cube_5.geometry} material={materials.Lights} />
-                        <mesh name="Car_Cube_6" geometry={nodes.Car_Cube_6.geometry} material={materials.Bottom} />
-                        <mesh name="Car_Cube_7" geometry={nodes.Car_Cube_7.geometry} material={materials.Tires} />
-                        <mesh name="Car_Cube_8" geometry={nodes.Car_Cube_8.geometry} material={materials.Wheels} />
-                    </group>
-                    <group name="Car_Cube001" position={[12, -0.2, -14]} rotation={[Math.PI / 2, 0, Math.PI / 2]}>
-                        <mesh name="Car_Cube001_1" geometry={nodes.Car_Cube001_1.geometry} material={materials['Body.002']} />
-                        <mesh name="Car_Cube001_2" geometry={nodes.Car_Cube001_2.geometry} material={materials.Black} />
-                        <mesh name="Car_Cube001_3" geometry={nodes.Car_Cube001_3.geometry} material={materials.Window} />
-                        <mesh name="Car_Cube001_4" geometry={nodes.Car_Cube001_4.geometry} material={materials.Bumpers} />
-                        <mesh name="Car_Cube001_5" geometry={nodes.Car_Cube001_5.geometry} material={materials.Lights} />
-                        <mesh name="Car_Cube001_6" geometry={nodes.Car_Cube001_6.geometry} material={materials.Bottom} />
-                        <mesh name="Car_Cube001_7" geometry={nodes.Car_Cube001_7.geometry} material={materials['Tires.001']} />
-                        <mesh name="Car_Cube001_8" geometry={nodes.Car_Cube001_8.geometry} material={materials.Wheels} />
-                    </group>
-                    <group name="Car_Cube002" position={[7, -0.2, -14]} rotation={[Math.PI / 2, 0, Math.PI / 2]}>
-                        <mesh name="Car_Cube002_1" geometry={nodes.Car_Cube002_1.geometry} material={materials['Body.001']} />
-                        <mesh name="Car_Cube002_2" geometry={nodes.Car_Cube002_2.geometry} material={materials.Black} />
-                        <mesh name="Car_Cube002_3" geometry={nodes.Car_Cube002_3.geometry} material={materials.Window} />
-                        <mesh name="Car_Cube002_4" geometry={nodes.Car_Cube002_4.geometry} material={materials.Bumpers} />
-                        <mesh name="Car_Cube002_5" geometry={nodes.Car_Cube002_5.geometry} material={materials.Lights} />
-                        <mesh name="Car_Cube002_6" geometry={nodes.Car_Cube002_6.geometry} material={materials.Bottom} />
-                        <mesh name="Car_Cube002_7" geometry={nodes.Car_Cube002_7.geometry} material={materials.Tires} />
-                        <mesh name="Car_Cube002_8" geometry={nodes.Car_Cube002_8.geometry} material={materials.Wheels} />
-                    </group>
-                    <group name="Car_Cube003" position={[17, -0.2, -14]} rotation={[Math.PI / 2, 0, -Math.PI / 2]}>
-                        <mesh name="Car_Cube003_1" geometry={nodes.Car_Cube003_1.geometry} material={materials['Body.003']} />
-                        <mesh name="Car_Cube003_2" geometry={nodes.Car_Cube003_2.geometry} material={materials.Black} />
-                        <mesh name="Car_Cube003_3" geometry={nodes.Car_Cube003_3.geometry} material={materials.Window} />
-                        <mesh name="Car_Cube003_4" geometry={nodes.Car_Cube003_4.geometry} material={materials.Bumpers} />
-                        <mesh name="Car_Cube003_5" geometry={nodes.Car_Cube003_5.geometry} material={materials.Lights} />
-                        <mesh name="Car_Cube003_6" geometry={nodes.Car_Cube003_6.geometry} material={materials.Bottom} />
-                        <mesh name="Car_Cube003_7" geometry={nodes.Car_Cube003_7.geometry} material={materials.Tires} />
-                        <mesh name="Car_Cube003_8" geometry={nodes.Car_Cube003_8.geometry} material={materials.Wheels} />
-                    </group>
-                    <group name="Car_Cube004" position={[-24.8, -0.2, -49.5]} rotation={[Math.PI / 2, 0, 0]}>
-                        <mesh name="Car_Cube004_1" geometry={nodes.Car_Cube004_1.geometry} material={materials['Body.002']} />
-                        <mesh name="Car_Cube004_2" geometry={nodes.Car_Cube004_2.geometry} material={materials.Black} />
-                        <mesh name="Car_Cube004_3" geometry={nodes.Car_Cube004_3.geometry} material={materials.Window} />
-                        <mesh name="Car_Cube004_4" geometry={nodes.Car_Cube004_4.geometry} material={materials.Bumpers} />
-                        <mesh name="Car_Cube004_5" geometry={nodes.Car_Cube004_5.geometry} material={materials.Lights} />
-                        <mesh name="Car_Cube004_6" geometry={nodes.Car_Cube004_6.geometry} material={materials.Bottom} />
-                        <mesh name="Car_Cube004_7" geometry={nodes.Car_Cube004_7.geometry} material={materials['Tires.001']} />
-                        <mesh name="Car_Cube004_8" geometry={nodes.Car_Cube004_8.geometry} material={materials.Wheels} />
-                    </group>
-                    <group name="Car_Cube005" position={[-24.8, -0.2, -44.5]} rotation={[Math.PI / 2, 0, 0]}>
-                        <mesh name="Car_Cube005_1" geometry={nodes.Car_Cube005_1.geometry} material={materials['Body.004']} />
-                        <mesh name="Car_Cube005_2" geometry={nodes.Car_Cube005_2.geometry} material={materials.Black} />
-                        <mesh name="Car_Cube005_3" geometry={nodes.Car_Cube005_3.geometry} material={materials.Window} />
-                        <mesh name="Car_Cube005_4" geometry={nodes.Car_Cube005_4.geometry} material={materials.Bumpers} />
-                        <mesh name="Car_Cube005_5" geometry={nodes.Car_Cube005_5.geometry} material={materials.Lights} />
-                        <mesh name="Car_Cube005_6" geometry={nodes.Car_Cube005_6.geometry} material={materials.Bottom} />
-                        <mesh name="Car_Cube005_7" geometry={nodes.Car_Cube005_7.geometry} material={materials.Tires} />
-                        <mesh name="Car_Cube005_8" geometry={nodes.Car_Cube005_8.geometry} material={materials.Wheels} />
-                    </group>
+        <group ref={group} {...props} dispose={null}>
+            <group name="Scene">
+                <group name="Cube001" position={[-6.76, 0.63, 4.28]}>
+                    <mesh name="Cube004" geometry={nodes.Cube004.geometry} material={materials['Material.001']} />
+                    <mesh name="Cube004_1" geometry={nodes.Cube004_1.geometry} material={materials['Material.002']} />
+                    <mesh name="Cube004_2" geometry={nodes.Cube004_2.geometry} material={materials['Material.003']} />
+                    <mesh name="Cube004_3" geometry={nodes.Cube004_3.geometry} material={materials['Material.004']} />
+                    <mesh name="Cube004_4" geometry={nodes.Cube004_4.geometry} material={materials['Material.006']} />
+                    <mesh name="Cube004_5" geometry={nodes.Cube004_5.geometry} material={materials['Material.008']} />
+                    <mesh name="Cube004_6" geometry={nodes.Cube004_6.geometry} material={materials['Material.005']} />
+                    <mesh name="Cube004_7" geometry={nodes.Cube004_7.geometry} material={materials['Material.007']} />
+                </group>
+                <group name="Plane001" position={[-27.49, 0, -11.33]} scale={[2.19, 1, 1]}>
+                    <mesh name="Plane002" geometry={nodes.Plane002.geometry} material={materials['Material.009']} />
+                    <mesh name="Plane002_1" geometry={nodes.Plane002_1.geometry} material={materials['Material.010']} />
+                </group>
+                <group name="Cube009" position={[-36.09, 1.32, -127.13]} rotation={[Math.PI, -1.57, 0]} scale={-0.84}>
+                    <mesh name="Cube025" geometry={nodes.Cube025.geometry} material={materials['Material.013']} />
+                    <mesh name="Cube025_1" geometry={nodes.Cube025_1.geometry} material={materials['Material.003']} />
+                    <mesh name="Cube025_2" geometry={nodes.Cube025_2.geometry} material={materials['Material.012']} />
+                    <mesh name="Cube025_3" geometry={nodes.Cube025_3.geometry} material={materials.Grass} />
+                    <mesh name="Cube025_4" geometry={nodes.Cube025_4.geometry} material={materials.Haie} />
+                    <mesh name="Cube025_5" geometry={nodes.Cube025_5.geometry} material={materials.Wood1} />
+                </group>
+                <group name="Cube015" position={[56.25, 1.33, -55.55]} scale={0.84}>
+                    <mesh name="Cube030" geometry={nodes.Cube030.geometry} material={materials['Material.013']} />
+                    <mesh name="Cube030_1" geometry={nodes.Cube030_1.geometry} material={materials['Material.003']} />
+                    <mesh name="Cube030_2" geometry={nodes.Cube030_2.geometry} material={materials['Material.012']} />
+                    <mesh name="Cube030_3" geometry={nodes.Cube030_3.geometry} material={materials.Grass} />
+                    <mesh name="Cube030_4" geometry={nodes.Cube030_4.geometry} material={materials.Haie} />
+                    <mesh name="Cube030_5" geometry={nodes.Cube030_5.geometry} material={materials.Wood1} />
+                </group>
+                <group name="Car_Cube" position={[-24, -0.2, -14]} rotation={[Math.PI / 2, 0, Math.PI / 2]}>
+                    <mesh name="Car_Cube_1" geometry={nodes.Car_Cube_1.geometry} material={materials.Body} />
+                    <mesh name="Car_Cube_2" geometry={nodes.Car_Cube_2.geometry} material={materials.Black} />
+                    <mesh name="Car_Cube_3" geometry={nodes.Car_Cube_3.geometry} material={materials.Window} />
+                    <mesh name="Car_Cube_4" geometry={nodes.Car_Cube_4.geometry} material={materials.Bumpers} />
+                    <mesh name="Car_Cube_5" geometry={nodes.Car_Cube_5.geometry} material={materials.Lights} />
+                    <mesh name="Car_Cube_6" geometry={nodes.Car_Cube_6.geometry} material={materials.Bottom} />
+                    <mesh name="Car_Cube_7" geometry={nodes.Car_Cube_7.geometry} material={materials.Tires} />
+                    <mesh name="Car_Cube_8" geometry={nodes.Car_Cube_8.geometry} material={materials.Wheels} />
+                </group>
+                <group name="Car_Cube001" position={[12, -0.2, -14]} rotation={[Math.PI / 2, 0, Math.PI / 2]}>
+                    <mesh name="Car_Cube001_1" geometry={nodes.Car_Cube001_1.geometry} material={materials['Body.002']} />
+                    <mesh name="Car_Cube001_2" geometry={nodes.Car_Cube001_2.geometry} material={materials.Black} />
+                    <mesh name="Car_Cube001_3" geometry={nodes.Car_Cube001_3.geometry} material={materials.Window} />
+                    <mesh name="Car_Cube001_4" geometry={nodes.Car_Cube001_4.geometry} material={materials.Bumpers} />
+                    <mesh name="Car_Cube001_5" geometry={nodes.Car_Cube001_5.geometry} material={materials.Lights} />
+                    <mesh name="Car_Cube001_6" geometry={nodes.Car_Cube001_6.geometry} material={materials.Bottom} />
+                    <mesh name="Car_Cube001_7" geometry={nodes.Car_Cube001_7.geometry} material={materials['Tires.001']} />
+                    <mesh name="Car_Cube001_8" geometry={nodes.Car_Cube001_8.geometry} material={materials.Wheels} />
+                </group>
+                <group name="Car_Cube002" position={[7, -0.2, -14]} rotation={[Math.PI / 2, 0, Math.PI / 2]}>
+                    <mesh name="Car_Cube002_1" geometry={nodes.Car_Cube002_1.geometry} material={materials['Body.001']} />
+                    <mesh name="Car_Cube002_2" geometry={nodes.Car_Cube002_2.geometry} material={materials.Black} />
+                    <mesh name="Car_Cube002_3" geometry={nodes.Car_Cube002_3.geometry} material={materials.Window} />
+                    <mesh name="Car_Cube002_4" geometry={nodes.Car_Cube002_4.geometry} material={materials.Bumpers} />
+                    <mesh name="Car_Cube002_5" geometry={nodes.Car_Cube002_5.geometry} material={materials.Lights} />
+                    <mesh name="Car_Cube002_6" geometry={nodes.Car_Cube002_6.geometry} material={materials.Bottom} />
+                    <mesh name="Car_Cube002_7" geometry={nodes.Car_Cube002_7.geometry} material={materials.Tires} />
+                    <mesh name="Car_Cube002_8" geometry={nodes.Car_Cube002_8.geometry} material={materials.Wheels} />
+                </group>
+                <group name="Car_Cube003" position={[17, -0.2, -14]} rotation={[Math.PI / 2, 0, -Math.PI / 2]}>
+                    <mesh name="Car_Cube003_1" geometry={nodes.Car_Cube003_1.geometry} material={materials['Body.003']} />
+                    <mesh name="Car_Cube003_2" geometry={nodes.Car_Cube003_2.geometry} material={materials.Black} />
+                    <mesh name="Car_Cube003_3" geometry={nodes.Car_Cube003_3.geometry} material={materials.Window} />
+                    <mesh name="Car_Cube003_4" geometry={nodes.Car_Cube003_4.geometry} material={materials.Bumpers} />
+                    <mesh name="Car_Cube003_5" geometry={nodes.Car_Cube003_5.geometry} material={materials.Lights} />
+                    <mesh name="Car_Cube003_6" geometry={nodes.Car_Cube003_6.geometry} material={materials.Bottom} />
+                    <mesh name="Car_Cube003_7" geometry={nodes.Car_Cube003_7.geometry} material={materials.Tires} />
+                    <mesh name="Car_Cube003_8" geometry={nodes.Car_Cube003_8.geometry} material={materials.Wheels} />
+                </group>
+                <group name="Car_Cube004" position={[-24.8, -0.2, -49.5]} rotation={[Math.PI / 2, 0, 0]}>
+                    <mesh name="Car_Cube004_1" geometry={nodes.Car_Cube004_1.geometry} material={materials['Body.002']} />
+                    <mesh name="Car_Cube004_2" geometry={nodes.Car_Cube004_2.geometry} material={materials.Black} />
+                    <mesh name="Car_Cube004_3" geometry={nodes.Car_Cube004_3.geometry} material={materials.Window} />
+                    <mesh name="Car_Cube004_4" geometry={nodes.Car_Cube004_4.geometry} material={materials.Bumpers} />
+                    <mesh name="Car_Cube004_5" geometry={nodes.Car_Cube004_5.geometry} material={materials.Lights} />
+                    <mesh name="Car_Cube004_6" geometry={nodes.Car_Cube004_6.geometry} material={materials.Bottom} />
+                    <mesh name="Car_Cube004_7" geometry={nodes.Car_Cube004_7.geometry} material={materials['Tires.001']} />
+                    <mesh name="Car_Cube004_8" geometry={nodes.Car_Cube004_8.geometry} material={materials.Wheels} />
+                </group>
+                <group name="Car_Cube005" position={[-24.8, -0.2, -44.5]} rotation={[Math.PI / 2, 0, 0]}>
+                    <mesh name="Car_Cube005_1" geometry={nodes.Car_Cube005_1.geometry} material={materials['Body.004']} />
+                    <mesh name="Car_Cube005_2" geometry={nodes.Car_Cube005_2.geometry} material={materials.Black} />
+                    <mesh name="Car_Cube005_3" geometry={nodes.Car_Cube005_3.geometry} material={materials.Window} />
+                    <mesh name="Car_Cube005_4" geometry={nodes.Car_Cube005_4.geometry} material={materials.Bumpers} />
+                    <mesh name="Car_Cube005_5" geometry={nodes.Car_Cube005_5.geometry} material={materials.Lights} />
+                    <mesh name="Car_Cube005_6" geometry={nodes.Car_Cube005_6.geometry} material={materials.Bottom} />
+                    <mesh name="Car_Cube005_7" geometry={nodes.Car_Cube005_7.geometry} material={materials.Tires} />
+                    <mesh name="Car_Cube005_8" geometry={nodes.Car_Cube005_8.geometry} material={materials.Wheels} />
                 </group>
             </group>
-        </>
+        </group>
     );
 }
 
