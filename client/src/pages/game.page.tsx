@@ -72,8 +72,9 @@ const GamePage = () => {
                 <Canvas
                     id="canvas"
                     ref={canvasRef}
-                    gl={{ preserveDrawingBuffer: true }}
-                    camera={{ position: [0, 0, 5], fov: 70, near: 0.01, far: 100, aspect: window.innerWidth / window.innerHeight }}
+                    gl={{ preserveDrawingBuffer: false }}
+                    camera={{ position: [0, 0, 5], fov: 70, near: 0.01, far: 170, aspect: window.innerWidth / window.innerHeight }}
+                    dpr={[1, 2]}
                 >
                     <PixelRatioSetting />
                     <Provider store={store}>

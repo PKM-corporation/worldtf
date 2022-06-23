@@ -4,6 +4,7 @@ import { IStoreStates } from '../interfaces/store.interface';
 import { jumpIfPossible } from '../services/player.service';
 import { InterfaceSliceActions } from '../store/slices/interface.slice';
 import { PlayerSliceActions } from '../store/slices/player.slice';
+import { SceneSliceActions } from '../store/slices/scene.slice';
 
 declare global {
     interface Navigator {
@@ -17,6 +18,7 @@ export const useKeyboardControls = () => {
     const dispatch = useDispatch();
     const interfaceStore = useSelector((state: IStoreStates) => state.interface);
     const player = useSelector((state: IStoreStates) => state.player);
+    const scene = useSelector((state: IStoreStates) => state.scene);
     const [keyDown, setKeyDown] = useState('');
     const [keyUp, setKeyUp] = useState('');
 
@@ -127,6 +129,9 @@ export const useKeyboardControls = () => {
                 break;
             case 'ShiftLeft':
                 player.sprinting && dispatch(PlayerSliceActions.setSprinting(false));
+                break;
+            case 'Backquote':
+                dispatch(SceneSliceActions.setIsDebug(!scene.isDebug));
                 break;
             default:
                 break;

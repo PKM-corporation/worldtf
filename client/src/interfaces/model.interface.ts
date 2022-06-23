@@ -52,8 +52,101 @@ export type TMapMaterials =
     | 'Material.005'
     | 'Material.006'
     | 'Material.007'
-    | 'Material.008';
-export type TMapNodes = 'Cube_1' | 'Cube_2' | 'Cube_3' | 'Cube_4' | 'Cube004' | 'Cube004_1' | 'Cube004_2' | 'Cube005' | 'Cube005_1' | 'Cube005_2';
+    | 'Material.008'
+    | 'Material.012'
+    | 'Material.013'
+    | 'Material.009'
+    | 'Material.010'
+    | 'Material.011'
+    | 'Grass'
+    | 'Haie'
+    | 'Wood1'
+    | 'Black'
+    | 'Window'
+    | 'Bumpers'
+    | 'Bottom'
+    | 'Lights'
+    | 'Tires'
+    | 'Body'
+    | 'Wheels'
+    | 'Tires'
+    | 'Body'
+    | 'Body.002'
+    | 'Body.001'
+    | 'Body.003'
+    | 'Body.004'
+    | 'Tires.001';
+export type TMapNodes =
+    | 'Cube004'
+    | 'Cube004_1'
+    | 'Cube004_2'
+    | 'Cube004_3'
+    | 'Cube004_4'
+    | 'Cube004_5'
+    | 'Cube004_6'
+    | 'Cube004_7'
+    | 'Plane002'
+    | 'Plane002_1'
+    | 'Cube025'
+    | 'Cube025_1'
+    | 'Cube025_2'
+    | 'Cube025_3'
+    | 'Cube025_4'
+    | 'Cube025_5'
+    | 'Cube030'
+    | 'Cube030_1'
+    | 'Cube030_2'
+    | 'Cube030_3'
+    | 'Cube030_4'
+    | 'Cube030_5'
+    | 'Car_Cube_1'
+    | 'Car_Cube_2'
+    | 'Car_Cube_3'
+    | 'Car_Cube_4'
+    | 'Car_Cube_5'
+    | 'Car_Cube_6'
+    | 'Car_Cube_7'
+    | 'Car_Cube_8'
+    | 'Car_Cube001_1'
+    | 'Car_Cube001_2'
+    | 'Car_Cube001_3'
+    | 'Car_Cube001_4'
+    | 'Car_Cube001_5'
+    | 'Car_Cube001_6'
+    | 'Car_Cube001_7'
+    | 'Car_Cube001_8'
+    | 'Car_Cube002_1'
+    | 'Car_Cube002_2'
+    | 'Car_Cube002_3'
+    | 'Car_Cube002_4'
+    | 'Car_Cube002_5'
+    | 'Car_Cube002_6'
+    | 'Car_Cube002_7'
+    | 'Car_Cube002_8'
+    | 'Car_Cube003_1'
+    | 'Car_Cube003_2'
+    | 'Car_Cube003_3'
+    | 'Car_Cube003_4'
+    | 'Car_Cube003_5'
+    | 'Car_Cube003_6'
+    | 'Car_Cube003_7'
+    | 'Car_Cube003_8'
+    | 'Car_Cube004_1'
+    | 'Car_Cube004_2'
+    | 'Car_Cube004_3'
+    | 'Car_Cube004_4'
+    | 'Car_Cube004_5'
+    | 'Car_Cube004_6'
+    | 'Car_Cube004_7'
+    | 'Car_Cube004_8'
+    | 'Car_Cube005_1'
+    | 'Car_Cube005_2'
+    | 'Car_Cube005_3'
+    | 'Car_Cube005_4'
+    | 'Car_Cube005_5'
+    | 'Car_Cube005_6'
+    | 'Car_Cube005_7'
+    | 'Car_Cube005_8';
 
 export type TMapGLTF = GLTF & {
     materials: {
@@ -61,5 +154,17 @@ export type TMapGLTF = GLTF & {
     };
     nodes: {
         [key in TMapNodes]: SkinnedMesh;
+    };
+};
+
+export type TTableMaterials = 'Wood';
+export type TTableNodes = 'Circle';
+
+export type TTableGLTF = GLTF & {
+    materials: {
+        [key in TTableMaterials]: MeshStandardMaterial;
+    };
+    nodes: {
+        [key in TTableNodes]: SkinnedMesh;
     };
 };

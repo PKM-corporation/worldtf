@@ -27,15 +27,15 @@ export const PlayersSlice = createSlice({
             delete state.data[action.payload];
         },
         setAnimation: (state, action: Omit<IStoreAction, 'payload'> & { payload: { id: string; animation: TAnimation } }) => {
-            if (state.updated === 0) return;
+            if (state.updated === 0 || !state.data[action.payload.id]) return;
             state.data[action.payload.id].animation = action.payload.animation;
         },
         setPosition: (state, action: Omit<IStoreAction, 'payload'> & { payload: { id: string; position: ICoordinates } }) => {
-            if (state.updated === 0) return;
+            if (state.updated === 0 || !state.data[action.payload.id]) return;
             state.data[action.payload.id].position = action.payload.position;
         },
         setRotation: (state, action: Omit<IStoreAction, 'payload'> & { payload: { id: string; rotation: ICoordinates } }) => {
-            if (state.updated === 0) return;
+            if (state.updated === 0 || !state.data[action.payload.id]) return;
             state.data[action.payload.id].rotation = action.payload.rotation;
         },
     },

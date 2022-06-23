@@ -65,8 +65,6 @@ export const useWebsocketServer = () => {
         server.on('PlayerAction', (data: IWebsocketDataPlayerActionDto) => {
             switch (data.type) {
                 case 'Move':
-                    console.log(data);
-
                     dispatch(PlayersSliceActions.setPosition({ id: data.id, position: data.position as ICoordinates }));
                     break;
                 case 'Rotate':

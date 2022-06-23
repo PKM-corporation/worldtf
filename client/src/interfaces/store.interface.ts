@@ -4,6 +4,7 @@ import { IUserObject } from '../class/user.class';
 import { IWebsocketErrorObject } from '../class/websocket.class';
 import { TAnimation } from './model.interface';
 import { ICoordinates } from './player.interface';
+import { TTime } from './scene.interface';
 
 export interface IUserSlice {
     updated: number;
@@ -36,6 +37,17 @@ export interface IInterfaceSlice {
 export interface IWebsocketSlice {
     connected: boolean;
     error: IWebsocketErrorObject;
+}
+
+export interface ISceneSlice {
+    isDebug: boolean;
+    time: number;
+    period: TTime;
+    fog: {
+        color: [r: number, g: number, b: number];
+        near: number;
+        far: number;
+    };
 }
 
 export interface IPlayersSlice {
@@ -72,4 +84,5 @@ export interface IStoreStates {
     player: IPlayerSlice;
     websocket: IWebsocketSlice;
     chat: IChatSlice;
+    scene: ISceneSlice;
 }

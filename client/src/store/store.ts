@@ -6,6 +6,7 @@ import PlayersSlice from './slices/players.slice';
 import UserSlice, { UserSliceActions } from './slices/user.slice';
 import InterfaceSlice from './slices/interface.slice';
 import { User } from '../class/user.class';
+import SceneSlice from './slices/scene.slice';
 
 const store = configureStore({
     reducer: {
@@ -15,6 +16,7 @@ const store = configureStore({
         chat: ChatSlice,
         player: PlayerSlice,
         interface: InterfaceSlice,
+        scene: SceneSlice,
     },
 });
 
