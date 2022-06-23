@@ -35,6 +35,7 @@ export const PlayerComponent = ({ position }: IProps) => {
         },
         position,
     }));
+    const isJumpStart = useRef(false);
     const velocity = useRef([0, 0, 0]);
     useEffect(() => {
         api.velocity.subscribe((v) => (velocity.current = v));
@@ -84,9 +85,14 @@ export const PlayerComponent = ({ position }: IProps) => {
                 const raycaster = new Raycaster(ref.current.position, new Vector3(0, -1, 0), 0, 1);
                 const intersects = raycaster.intersectObjects(scene.children);
 
-                if (intersects.length !== 0) {
+                console.log(intersects);
+                if (!isJumpStart.current && intersects.length === 0) {
+                    isJumpStart.current = true;
+                }
+                if (isJumpStart.current && intersects.length !== 0) {
                     dispatch(PlayerSliceActions.setJumping(false));
                     jump = false;
+                    isJumpStart.current = false;
                 }
             } else {
                 api.velocity.set(direction.x, PlayerJumpSpeed, direction.z);
