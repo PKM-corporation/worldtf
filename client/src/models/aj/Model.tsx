@@ -35,7 +35,7 @@ export default function Model({ playerId }: IProps) {
         actions.Idle && actions.Idle.play();
     }, []);
     useEffect(() => {
-        if (!player.animation) return;
+        if (!player?.animation) return;
         stopAllAnimations();
         switch (player.animation) {
             case 'Idle':
@@ -74,7 +74,7 @@ export default function Model({ playerId }: IProps) {
             default:
                 break;
         }
-    }, [player.animation]);
+    }, [player?.animation]);
     return (
         <group ref={group} dispose={null}>
             <group name="Scene">

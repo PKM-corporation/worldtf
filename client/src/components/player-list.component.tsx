@@ -18,7 +18,7 @@ const PlayerlistComponent = () => {
                     <h3>{t('interface.playerList')}</h3>
                     {playersId.map((id) => (
                         <div className="player" key={id}>
-                            <div className="playerName">{players[id].pseudo}</div>
+                            <div className="playerName">{players[id]?.pseudo}</div>
                         </div>
                     ))}
                 </div>

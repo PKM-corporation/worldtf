@@ -17,20 +17,20 @@ export const OtherPlayerComponent = ({ playerId }: IProps) => {
     const textRef = useRef<Mesh>(null);
 
     useEffect(() => {
-        if (!player.position) return;
+        if (!player?.position) return;
         if (boxRef.current) {
             boxRef.current.position.x = player.position.x;
             boxRef.current.position.z = player.position.z;
             boxRef.current.position.y = player.position.y - 0.5;
         }
-    }, [player.position]);
+    }, [player?.position]);
     useEffect(() => {
-        if (!player.rotation) return;
+        if (!player?.rotation) return;
         if (boxRef.current) {
             boxRef.current.rotation.order = 'ZYX';
             boxRef.current.rotation.y = player.rotation.y - Math.PI;
         }
-    }, [player.rotation]);
+    }, [player?.rotation]);
 
     useFrame(({ camera }) => {
         if (boxRef.current && Math.abs(boxRef.current.position.distanceTo(camera.position)) > 10) {
@@ -47,7 +47,7 @@ export const OtherPlayerComponent = ({ playerId }: IProps) => {
                     <Aj position={[0, 0, 0]} playerId={playerId} />
                 </Suspense>
                 <Text ref={textRef} color="black" anchorX="center" anchorY="middle" position={[0, 2, 0]}>
-                    {player.pseudo}
+                    {player?.pseudo}
                 </Text>
             </mesh>
         </>

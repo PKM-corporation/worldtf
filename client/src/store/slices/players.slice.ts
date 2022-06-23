@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { IPlayerObject } from '../../class/player.class';
 import { TAnimation } from '../../interfaces/model.interface';
 import { ICoordinates } from '../../interfaces/player.interface';
-import { IPlayersSlice, IStoreAction } from '../../interfaces/store.interface';
+import { IPlayersSliceNotNull, IStoreAction } from '../../interfaces/store.interface';
 
 export const PlayersSlice = createSlice({
     name: 'players',
@@ -10,7 +10,7 @@ export const PlayersSlice = createSlice({
         updated: 0,
         ids: [],
         data: {},
-    } as IPlayersSlice,
+    } as IPlayersSliceNotNull,
     reducers: {
         setPlayersId: (state, action: Omit<IStoreAction, 'payload'> & { payload: string[] }) => {
             state.ids = action.payload;

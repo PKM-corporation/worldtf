@@ -58,6 +58,14 @@ export interface IPlayersSlice {
     updated: number;
     ids: string[];
     data: {
+        [key in string]: IPlayerObject | undefined;
+    };
+}
+
+export interface IPlayersSliceNotNull {
+    updated: number;
+    ids: string[];
+    data: {
         [key in string]: IPlayerObject;
     };
 }
