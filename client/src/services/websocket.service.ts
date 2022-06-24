@@ -19,6 +19,6 @@ export const websocketEmitData = (
     event: TWebsocketEvents,
     data: IWebsocketEmitDataPlayerActionDto | IWebsocketEmitDataMessageDto | IWebsocketEmitDataCommandDto,
 ) => {
-    if (!server.connected) throw new Error('ClientDisconnected');
+    if (!server.connected) return;
     server.emit(event, data);
 };
