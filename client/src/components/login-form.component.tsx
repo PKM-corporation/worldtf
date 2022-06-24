@@ -19,7 +19,7 @@ const LoginFormComponent = () => {
             setInvalidMessage(<></>);
             navigate('/');
         } catch (e) {
-            if (e instanceof AxiosError && e.status === '401') {
+            if (e instanceof AxiosError && (e.status === '401' || e.response?.status === 401)) {
                 return setInvalidMessage(<p className="mb-3 text-center invalid-message">{t('warn.log')}</p>);
             }
             throw e;

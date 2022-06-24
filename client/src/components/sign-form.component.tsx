@@ -31,7 +31,7 @@ const SignFormComponent = () => {
             setInvalidMessage(<></>);
             navigate('/');
         } catch (e) {
-            if (e instanceof AxiosError && e.status === '409') {
+            if (e instanceof AxiosError && (e.status === '409' || e.response?.status === 409)) {
                 return setInvalidMessage(<p className="mb-3 text-center invalid-message">{t('warn.taken')}</p>);
             }
             console.error(e);
