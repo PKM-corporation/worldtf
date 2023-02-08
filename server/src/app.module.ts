@@ -4,7 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { WebsocketModule } from './websocket/websocket.module';
-import { DbModule } from './db/db.module';
+import { DbModule as DatabaseModule } from './db/db.module';
 import { SanctionsModule } from './sanctions/sanctions.module';
 
 const configOptions = {
@@ -16,7 +16,7 @@ const configOptions = {
 @Module({
     imports: [
         ConfigModule.forRoot(configOptions),
-        DbModule,
+        DatabaseModule,
         AuthModule,
         SanctionsModule,
         UsersModule,
