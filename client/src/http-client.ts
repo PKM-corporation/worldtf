@@ -1,4 +1,5 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import type { AxiosRequestConfig, AxiosRequestHeaders, InternalAxiosRequestConfig } from 'axios';
+import axios from 'axios';
 import store from './store/store';
 
 const httpClient = axios.create({
@@ -17,11 +18,19 @@ const httpClientAuth = axios.create({
     },
 });
 
-const authInterceptor = (config: AxiosRequestConfig) => {
+// const authInterceptor = (config: AxiosRequestConfig) => {
+//     if (store.getState().user.data.accessToken && config.headers) {
+//         config.headers.Authorization = `Bearer ${store.getState().user.data.accessToken}`;
+//     }
+//     return config;
+// };
+
+const authInterceptor = (config: AxiosRequestConfig): InternalAxiosRequestConfig | Promise<InternalAxiosRequestConfig> => {
     if (store.getState().user.data.accessToken && config.headers) {
-        config.headers['Authorization'] = 'Bearer ' + store.getState().user.data.accessToken;
+        config.headers.Authorization = `Bearer ${store.getState().user.data.accessToken}`;
     }
-    return config;
+    return { ...config, headers: config.headers as AxiosRequestHeaders };
+    // return config;
 };
 
 httpClientAuth.interceptors.request.use(authInterceptor);
