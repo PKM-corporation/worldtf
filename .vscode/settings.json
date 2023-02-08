@@ -1,3 +1,15 @@
 {
-    "editor.formatOnSave": true
+  "github.copilot.enable": {
+    "*": true
+  },
+  "security.workspace.trust.untrustedFiles": "open",
+  "files.eol": "\n",
+  "git.autofetch": true,
+  "files.autoSave": "onFocusChange",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "eslint.workingDirectories": ["./client", "./server"]
 }

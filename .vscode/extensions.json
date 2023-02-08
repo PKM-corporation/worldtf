@@ -1,0 +1,20 @@
+{
+  "recommendations": [
+    "eamodio.gitlens",
+    "naumovs.color-highlight",
+    "formulahendry.auto-rename-tag",
+    "steoates.autoimport",
+    "NuclleaR.vscode-extension-auto-import",
+    "usernamehw.errorlens",
+    "dbaeumer.vscode-eslint",
+    "GitHub.copilot", // make sure you have github copilot
+    "wix.vscode-import-cost",
+    "sburg.vscode-javascript-booster",
+    "esbenp.prettier-vscode",
+    "xabikos.ReactSnippets",
+    "jock.svg",
+    "rangav.vscode-thunder-client",
+    "planbcoding.vscode-react-refactor",
+    "redhat.vscode-xml"
+  ]
+}
